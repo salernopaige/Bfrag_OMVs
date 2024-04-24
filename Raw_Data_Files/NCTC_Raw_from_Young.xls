@@ -1,0 +1,615 @@
+21-2342-NCTC9343_Sample1-3, Samples report created on 11/27/2020
+Experiment: 21-2342-NCTC9343_Sample1-3
+	Peak List Generator: unknown
+		Version: unknown
+		Charge States Calculated: unknown
+		Deisotoped: unknown
+		Textual Annotation: unknown
+	Database Set: 1 Database
+		Database Name: the 21-2256_NCTC9343_20200918 database
+			Version: unknown
+			Taxonomy: All Entries
+			Number of Proteins: 4193
+		Does database contain common contaminants?: unknown
+	Search Engine Set: 1 Search Engine
+		Search Engine: Mascot
+			Version: 2.7.0.1
+			Samples: All Samples
+			Fragment Tolerance: 0.60 Da (Monoisotopic)
+			Parent Tolerance: 10.0 PPM (Monoisotopic)
+			Fixed Modifications: +57 on C (Carbamidomethyl)
+			Variable Modifications: +1 on NQ (Deamidated), +16 on M (Oxidation), +42 on Peptide N-Terminal  (Acetyl)
+			Database: the 21-2256_NCTC9343_20200918 database (unknown version, 4193 entries)
+			Digestion Enzyme: Trypsin
+			Max Missed Cleavages: 3
+			Probability Model: 
+				20201125_nst9054_21-2342_Stanton_Barnaby_1_NCTC9343 (F002447): Peptide Prophet with Delta Mass Correction [+1,+2,+3 and above]
+				20201125_nst9054_21-2342_Stanton_Barnaby_2_NCTC9343 (F002448): Peptide Prophet with Delta Mass Correction [+1,+2,+3 and above]
+				20201125_nst9054_21-2342_Stanton_Barnaby_3_NCTC9343 (F002449): Peptide Prophet with Delta Mass Correction [+1,+2,+3 and above]
+	Scaffold: Version: Scaffold_4.11.0
+		Modification Metadata Set: 2334 modifications
+			Source: C:\Program Files\Scaffold 4\parameters\unimod.xml
+			Comment: 
+		Protein Grouping Strategy: Experiment-wide grouping with binary peptide-protein weights
+		Peptide Thresholds: 90.0% minimum 
+		Protein Thresholds: 99.0% minimum and 2 peptides minimum
+		Peptide FDR: 0.0% (Decoy)
+		Protein FDR: 0.2% (Decoy)
+		GO Annotation Source(s): 
+		Pathway Annotation Source(s): 
+		Alternate ID Source(s): 
+
+									Total Spectrum Count	Total Spectrum Count	Total Spectrum Count	
+21-2342-NCTC9343_Sample1-3									1_NCTC9343	2_NCTC9343	3_NCTC9343
+									1_NCTC9343	2_NCTC9343	3_NCTC9343
+#	Visible?	Starred?	Identified Proteins (568/569)	Accession Number	Alternate ID	Molecular Weight	Protein Grouping Ambiguity	Taxonomy	20201125_nst9054_21-2342_Stanton_Barnaby_1_NCTC9343 (F002447)	20201125_nst9054_21-2342_Stanton_Barnaby_2_NCTC9343 (F002448)	20201125_nst9054_21-2342_Stanton_Barnaby_3_NCTC9343 (F002449)
+1	true	Empty	WP_009292609.1 PCMD domain-containing protein [Bacteroides fragilis]	WP_009292609.1		?		unknown	484	462	283	
+2	true	Empty	WP_005791939.1 tetratricopeptide repeat protein [Bacteroides fragilis]	WP_005791939.1		?		unknown	360	326	240	
+3	true	Empty	MULTISPECIES: SusC/RagA family TonB-linked outer membrane protein [Bacteroides]	WP_005786949.1		125 kDa		unknown	358	195	197	
+4	true	Empty	TonB-dependent receptor [Bacteroides fragilis]	WP_005789575.1		111 kDa		unknown	341	167	208	
+5	true	Empty	WP_065849906.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849906.1		?		unknown	200	229	147	
+6	true	Empty	WP_005813423.1 SusC/RagA family TonB-linked outer membrane protein [Bacteroides fragilis]	WP_005813423.1		?		unknown	289	146	152	
+7	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005785453.1		49 kDa		unknown	198	211	135	
+8	true	Empty	WP_005786002.1 OmpA family protein [Bacteroides fragilis]	WP_005786002.1		?		unknown	152	153	125	
+9	true	Empty	WP_005798906.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005798906.1		?		unknown	135	157	65	
+10	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005793335.1		30 kDa		unknown	194	108	82	
+11	true	Empty	WP_009292127.1 SusD/RagB family nutrient-binding outer membrane lipoprotein [Bacteroides fragilis]	WP_009292127.1		?		unknown	147	112	104	
+12	true	Empty	WP_009292000.1 OmpA family protein [Bacteroides fragilis]	WP_009292000.1		?		unknown	92	209	66	
+13	true	Empty	WP_009291681.1 insulinase family protein [Bacteroides fragilis]	WP_009291681.1		?		unknown	128	144	81	
+14	true	Empty	MULTISPECIES: tetratricopeptide repeat protein [Bacteroides]	WP_005787888.1		47 kDa		unknown	151	128	73	
+15	true	Empty	WP_005789096.1 S46 family peptidase [Bacteroides fragilis]	WP_005789096.1		?	true	unknown	159	122	58	
+16	true	Empty	MULTISPECIES: phosphoenolpyruvate carboxykinase (ATP) [Bacteroides]	WP_005791971.1		59 kDa		unknown	212	90	41	
+17	true	Empty	WP_005802810.1 SusF/SusE family outer membrane protein [Bacteroides fragilis]	WP_005802810.1		?		unknown	150	119	75	
+18	true	Empty	WP_008660039.1 MULTISPECIES: hypothetical protein [Bacteroides]	WP_008660039.1		?		unknown	84	154	70	
+19	true	Empty	MULTISPECIES: DUF4251 domain-containing protein [Bacteroides]	WP_005786125.1		21 kDa		unknown	118	118	60	
+20	true	Empty	type I glyceraldehyde-3-phosphate dehydrogenase [Bacteroides fragilis]	WP_005785248.1		36 kDa		unknown	173	67	51	
+21	true	Empty	WP_011202480.1 DUF5074 domain-containing protein [Bacteroides fragilis]	WP_011202480.1		?		unknown	138	85	69	
+22	true	Empty	WP_005789215.1 MULTISPECIES: DUF4876 domain-containing protein [Bacteroides]	WP_005789215.1		?		unknown	120	93	71	
+23	true	Empty	MULTISPECIES: PDZ domain-containing protein [Bacteroides]	WP_005788554.1		55 kDa		unknown	64	118	66	
+24	true	Empty	MULTISPECIES: SusC/RagA family TonB-linked outer membrane protein [Bacteroides]	WP_005786045.1		122 kDa		unknown	109	77	83	
+25	true	Empty	WP_005801480.1 MULTISPECIES: TonB-dependent receptor [Bacteroides]	WP_005801480.1		?	true	unknown	161	65	42	
+26	true	Empty	MULTISPECIES: OmpA family protein [Bacteroides]	WP_005791792.1		43 kDa		unknown	103	60	86	
+27	true	Empty	MULTISPECIES: phosphoglycerate kinase [Bacteroides]	WP_005789299.1		45 kDa		unknown	117	74	34	
+28	true	Empty	MULTISPECIES: aminopeptidase [Bacteroides]	WP_005789686.1		44 kDa		unknown	75	106	29	
+29	true	Empty	WP_065849581.1 beta-glucosidase BglX [Bacteroides fragilis]	WP_065849581.1		?		unknown	111	67	29	
+30	true	Empty	WP_005783497.1 MULTISPECIES: TonB-dependent receptor [Bacteria]	WP_005783497.1		?		unknown	121	56	36	
+31	true	Empty	WP_005799121.1 beta-galactosidase [Bacteroides fragilis]	WP_005799121.1		?		unknown	100	72	42	
+32	true	Empty	MULTISPECIES: OmpA family protein [Bacteroides]	WP_005786956.1		23 kDa		unknown	73	105	52	
+33	true	Empty	RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005797378.1		77 kDa		unknown	94	65	52	
+34	true	Empty	Gfo/Idh/MocA family oxidoreductase [Bacteroides fragilis]	WP_005785179.1		52 kDa		unknown	72	72	45	
+35	true	Empty	WP_065850165.1 TonB-dependent receptor, partial [Bacteroides fragilis]	WP_065850165.1		?	true	unknown	88	51	58	
+36	true	Empty	phenylalanine--tRNA ligase subunit beta [Bacteroides fragilis]	WP_005788108.1		91 kDa		unknown	78	31	90	
+37	true	Empty	WP_032564828.1 SusC/RagA family TonB-linked outer membrane protein [Bacteroides fragilis]	WP_032564828.1		?	true	unknown	104	54	43	
+38	true	Empty	MULTISPECIES: DUF4493 domain-containing protein [Bacteroides]	WP_005790466.1		65 kDa		unknown	43	48	103	
+39	true	Empty	MULTISPECIES: L-asparaginase 2 [Bacteroides]	WP_005791484.1		38 kDa		unknown	86	89	20	
+40	true	Empty	WP_005798791.1 MULTISPECIES: hypothetical protein [Bacteria]	WP_005798791.1		?		unknown	94	54	41	
+41	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005786201.1		48 kDa		unknown	88	58	33	
+42	true	Empty	WP_005797093.1 TonB-dependent receptor [Bacteroides fragilis]	WP_005797093.1		?		unknown	91	37	41	
+43	true	Empty	WP_081309410.1 TonB-dependent receptor [Bacteroides fragilis]	WP_081309410.1		?	true	unknown	121	26	24	
+44	true	Empty	MULTISPECIES: alpha-L-fucosidase [Bacteroides]	WP_005785086.1		51 kDa		unknown	65	60	34	
+45	true	Empty	MULTISPECIES: DUF4831 family protein [Bacteroides]	WP_005801184.1		39 kDa		unknown	71	62	27	
+46	true	Empty	MULTISPECIES: PorT family protein [Bacteroides]	WP_005788064.1		20 kDa		unknown	62	71	33	
+47	true	Empty	WP_005796345.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005796345.1		?		unknown	94	51	24	
+48	true	Empty	MULTISPECIES: class II fructose-1,6-bisphosphate aldolase [Bacteroides]	WP_005798895.1		36 kDa		unknown	78	52	24	
+49	true	Empty	WP_009291916.1 C69 family dipeptidase [Bacteroides fragilis]	WP_009291916.1		?		unknown	82	39	34	
+50	true	Empty	MULTISPECIES: membrane protein [Bacteroides]	WP_005795325.1		55 kDa		unknown	98	37	24	
+51	true	Empty	WP_032532916.1 discoidin domain-containing protein [Bacteroides fragilis]	WP_032532916.1		?		unknown	81	60	8	
+52	true	Empty	WP_065850034.1 pyruvate:ferredoxin (flavodoxin) oxidoreductase [Bacteroides fragilis]	WP_065850034.1		?		unknown	106	39	6	
+53	true	Empty	WP_005803715.1 pyruvate, phosphate dikinase [Bacteroides fragilis]	WP_005803715.1		?		unknown	93	34	24	
+54	true	Empty	chaperonin GroEL [Bacteroides fragilis]	WP_005789739.1		58 kDa		unknown	82	33	35	
+55	true	Empty	MULTISPECIES: elongation factor Tu [Bacteroides]	WP_005782155.1		44 kDa		unknown	72	37	21	
+56	true	Empty	MULTISPECIES: tetratricopeptide repeat protein [Bacteroides]	WP_005791196.1		115 kDa		unknown	79	36	21	
+57	true	Empty	molecular chaperone DnaK [Bacteroides fragilis]	WP_005785809.1		69 kDa		unknown	75	38	17	
+58	true	Empty	MULTISPECIES: phosphopyruvate hydratase [Bacteroides]	WP_005785741.1		46 kDa		unknown	83	37	13	
+59	true	Empty	MULTISPECIES: DUF4136 domain-containing protein [Bacteroides]	WP_005784472.1		24 kDa		unknown	58	46	31	
+60	true	Empty	MULTISPECIES: OmpH family outer membrane protein [Bacteroides]	WP_005784365.1		19 kDa		unknown	69	27	39	
+61	true	Empty	MULTISPECIES: elongation factor G [Bacteroides]	WP_005791539.1		78 kDa		unknown	91	21	15	
+62	true	Empty	WP_032497065.1 S46 family peptidase [Bacteroides fragilis]	WP_032497065.1		?		unknown	64	39	18	
+63	true	Empty	WP_005813194.1 hypothetical protein [Bacteroides fragilis]	WP_005813194.1		?		unknown	69	39	12	
+64	true	Empty	MULTISPECIES: diphosphate--fructose-6-phosphate 1-phosphotransferase [Bacteroides]	WP_005788903.1		60 kDa		unknown	71	39	12	
+65	true	Empty	MULTISPECIES: choloylglycine hydrolase family protein [Bacteroides]	WP_005797284.1		40 kDa		unknown	59	38	26	
+66	true	Empty	WP_005790465.1 PCMD domain-containing protein [Bacteroides fragilis]	WP_005790465.1		?		unknown	40	31	44	
+67	true	Empty	WP_065849536.1 PD40 domain-containing protein [Bacteroides fragilis]	WP_065849536.1		?	true	unknown	56	41	19	
+68	true	Empty	WP_008767985.1 DUF4270 domain-containing protein [Bacteroides fragilis]	WP_008767985.1		?		unknown	65	23	26	
+69	true	Empty	WP_014299313.1 DUF4929 domain-containing protein [Bacteroides fragilis]	WP_014299313.1		?		unknown	42	40	28	
+70	true	Empty	WP_032568438.1 TonB-dependent receptor [Bacteroides fragilis]	WP_032568438.1		?		unknown	81	21	18	
+71	true	Empty	WP_005788738.1 MULTISPECIES: serine protease [Bacteroides]	WP_005788738.1		?		unknown	46	43	20	
+72	true	Empty	MULTISPECIES: malate dehydrogenase [Bacteroides]	WP_005791692.1		33 kDa		unknown	59	33	13	
+73	true	Empty	WP_011202268.1 TonB-dependent receptor [Bacteroides fragilis]	WP_011202268.1		?		unknown	60	21	26	
+74	true	Empty	WP_005796352.1 SusD/RagB family nutrient-binding outer membrane lipoprotein [Bacteroides fragilis]	WP_005796352.1		?		unknown	53	44	8	
+75	true	Empty	MULTISPECIES: TonB-dependent receptor [Bacteroides]	WP_008769257.1		113 kDa		unknown	89	16	7	
+76	true	Empty	WP_005786667.1 MULTISPECIES: family 20 glycosylhydrolase [Bacteroides]	WP_005786667.1		?		unknown	59	30	9	
+77	true	Empty	WP_065849750.1 DUF4982 domain-containing protein [Bacteroides fragilis]	WP_065849750.1		?		unknown	57	25	12	
+78	true	Empty	WP_009293079.1 TonB-dependent receptor [Bacteroides fragilis]	WP_009293079.1		?		unknown	52	38	14	
+79	true	Empty	WP_011203608.1 porin family protein [Bacteroides fragilis]	WP_011203608.1		?		unknown	49	37	24	
+80	true	Empty	WP_032578011.1 family 10 glycosylhydrolase [Bacteroides fragilis]	WP_032578011.1		?		unknown	57	36	11	
+81	true	Empty	MULTISPECIES: porin family protein [Bacteroides]	WP_005784469.1		23 kDa		unknown	46	35	16	
+82	true	Empty	WP_008769881.1 DUF4493 domain-containing protein [Bacteroides fragilis]	WP_008769881.1		?		unknown	29	16	45	
+83	true	Empty	WP_005784694.1 fumarate hydratase [Bacteroides fragilis]	WP_005784694.1		?		unknown	64	21	2	
+84	true	Empty	beta-N-acetylhexosaminidase [Bacteroides fragilis]	WP_005787412.1		60 kDa		unknown	43	32	17	
+85	true	Empty	WP_009292997.1 S9 family peptidase [Bacteroides fragilis]	WP_009292997.1		?		unknown	52	31	14	
+86	true	Empty	transketolase [Bacteroides fragilis]	WP_005786503.1		72 kDa		unknown	67	23	8	
+87	true	Empty	WP_065849900.1 S41 family peptidase [Bacteroides fragilis]	WP_065849900.1		?		unknown	43	26	20	
+88	true	Empty	DUF4493 domain-containing protein [Bacteroides fragilis]	WP_005792636.1		29 kDa		unknown	18	7	72	
+89	true	Empty	MULTISPECIES: tetratricopeptide repeat protein [Bacteroides]	WP_005795728.1		55 kDa		unknown	38	38	18	
+90	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005785524.1		23 kDa		unknown	36	35	21	
+91	true	Empty	WP_009291907.1 DUF4468 domain-containing protein [Bacteroides fragilis]	WP_009291907.1		?		unknown	30	31	23	
+92	true	Empty	MULTISPECIES: fumarate reductase/succinate dehydrogenase flavoprotein subunit [Bacteroides]	WP_005783490.1		72 kDa		unknown	65	16	7	
+93	true	Empty	WP_005784370.1 MULTISPECIES: membrane protein [Bacteroides]	WP_005784370.1		?		unknown	58	17	13	
+94	true	Empty	WP_008658876.1 MULTISPECIES: SurA N-terminal domain-containing protein [Bacteroides]	WP_008658876.1		?		unknown	55	26	7	
+95	true	Empty	WP_008769531.1 MULTISPECIES: hypothetical protein [Bacteroides]	WP_008769531.1		?		unknown	44	30	19	
+96	true	Empty	WP_005786655.1 MULTISPECIES: sialidase [Bacteroides]	WP_005786655.1		?		unknown	43	31	11	
+97	true	Empty	MULTISPECIES: elongation factor Ts [Bacteroides]	WP_005791746.1		36 kDa		unknown	61	17	9	
+98	true	Empty	WP_065850159.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065850159.1		?	true	unknown	81	5	8	
+99	true	Empty	WP_008768137.1 DUF1735 domain-containing protein [Bacteroides fragilis]	WP_008768137.1		?		unknown	36	23	29	
+100	true	Empty	S9 family peptidase [Bacteroides fragilis]	WP_005785270.1		84 kDa		unknown	49	31	6	
+101	true	Empty	WP_065849928.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849928.1		?		unknown	48	19	16	
+102	true	Empty	WP_032572506.1 TonB-dependent receptor [Bacteroides fragilis]	WP_032572506.1		?	true	unknown	13	0	64	
+103	true	Empty	WP_005784328.1 alkaline phosphatase [Bacteroides fragilis]	WP_005784328.1		?		unknown	36	24	10	
+104	true	Empty	WP_032584583.1 TlpA family protein disulfide reductase [Bacteroides fragilis]	WP_032584583.1		?		unknown	20	39	14	
+105	true	Empty	WP_005795141.1 MULTISPECIES: TonB-dependent receptor [Bacteria]	WP_005795141.1		?		unknown	44	15	15	
+106	true	Empty	WP_009292613.1 PCMD domain-containing protein [Bacteroides fragilis]	WP_009292613.1		?		unknown	35	24	9	
+107	true	Empty	WP_065849582.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_065849582.1		?		unknown	47	16	9	
+108	true	Empty	WP_005794179.1 hypothetical protein [Bacteroides fragilis]	WP_005794179.1		?		unknown	31	16	24	
+109	true	Empty	WP_005786230.1 MULTISPECIES: phospho-sugar mutase [Bacteroides]	WP_005786230.1		?		unknown	54	12	0	
+110	true	Empty	MULTISPECIES: glucosamine-6-phosphate deaminase [Bacteroides]	WP_005788942.1		75 kDa		unknown	23	18	22	
+111	true	Empty	WP_065849574.1 alpha-galactosidase [Bacteroides fragilis]	WP_065849574.1		?		unknown	32	30	10	
+112	true	Empty	WP_009292982.1 discoidin domain-containing protein [Bacteroides fragilis]	WP_009292982.1		?		unknown	43	22	3	
+113	true	Empty	MULTISPECIES: cell division protein [Bacteroides]	WP_005786521.1		18 kDa		unknown	32	26	11	
+114	true	Empty	WP_011202030.1 hypothetical protein [Bacteroides fragilis]	WP_011202030.1		?		unknown	45	8	13	
+115	true	Empty	WP_008769876.1 hypothetical protein [Bacteroides fragilis]	WP_008769876.1		?		unknown	39	21	7	
+116	true	Empty	formate C-acetyltransferase [Bacteroides fragilis]	WP_005786073.1		84 kDa		unknown	42	13	11	
+117	true	Empty	WP_005791853.1 MULTISPECIES: peptidylprolyl isomerase [Bacteroides]	WP_005791853.1		?		unknown	45	9	12	
+118	true	Empty	WP_005800816.1 hypothetical protein [Bacteroides fragilis]	WP_005800816.1		?		unknown	31	24	13	
+119	true	Empty	WP_065849732.1 DUF3868 domain-containing protein [Bacteroides fragilis]	WP_065849732.1		?		unknown	26	22	16	
+120	true	Empty	FKBP-type peptidyl-prolyl cis-trans isomerase [Bacteroides fragilis]	WP_005791913.1		31 kDa		unknown	35	11	17	
+121	true	Empty	WP_005813408.1 MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteroides]	WP_005813408.1		?		unknown	31	22	11	
+122	true	Empty	WP_049100422.1 TonB-dependent receptor [Bacteroides fragilis]	WP_049100422.1		?		unknown	24	28	13	
+123	true	Empty	MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteroides]	WP_005788911.1		72 kDa		unknown	33	23	13	
+124	true	Empty	MULTISPECIES: TolC family protein [Bacteroides]	WP_005789589.1		48 kDa		unknown	28	17	17	
+125	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005800815.1		38 kDa		unknown	23	28	11	
+126	true	Empty	WP_009293146.1 TonB-dependent receptor [Bacteroides fragilis]	WP_009293146.1		?		unknown	27	15	14	
+127	true	Empty	WP_042987673.1 DUF4374 domain-containing protein [Bacteroides fragilis]	WP_042987673.1		?		unknown	31	25	8	
+128	true	Empty	WP_009291583.1 family 20 glycosylhydrolase [Bacteroides fragilis]	WP_009291583.1		?		unknown	35	21	6	
+129	true	Empty	WP_005788166.1 MULTISPECIES: DUF3078 domain-containing protein [Bacteroides]	WP_005788166.1		?		unknown	26	23	7	
+130	true	Empty	WP_009293136.1 outer membrane beta-barrel protein [Bacteroides fragilis]	WP_009293136.1		?		unknown	25	23	13	
+131	true	Empty	MULTISPECIES: glycoside hydrolase family 97 protein [Bacteroides]	WP_005795718.1		82 kDa		unknown	32	24	4	
+132	true	Empty	phenylalanine--tRNA ligase subunit alpha [Bacteroides fragilis]	WP_005789293.1		39 kDa		unknown	21	3	34	
+133	true	Empty	WP_005798837.1 alpha-L-fucosidase [Bacteroides fragilis]	WP_005798837.1		?		unknown	32	19	4	
+134	true	Empty	WP_009293271.1 beta-N-acetylglucosaminidase domain-containing protein [Bacteroides fragilis]	WP_009293271.1		?		unknown	37	21	2	
+135	true	Empty	MULTISPECIES: molecular chaperone HtpG [Bacteroides]	WP_005793737.1		78 kDa		unknown	42	16	2	
+136	true	Empty	WP_005804126.1 DNA-directed RNA polymerase subunit beta' [Bacteroides fragilis]	WP_005804126.1		?		unknown	34	9	12	
+137	true	Empty	WP_032568440.1 choice-of-anchor J domain-containing protein [Bacteroides fragilis]	WP_032568440.1		?		unknown	42	12	5	
+138	true	Empty	MULTISPECIES: outer membrane protein assembly factor BamD [Bacteroides]	WP_005788200.1		31 kDa		unknown	13	20	5	
+139	true	Empty	WP_009293054.1 S41 family peptidase [Bacteroides fragilis]	WP_009293054.1		?		unknown	27	20	9	
+140	true	Empty	WP_065850167.1 pyruvate kinase [Bacteroides fragilis]	WP_065850167.1		?		unknown	35	19	3	
+141	true	Empty	WP_009291700.1 membrane protein [Bacteroides fragilis]	WP_009291700.1		?		unknown	36	10	12	
+142	true	Empty	PorT family protein [Bacteroides fragilis]	WP_009292612.1		29 kDa		unknown	27	20	10	
+143	true	Empty	WP_008769027.1 TonB-dependent receptor [Bacteroides fragilis]	WP_008769027.1		?		unknown	35	9	14	
+144	true	Empty	WP_065849673.1 alkaline phosphatase family protein [Bacteroides fragilis]	WP_065849673.1		?		unknown	16	31	12	
+145	true	Empty	MULTISPECIES: glutamine-hydrolyzing GMP synthase [Bacteroides]	WP_005785252.1		56 kDa		unknown	32	20	6	
+146	true	Empty	MULTISPECIES: superoxide dismutase [Bacteroides]	WP_005788037.1		23 kDa		unknown	32	17	3	
+147	true	Empty	WP_065850131.1 OprO/OprP family phosphate-selective porin [Bacteroides fragilis]	WP_065850131.1		?		unknown	39	17	0	
+148	true	Empty	WP_032561010.1 DUF1735 domain-containing protein [Bacteroides fragilis]	WP_032561010.1		?		unknown	28	13	10	
+149	true	Empty	WP_081039928.1 TonB-dependent receptor [Bacteroides fragilis]	WP_081039928.1		?		unknown	25	22	6	
+150	true	Empty	WP_005793582.1 MULTISPECIES: sirohydrochlorin cobaltochelatase [Bacteroides]	WP_005793582.1		?		unknown	17	29	6	
+151	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005787597.1		27 kDa		unknown	17	13	18	
+152	true	Empty	WP_032588245.1 DUF4981 domain-containing protein [Bacteroides fragilis]	WP_032588245.1		?		unknown	27	13	4	
+153	true	Empty	RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005797392.1		76 kDa		unknown	48	4	0	
+154	true	Empty	WP_009291684.1 DUF4836 family protein [Bacteroides fragilis]	WP_009291684.1		?		unknown	33	8	8	
+155	true	Empty	WP_065850055.1 SusC/RagA family TonB-linked outer membrane protein [Bacteroides fragilis]	WP_065850055.1		?		unknown	29	15	0	
+156	true	Empty	RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005787416.1		50 kDa		unknown	24	13	12	
+157	true	Empty	WP_065849836.1 C1 family peptidase [Bacteroides fragilis]	WP_065849836.1		?		unknown	26	14	9	
+158	true	Empty	adenylosuccinate synthase [Bacteroides fragilis]	WP_005789791.1		47 kDa		unknown	35	9	1	
+159	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005786457.1		60 kDa		unknown	6	30	11	
+160	true	Empty	WP_014299450.1 S8 family serine peptidase [Bacteroides fragilis]	WP_014299450.1		?		unknown	25	15	5	
+161	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005780364.1		36 kDa		unknown	26	12	5	
+162	true	Empty	WP_065849594.1 acetate kinase [Bacteroides fragilis]	WP_065849594.1		?		unknown	32	13	1	
+163	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005791960.1		93 kDa		unknown	29	7	6	
+164	true	Empty	WP_032534055.1 BACON domain-containing protein [Bacteroides fragilis]	WP_032534055.1		?		unknown	5	20	11	
+165	true	Empty	WP_032496681.1 transglutaminase domain-containing protein [Bacteroides fragilis]	WP_032496681.1		?		unknown	32	6	4	
+166	true	Empty	WP_065849841.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849841.1		?		unknown	36	8	2	
+167	true	Empty	WP_005787354.1 MULTISPECIES: DUF4903 family protein [Bacteroides]	WP_005787354.1		?		unknown	22	10	12	
+168	true	Empty	WP_009291813.1 sulfatase [Bacteroides fragilis]	WP_009291813.1		?		unknown	22	14	5	
+169	true	Empty	MULTISPECIES: glycosyltransferase family 1 protein [Bacteroides]	WP_005803825.1		98 kDa		unknown	41	5	0	
+170	true	Empty	MULTISPECIES: glucosamine-6-phosphate deaminase [Bacteroides]	WP_005775719.1		30 kDa		unknown	30	16	0	
+171	true	Empty	MULTISPECIES: OmpH family outer membrane protein [Bacteroides]	WP_005784368.1		19 kDa		unknown	20	12	10	
+172	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005784668.1		32 kDa		unknown	19	19	8	
+173	true	Empty	WP_032564827.1 zinc-dependent metalloprotease [Bacteroides fragilis]	WP_032564827.1		?		unknown	22	15	7	
+174	true	Empty	WP_065850155.1 protein translocase subunit SecDF [Bacteroides fragilis]	WP_065850155.1		?		unknown	31	7	3	
+175	true	Empty	MULTISPECIES: trigger factor [Bacteroides]	WP_005791866.1		51 kDa		unknown	24	12	5	
+176	true	Empty	carbohydrate-binding protein [Bacteroides fragilis]	WP_005798674.1		104 kDa		unknown	26	16	3	
+177	true	Empty	WP_009292334.1 isoleucine--tRNA ligase [Bacteroides fragilis]	WP_009292334.1		?		unknown	31	5	0	
+178	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005787106.1		14 kDa		unknown	18	11	10	
+179	true	Empty	WP_065849572.1 S9 family peptidase [Bacteroides fragilis]	WP_065849572.1		?		unknown	23	12	4	
+180	true	Empty	WP_008661284.1 MULTISPECIES: glycoside hydrolase family 92 protein [Bacteroides]	WP_008661284.1		?		unknown	27	12	2	
+181	true	Empty	WP_009291986.1 C10 family peptidase [Bacteroides fragilis]	WP_009291986.1		?		unknown	18	11	13	
+182	true	Empty	MULTISPECIES: polyribonucleotide nucleotidyltransferase [Bacteroides]	WP_005791373.1		78 kDa		unknown	28	2	8	
+183	true	Empty	insulinase family protein [Bacteroides fragilis]	WP_010993418.1		109 kDa		unknown	12	12	6	
+184	true	Empty	WP_065849630.1 alpha-2-macroglobulin [Bacteroides fragilis]	WP_065849630.1		?		unknown	31	7	0	
+185	true	Empty	MULTISPECIES: thiol peroxidase [Bacteroides]	WP_005788597.1		18 kDa		unknown	19	5	9	
+186	true	Empty	MULTISPECIES: DUF1573 domain-containing protein [Bacteroides]	WP_005796193.1		40 kDa		unknown	22	8	4	
+187	true	Empty	WP_065850074.1 linear amide C-N hydrolase, partial [Bacteroides fragilis]	WP_065850074.1		?		unknown	24	8	6	
+188	true	Empty	WP_009292672.1 DUF4493 domain-containing protein [Bacteroides fragilis]	WP_009292672.1		?		unknown	4	6	26	
+189	true	Empty	WP_032560792.1 aminoacyl-histidine dipeptidase [Bacteroides fragilis]	WP_032560792.1		?		unknown	24	11	0	
+190	true	Empty	WP_065850117.1 M13 family metallopeptidase [Bacteroides fragilis]	WP_065850117.1		?		unknown	28	4	3	
+191	true	Empty	WP_009292819.1 carboxypeptidase-like regulatory domain-containing protein [Bacteroides fragilis]	WP_009292819.1		?		unknown	32	4	2	
+192	true	Empty	MULTISPECIES: phosphate acetyltransferase [Bacteroides]	WP_005796541.1		36 kDa		unknown	22	8	2	
+193	true	Empty	WP_032567849.1 DUF4982 domain-containing protein [Bacteroides fragilis]	WP_032567849.1		?		unknown	26	10	2	
+194	true	Empty	WP_009293261.1 PD40 domain-containing protein [Bacteroides fragilis]	WP_009293261.1		?	true	unknown	22	11	3	
+195	true	Empty	WP_065849682.1 saccharopine dehydrogenase family protein [Bacteroides fragilis]	WP_065849682.1		?		unknown	27	6	1	
+196	true	Empty	MULTISPECIES: alkaline phosphatase family protein [Bacteroides]	WP_005787649.1		46 kDa		unknown	19	18	0	
+197	true	Empty	WP_005800641.1 MULTISPECIES: hypothetical protein [Bacteroides]	WP_005800641.1		?		unknown	20	6	7	
+198	true	Empty	WP_009292022.1 family 20 glycosylhydrolase [Bacteroides fragilis]	WP_009292022.1		?		unknown	18	14	4	
+199	true	Empty	WP_005786455.1 hypothetical protein [Bacteroides fragilis]	WP_005786455.1		?		unknown	8	18	4	
+200	true	Empty	WP_009292064.1 5'-nucleotidase C-terminal domain-containing protein [Bacteroides fragilis]	WP_009292064.1		?		unknown	16	15	3	
+201	true	Empty	WP_009293274.1 membrane protein [Bacteroides fragilis]	WP_009293274.1		?		unknown	6	10	20	
+202	true	Empty	MULTISPECIES: nucleotidyltransferase [Bacteroides]	WP_005792036.1		33 kDa		unknown	20	9	6	
+203	true	Empty	MULTISPECIES: DNA-directed RNA polymerase subunit beta [Bacteroides]	WP_005791521.1		142 kDa		unknown	24	0	7	
+204	true	Empty	WP_005784415.1 MULTISPECIES: DUF4476 domain-containing protein [Bacteroides]	WP_005784415.1		?		unknown	6	10	6	
+205	true	Empty	alpha-galactosidase [Bacteroides fragilis]	WP_008770125.1		55 kDa	true	unknown	12	13	7	
+206	true	Empty	MULTISPECIES: glycine C-acetyltransferase [Bacteroides]	WP_005788771.1		44 kDa		unknown	27	4	1	
+207	true	Empty	WP_005787198.1 MULTISPECIES: Na(+)-translocating NADH-quinone reductase subunit A [Bacteroides]	WP_005787198.1		?		unknown	29	2	1	
+208	true	Empty	WP_065849727.1 cell surface protein [Bacteroides fragilis]	WP_065849727.1		?		unknown	20	9	2	
+209	true	Empty	MULTISPECIES: nitrogen-fixing protein NifU [Bacteroides]	WP_005780363.1		25 kDa		unknown	20	11	2	
+210	true	Empty	WP_009292980.1 TonB-dependent receptor [Bacteroides fragilis]	WP_009292980.1		?	true	unknown	21	10	3	
+211	true	Empty	WP_005791600.1 MULTISPECIES: TolC family protein [Bacteria]	WP_005791600.1		?		unknown	19	5	8	
+212	true	Empty	MULTISPECIES: glycerophosphoryl diester phosphodiesterase [Bacteroides]	WP_005788251.1		29 kDa		unknown	17	9	5	
+213	true	Empty	WP_005789701.1 MULTISPECIES: alpha-L-fucosidase [Bacteroides]	WP_005789701.1		?		unknown	15	9	1	
+214	true	Empty	WP_005783975.1 2,3-bisphosphoglycerate-independent phosphoglycerate mutase [Bacteroides fragilis]	WP_005783975.1		?		unknown	19	9	0	
+215	true	Empty	tetratricopeptide repeat protein [Bacteroides fragilis]	WP_005786569.1		78 kDa		unknown	11	15	5	
+216	true	Empty	WP_005788421.1 AhpC/TSA family protein [Bacteroides fragilis]	WP_005788421.1		?		unknown	20	11	1	
+217	true	Empty	WP_065849738.1 leucine-rich repeat protein [Bacteroides fragilis]	WP_065849738.1		?		unknown	15	12	2	
+218	true	Empty	WP_008659464.1 MULTISPECIES: glycoside hydrolase family 2 protein [Bacteroides]	WP_008659464.1		?		unknown	18	6	1	
+219	true	Empty	WP_005781763.1 MULTISPECIES: adenosylhomocysteinase [Bacteroides]	WP_005781763.1		?		unknown	29	1	0	
+220	true	Empty	WP_005785793.1 MULTISPECIES: META domain-containing protein [Bacteria]	WP_005785793.1		?		unknown	9	15	3	
+221	true	Empty	MULTISPECIES: M20/M25/M40 family metallo-hydrolase [Bacteroides]	WP_005796268.1		38 kDa		unknown	10	17	3	
+222	true	Empty	WP_045899445.1 hypothetical protein [Bacteroides fragilis]	WP_045899445.1		?		unknown	3	6	14	
+223	true	Empty	MULTISPECIES: glycoside hydrolase family 125 protein [Bacteroides]	WP_005784087.1		55 kDa		unknown	12	14	1	
+224	true	Empty	MULTISPECIES: LysM peptidoglycan-binding domain-containing protein [Bacteroides]	WP_005786259.1		34 kDa		unknown	0	12	11	
+225	true	Empty	WP_065849918.1 carbamoyl-phosphate synthase (glutamine-hydrolyzing) large subunit [Bacteroides fragilis]	WP_065849918.1		?	true	unknown	25	0	1	
+226	true	Empty	WP_065849745.1 SusC/RagA family TonB-linked outer membrane protein, partial [Bacteroides fragilis]	WP_065849745.1		?	true	unknown	15	8	4	
+227	true	Empty	MULTISPECIES: DUF4847 domain-containing protein [Bacteroides]	WP_005785244.1		19 kDa		unknown	12	10	5	
+228	true	Empty	WP_032533931.1 hypothetical protein [Bacteroides fragilis]	WP_032533931.1		?		unknown	10	8	8	
+229	true	Empty	WP_032583697.1 5'-nucleotidase C-terminal domain-containing protein [Bacteroides fragilis]	WP_032583697.1		?		unknown	20	6	0	
+230	true	Empty	MULTISPECIES: DUF1573 domain-containing protein [Bacteroides]	WP_005787254.1		14 kDa		unknown	10	13	3	
+231	true	Empty	WP_032568521.1 family 20 glycosylhydrolase [Bacteroides fragilis]	WP_032568521.1		?		unknown	18	7	2	
+232	true	Empty	WP_008661739.1 MULTISPECIES: FimB/Mfa2 family fimbrial subunit [Bacteroides]	WP_008661739.1		?		unknown	6	5	9	
+233	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005787268.1		16 kDa		unknown	17	4	4	
+234	true	Empty	MULTISPECIES: flavodoxin FldA [Bacteroides]	WP_005793355.1		19 kDa		unknown	21	6	1	
+235	true	Empty	WP_009291818.1 peptidase T [Bacteroides fragilis]	WP_009291818.1		?		unknown	20	3	0	
+236	true	Empty	dipeptidase [Bacteroides fragilis]	WP_005790875.1		50 kDa		unknown	17	8	0	
+237	true	Empty	WP_005785224.1 MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteria]	WP_005785224.1		?	true	unknown	11	8	1	
+238	true	Empty	MULTISPECIES: 50S ribosomal protein L7/L12 [Bacteroides]	WP_005782165.1		13 kDa		unknown	15	5	2	
+239	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005786554.1		48 kDa		unknown	18	5	2	
+240	true	Empty	WP_065850160.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_065850160.1		?		unknown	3	13	2	
+241	true	Empty	WP_032556461.1 TonB-dependent receptor [Bacteroides fragilis]	WP_032556461.1		?		unknown	23	3	2	
+242	true	Empty	TolC family protein [Bacteroides fragilis]	WP_005783789.1		50 kDa		unknown	10	14	0	
+243	true	Empty	MULTISPECIES: enoyl-ACP reductase [Bacteroides]	WP_005775707.1		31 kDa		unknown	18	6	2	
+244	true	Empty	WP_065849729.1 hypothetical protein [Bacteroides fragilis]	WP_065849729.1		?		unknown	11	12	2	
+245	true	Empty	DUF2807 domain-containing protein [Bacteroides fragilis]	WP_005783884.1		28 kDa		unknown	12	13	0	
+246	true	Empty	MULTISPECIES: pyridoxal phosphate-dependent aminotransferase [Bacteroides]	WP_005796424.1		43 kDa		unknown	13	8	0	
+247	true	Empty	WP_065850163.1 hypothetical protein [Bacteroides fragilis]	WP_065850163.1		?		unknown	11	14	0	
+248	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005783781.1		45 kDa		unknown	20	5	0	
+249	true	Empty	DUF3575 domain-containing protein [Bacteroides fragilis]	WP_008768285.1		22 kDa		unknown	10	10	5	
+250	true	Empty	WP_022348325.1 IgA Peptidase M64 [Bacteroides fragilis]	WP_022348325.1		?		unknown	8	11	4	
+251	true	Empty	WP_005796237.1 glycoside hydrolase family 92 protein [Bacteroides fragilis]	WP_005796237.1		?		unknown	12	12	1	
+252	true	Empty	MULTISPECIES: DUF5020 family protein [Bacteroides]	WP_005790377.1		27 kDa		unknown	14	9	1	
+253	true	Empty	MULTISPECIES: LptE family protein [Bacteroides]	WP_008658877.1		20 kDa		unknown	16	10	0	
+254	true	Empty	WP_081309409.1 SusC/RagA family TonB-linked outer membrane protein [Bacteroides fragilis]	WP_081309409.1		?	true	unknown	21	0	15	
+255	true	Empty	WP_032582773.1 SusD/RagB family nutrient-binding outer membrane lipoprotein [Bacteroides fragilis]	WP_032582773.1		?		unknown	8	8	8	
+256	true	Empty	MULTISPECIES: PepSY-like domain-containing protein [Bacteroides]	WP_005788539.1		17 kDa		unknown	13	2	7	
+257	true	Empty	MULTISPECIES: MotA/TolQ/ExbB proton channel family protein [Bacteroides]	WP_005790652.1		29 kDa		unknown	14	2	4	
+258	true	Empty	MULTISPECIES: acyl-CoA dehydrogenase [Bacteroides]	WP_005789707.1		64 kDa		unknown	17	5	2	
+259	true	Empty	WP_065849671.1 hypothetical protein [Bacteroides fragilis]	WP_065849671.1		?		unknown	6	16	0	
+260	true	Empty	glutathione peroxidase [Bacteroides fragilis]	WP_005802164.1		20 kDa		unknown	10	11	1	
+261	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005786511.1		37 kDa		unknown	11	11	0	
+262	true	Empty	MULTISPECIES: 30S ribosomal protein S1 [Bacteroides]	WP_005775782.1		67 kDa		unknown	22	0	2	
+263	true	Empty	WP_065849746.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849746.1		?	true	unknown	28	0	0	
+264	true	Empty	WP_008660299.1 MULTISPECIES: TolC family protein [Bacteroides]	WP_008660299.1		?		unknown	8	11	5	
+265	true	Empty	MULTISPECIES: beta-ketoacyl-ACP synthase II [Bacteroides]	WP_005783836.1		45 kDa		unknown	12	4	3	
+266	true	Empty	zinc-dependent metalloproteinase lipoprotein [Bacteroides fragilis]	WP_005784723.1		49 kDa		unknown	16	1	5	
+267	true	Empty	MULTISPECIES: aspartate kinase [Bacteroides]	WP_005788816.1		49 kDa		unknown	16	3	2	
+268	true	Empty	WP_065849672.1 preprotein translocase subunit SecA [Bacteroides fragilis]	WP_065849672.1		?		unknown	18	1	2	
+269	true	Empty	acetyl-CoA carboxylase biotin carboxylase subunit [Bacteroides fragilis]	WP_005790279.1		57 kDa		unknown	14	4	0	
+270	true	Empty	LysM peptidoglycan-binding domain-containing protein [Bacteroides fragilis]	WP_005793408.1		67 kDa		unknown	10	11	0	
+271	true	Empty	WP_065849670.1 valine--tRNA ligase [Bacteroides fragilis]	WP_065849670.1		?		unknown	22	2	0	
+272	true	Empty	WP_005784680.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005784680.1		?		unknown	11	3	6	
+273	true	Empty	MULTISPECIES: carbamoyl-phosphate synthase (glutamine-hydrolyzing) large subunit [Bacteroides]	WP_005799108.1		119 kDa	true	unknown	12	1	14	
+274	true	Empty	MULTISPECIES: branched-chain amino acid aminotransferase [Bacteroides]	WP_005791729.1		38 kDa		unknown	13	2	7	
+275	true	Empty	WP_009291999.1 DUF3869 domain-containing protein [Bacteroides fragilis]	WP_009291999.1		?		unknown	13	2	3	
+276	true	Empty	WP_005787500.1 MULTISPECIES: TolC family protein [Bacteroides]	WP_005787500.1		?		unknown	11	8	1	
+277	true	Empty	WP_005790956.1 elongation factor G [Bacteroides fragilis]	WP_005790956.1		?		unknown	12	7	0	
+278	true	Empty	WP_009291987.1 hypothetical protein [Bacteroides fragilis]	WP_009291987.1		?		unknown	12	10	0	
+279	true	Empty	WP_065849557.1 tetratricopeptide repeat protein [Bacteroides fragilis]	WP_065849557.1		?		unknown	10	8	0	
+280	true	Empty	MULTISPECIES: arylsulfatase [Bacteroides]	WP_005789261.1		55 kDa		unknown	5	17	0	
+281	true	Empty	WP_065849974.1 hypothetical protein [Bacteroides fragilis]	WP_065849974.1		?		unknown	19	1	0	
+282	true	Empty	WP_005792775.1 TonB-dependent receptor [Bacteroides fragilis]	WP_005792775.1		?		unknown	15	3	3	
+283	true	Empty	WP_005791495.1 DUF4091 domain-containing protein [Bacteroides fragilis]	WP_005791495.1		?		unknown	13	4	1	
+284	true	Empty	WP_009293049.1 prolyl oligopeptidase family serine peptidase [Bacteroides fragilis]	WP_009293049.1		?		unknown	11	8	0	
+285	true	Empty	TonB-dependent receptor [Bacteroides fragilis]	WP_005785256.1		121 kDa		unknown	18	4	0	
+286	true	Empty	WP_032532990.1 hypothetical protein [Bacteroides fragilis]	WP_032532990.1		?		unknown	3	10	2	
+287	true	Empty	ChaN family lipoprotein [Bacteroides fragilis]	WP_010993419.1		35 kDa		unknown	2	13	2	
+288	true	Empty	MULTISPECIES: aminotransferase class I/II-fold pyridoxal phosphate-dependent enzyme [Bacteroides]	WP_005787799.1		44 kDa		unknown	10	2	5	
+289	true	Empty	WP_005798974.1 MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteroides]	WP_005798974.1		?	true	unknown	12	7	1	
+290	true	Empty	WP_014298678.1 hypothetical protein [Bacteroides fragilis]	WP_014298678.1		?		unknown	11	7	2	
+291	true	Empty	MULTISPECIES: mannose-1-phosphate guanylyltransferase [Bacteroides]	WP_005791384.1		41 kDa		unknown	11	5	1	
+292	true	Empty	MULTISPECIES: esterase family protein [Bacteroides]	WP_005786111.1		31 kDa		unknown	9	9	0	
+293	true	Empty	MULTISPECIES: 50S ribosomal protein L1 [Bacteroides]	WP_005782161.1		25 kDa		unknown	15	0	5	
+294	true	Empty	MULTISPECIES: thioredoxin-disulfide reductase [Bacteroides]	WP_005785383.1		34 kDa		unknown	18	3	0	
+295	true	Empty	WP_008769511.1 orotidine-5'-phosphate decarboxylase [Bacteroides fragilis]	WP_008769511.1		?		unknown	11	6	0	
+296	true	Empty	WP_065849598.1 metallophosphatase [Bacteroides fragilis]	WP_065849598.1		?		unknown	8	8	2	
+297	true	Empty	MULTISPECIES: serine hydroxymethyltransferase [Bacteroides]	WP_005787540.1		47 kDa		unknown	14	4	0	
+298	true	Empty	WP_009291995.1 beta-galactosidase [Bacteroides fragilis]	WP_009291995.1		?		unknown	14	2	0	
+299	true	Empty	MULTISPECIES: phosphoribosylaminoimidazolesuccinocarboxamide synthase [Bacteroides]	WP_005785154.1		36 kDa		unknown	18	2	0	
+300	true	Empty	WP_032579692.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_032579692.1		?		unknown	8	6	1	
+301	true	Empty	MULTISPECIES: energy transducer TonB [Bacteroides]	WP_005790660.1		26 kDa		unknown	13	2	2	
+302	true	Empty	WP_032589165.1 S41 family peptidase [Bacteroides fragilis]	WP_032589165.1		?		unknown	12	4	2	
+303	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005781085.1		27 kDa		unknown	8	0	8	
+304	true	Empty	WP_065849747.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_065849747.1		?		unknown	17	0	0	
+305	true	Empty	MULTISPECIES: co-chaperone GroES [Bacteroides]	WP_005789740.1		10 kDa		unknown	7	4	6	
+306	true	Empty	WP_005798828.1 DUF2807 domain-containing protein [Bacteroides fragilis]	WP_005798828.1		?		unknown	4	8	4	
+307	true	Empty	WP_005802439.1 DUF4493 domain-containing protein [Bacteroides fragilis]	WP_005802439.1		?		unknown	4	2	11	
+308	true	Empty	MULTISPECIES: threonine--tRNA ligase [Bacteroides]	WP_005786570.1		74 kDa		unknown	10	2	3	
+309	true	Empty	MULTISPECIES: DUF4292 domain-containing protein [Bacteroides]	WP_005784040.1		22 kDa		unknown	8	7	1	
+310	true	Empty	WP_032595467.1 C10 family peptidase [Bacteroides fragilis]	WP_032595467.1		?		unknown	10	3	3	
+311	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005789211.1		21 kDa		unknown	13	2	2	
+312	true	Empty	MULTISPECIES: glycoside hydrolase family 92 protein [Bacteroides]	WP_005800561.1		85 kDa		unknown	7	8	1	
+313	true	Empty	MULTISPECIES: DNA-directed RNA polymerase subunit alpha [Bacteroides]	WP_005782229.1		37 kDa		unknown	12	4	0	
+314	true	Empty	WP_008658731.1 MULTISPECIES: alpha-1,3-galactosidase [Bacteroides]	WP_008658731.1		?		unknown	9	3	0	
+315	true	Empty	phosphoribosylamine--glycine ligase [Bacteroides fragilis]	WP_005796998.1		46 kDa		unknown	13	5	0	
+316	true	Empty	WP_009292800.1 M3 family metallopeptidase [Bacteroides fragilis]	WP_009292800.1		?		unknown	7	8	0	
+317	true	Empty	WP_009292826.1 DUF4981 domain-containing protein [Bacteroides fragilis]	WP_009292826.1		?		unknown	11	6	0	
+318	true	Empty	MULTISPECIES: tryptophan--tRNA ligase [Bacteroides]	WP_005791788.1		42 kDa		unknown	6	7	0	
+319	true	Empty	MULTISPECIES: glutamine--tRNA ligase/YqeY domain fusion protein [Bacteroides]	WP_005798520.1		67 kDa		unknown	14	4	0	
+320	true	Empty	WP_008660220.1 MULTISPECIES: ADP-forming succinate--CoA ligase subunit beta [Bacteroides]	WP_008660220.1		?		unknown	9	7	0	
+321	true	Empty	WP_005790434.1 MULTISPECIES: NADP-specific glutamate dehydrogenase [Bacteroides]	WP_005790434.1		?		unknown	16	0	0	
+322	true	Empty	WP_065850043.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065850043.1		?	true	unknown	4	8	4	
+323	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005790964.1		16 kDa		unknown	7	2	6	
+324	true	Empty	PepSY-like domain-containing protein [Bacteroides fragilis]	WP_005785923.1		19 kDa		unknown	6	7	2	
+325	true	Empty	WP_065850031.1 M48 family metallopeptidase [Bacteroides fragilis]	WP_065850031.1		?		unknown	0	12	1	
+326	true	Empty	DUF4468 domain-containing protein [Bacteroides fragilis]	WP_005801286.1		43 kDa		unknown	9	7	0	
+327	true	Empty	WP_065849546.1 DUF4981 domain-containing protein [Bacteroides fragilis]	WP_065849546.1		?		unknown	8	6	0	
+328	true	Empty	MULTISPECIES: DUF4488 domain-containing protein [Bacteroides]	WP_005791753.1		19 kDa		unknown	5	10	0	
+329	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005789644.1		28 kDa		unknown	13	4	0	
+330	true	Empty	MULTISPECIES: bifunctional phosphoribosylaminoimidazolecarboxamide formyltransferase/IMP cyclohydrolase [Bacteroides]	WP_005792044.1		56 kDa		unknown	13	4	0	
+331	true	Empty	WP_005786209.1 MULTISPECIES: NADPH-dependent 7-cyano-7-deazaguanine reductase QueF [Bacteroides]	WP_005786209.1		?		unknown	8	5	0	
+332	true	Empty	MULTISPECIES: TonB-dependent receptor [Bacteroides]	WP_005784143.1		95 kDa		unknown	13	3	0	
+333	true	Empty	MULTISPECIES: purine-nucleoside phosphorylase [Bacteroides]	WP_005789915.1		30 kDa		unknown	15	2	0	
+334	true	Empty	MULTISPECIES: ATP-binding cassette domain-containing protein [Bacteroides]	WP_005786690.1		61 kDa		unknown	15	1	0	
+335	true	Empty	MULTISPECIES: phosphoglucosamine mutase [Bacteroides]	WP_005791020.1		50 kDa		unknown	10	0	0	
+336	true	Empty	WP_005795183.1 MULTISPECIES: FimB/Mfa2 family fimbrial subunit [Bacteria]	WP_005795183.1		?		unknown	5	6	2	
+337	true	Empty	MULTISPECIES: galactokinase [Bacteroides]	WP_005800633.1		43 kDa		unknown	13	2	1	
+338	true	Empty	MULTISPECIES: PorT family protein [Bacteroides]	WP_005788195.1		26 kDa		unknown	8	8	0	
+339	true	Empty	WP_065850095.1 TlpA family protein disulfide reductase [Bacteroides fragilis]	WP_065850095.1		?		unknown	3	12	0	
+340	true	Empty	WP_005791757.1 MULTISPECIES: pseudouridine synthase [Bacteroides]	WP_005791757.1		?		unknown	8	0	1	
+341	true	Empty	peptide-methionine (R)-S-oxide reductase MsrB [Bacteroides fragilis]	WP_009292704.1		41 kDa		unknown	4	7	1	
+342	true	Empty	MULTISPECIES: long-chain fatty acid--CoA ligase [Bacteroides]	WP_005784128.1		68 kDa		unknown	8	1	4	
+343	true	Empty	WP_081309399.1 S46 family peptidase [Bacteroides fragilis]	WP_081309399.1		?		unknown	7	6	0	
+344	true	Empty	WP_009292015.1 SusD family outer membrane lipoprotein NanU [Bacteroides fragilis]	WP_009292015.1		?		unknown	6	10	0	
+345	true	Empty	MULTISPECIES: outer membrane beta-barrel protein [Bacteroides]	WP_005780691.1		18 kDa		unknown	7	7	0	
+346	true	Empty	tetratricopeptide repeat protein [Bacteroides fragilis]	WP_005790478.1		103 kDa		unknown	11	3	0	
+347	true	Empty	MULTISPECIES: FprA family A-type flavoprotein [Bacteroides]	WP_005795977.1		45 kDa		unknown	9	4	0	
+348	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_010992150.1		28 kDa		unknown	2	11	0	
+349	true	Empty	WP_005791755.1 asparagine--tRNA ligase [Bacteroides fragilis]	WP_005791755.1		?		unknown	11	0	0	
+350	true	Empty	WP_065850068.1 diaminopimelate dehydrogenase [Bacteroides fragilis]	WP_065850068.1		?		unknown	14	0	0	
+351	true	Empty	WP_009292622.1 aconitate hydratase [Bacteroides fragilis]	WP_009292622.1		?		unknown	14	0	0	
+352	true	Empty	MULTISPECIES: response regulator transcription factor [Bacteroides]	WP_005790952.1		27 kDa		unknown	7	3	3	
+353	true	Empty	MULTISPECIES: AhpC/TSA family protein [Bacteroides]	WP_005789197.1		40 kDa		unknown	8	4	1	
+354	true	Empty	WP_005790488.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005790488.1		?		unknown	8	5	0	
+355	true	Empty	MULTISPECIES: lytic transglycosylase domain-containing protein [Bacteroides]	WP_005784844.1		49 kDa		unknown	10	4	0	
+356	true	Empty	WP_005787587.1 ribose-phosphate pyrophosphokinase [Bacteroides fragilis]	WP_005787587.1		?		unknown	10	3	0	
+357	true	Empty	WP_005780626.1 MULTISPECIES: acyl-CoA carboxylase subunit beta [Bacteroides]	WP_005780626.1		?		unknown	10	2	0	
+358	true	Empty	MULTISPECIES: TonB-dependent receptor [Bacteroides]	WP_005785209.1		126 kDa		unknown	7	4	0	
+359	true	Empty	WP_005786509.1 galactose mutarotase [Bacteroides fragilis]	WP_005786509.1		?		unknown	12	2	0	
+360	true	Empty	MULTISPECIES: catalase [Bacteroides]	WP_005785885.1		56 kDa		unknown	8	2	0	
+361	true	Empty	MULTISPECIES: rubrerythrin family protein [Bacteroides]	WP_005783570.1		22 kDa		unknown	12	0	0	
+362	true	Empty	WP_065849744.1 TonB-dependent receptor, partial [Bacteroides fragilis]	WP_065849744.1		?	true	unknown	9	7	7	
+363	true	Empty	WP_065849937.1 clostripain [Bacteroides fragilis]	WP_065849937.1		?		unknown	6	3	3	
+364	true	Empty	MULTISPECIES: leucine-rich repeat domain-containing protein [Bacteroides]	WP_005794961.1		39 kDa		unknown	7	4	2	
+365	true	Empty	MULTISPECIES: DUF4923 family protein [Bacteroides]	WP_005787260.1		22 kDa		unknown	6	7	0	
+366	true	Empty	WP_005813851.1 Ig-like domain-containing protein [Bacteroides fragilis]	WP_005813851.1		?		unknown	11	2	0	
+367	true	Empty	MULTISPECIES: GDP-mannose 4,6-dehydratase [Bacteroides]	WP_005786803.1		41 kDa		unknown	9	0	0	
+368	true	Empty	WP_005795374.1 hypothetical protein [Bacteroides fragilis]	WP_005795374.1		?		unknown	4	6	2	
+369	true	Empty	WP_008660041.1 MULTISPECIES: hypothetical protein [Bacteroides]	WP_008660041.1		?		unknown	5	2	5	
+370	true	Empty	MULTISPECIES: DUF4369 domain-containing protein [Bacteroides]	WP_005791376.1		43 kDa		unknown	6	5	0	
+371	true	Empty	WP_005796464.1 TolC family protein [Bacteroides fragilis]	WP_005796464.1		?		unknown	4	5	0	
+372	true	Empty	WP_032580882.1 alpha/beta hydrolase family protein [Bacteroides fragilis]	WP_032580882.1		?		unknown	6	5	0	
+373	true	Empty	MULTISPECIES: 50S ribosomal protein L2 [Bacteroides]	WP_005791545.1		30 kDa		unknown	8	0	4	
+374	true	Empty	WP_065849624.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849624.1		?		unknown	4	6	0	
+375	true	Empty	WP_005787194.1 BamA/TamA family outer membrane protein [Bacteroides fragilis]	WP_005787194.1		?		unknown	9	2	0	
+376	true	Empty	MULTISPECIES: glycine--tRNA ligase [Bacteroides]	WP_005784203.1		59 kDa		unknown	8	0	1	
+377	true	Empty	MULTISPECIES: CTP synthase [Bacteroides]	WP_005788170.1		60 kDa		unknown	9	2	0	
+378	true	Empty	WP_032561878.1 MULTISPECIES: TonB-dependent receptor [Bacteroides]	WP_032561878.1		?		unknown	9	2	0	
+379	true	Empty	MULTISPECIES: biopolymer transporter ExbD [Bacteroides]	WP_005790648.1		22 kDa		unknown	9	1	0	
+380	true	Empty	WP_065849897.1 aspartate--tRNA ligase [Bacteroides fragilis]	WP_065849897.1		?		unknown	6	0	0	
+381	true	Empty	WP_005779363.1 L-fucose isomerase [Bacteroides fragilis]	WP_005779363.1		?		unknown	12	0	0	
+382	true	Empty	MULTISPECIES: succinate dehydrogenase/fumarate reductase iron-sulfur subunit [Bacteroides]	WP_005783491.1		27 kDa		unknown	11	0	0	
+383	true	Empty	WP_005784257.1 aspartate-semialdehyde dehydrogenase [Bacteroides fragilis]	WP_005784257.1		?		unknown	12	0	0	
+384	true	Empty	MULTISPECIES: 5'-nucleotidase [Bacteroides]	WP_005784454.1		28 kDa		unknown	9	0	0	
+385	true	Empty	WP_032565546.1 arginine--tRNA ligase [Bacteroides fragilis]	WP_032565546.1		?		unknown	12	0	0	
+386	true	Empty	WP_005797295.1 fimbrillin family protein [Bacteroides fragilis]	WP_005797295.1		?		unknown	2	3	4	
+387	true	Empty	WP_005789673.1 TolC family protein [Bacteroides fragilis]	WP_005789673.1		?		unknown	5	3	1	
+388	true	Empty	WP_005795196.1 MULTISPECIES: arylsulfatase [Bacteroides]	WP_005795196.1		?		unknown	4	4	1	
+389	true	Empty	WP_008660188.1 MULTISPECIES: phosphatidylinositol-4-phosphate 5-kinase [Bacteroides]	WP_008660188.1		?		unknown	7	1	1	
+390	true	Empty	MULTISPECIES: nitroreductase family protein [Bacteroides]	WP_005783862.1		23 kDa		unknown	5	5	0	
+391	true	Empty	WP_005800603.1 SLBB domain-containing protein [Bacteroides fragilis]	WP_005800603.1		?		unknown	2	5	0	
+392	true	Empty	WP_005795013.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005795013.1		?		unknown	4	0	3	
+393	true	Empty	WP_065849545.1 hypothetical protein [Bacteroides fragilis]	WP_065849545.1		?		unknown	5	6	0	
+394	true	Empty	endoglycosidase [Bacteroides fragilis]	WP_005786048.1		39 kDa		unknown	4	0	2	
+395	true	Empty	WP_005797027.1 MULTISPECIES: tyrosine--tRNA ligase [Bacteroides]	WP_005797027.1		?		unknown	9	1	0	
+396	true	Empty	WP_005798364.1 DUF4827 domain-containing protein [Bacteroides fragilis]	WP_005798364.1		?		unknown	7	4	0	
+397	true	Empty	WP_032556935.1 iron-containing alcohol dehydrogenase [Bacteroides fragilis]	WP_032556935.1		?		unknown	8	0	1	
+398	true	Empty	MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteroides]	WP_005784466.1		76 kDa		unknown	0	9	0	
+399	true	Empty	MULTISPECIES: aminoacyl-histidine dipeptidase [Bacteroides]	WP_005798834.1		54 kDa		unknown	10	0	0	
+400	true	Empty	WP_009291291.1 MULTISPECIES: leucine--tRNA ligase [Bacteria]	WP_009291291.1		?		unknown	10	0	0	
+401	true	Empty	WP_025813916.1 hypothetical protein [Bacteroides fragilis]	WP_025813916.1		?		unknown	3	5	2	
+402	true	Empty	MULTISPECIES: 50S ribosomal protein L11 [Bacteroides]	WP_005791514.1		16 kDa		unknown	6	2	1	
+403	true	Empty	WP_009293085.1 hypothetical protein [Bacteroides fragilis]	WP_009293085.1		?		unknown	4	3	2	
+404	true	Empty	WP_005785772.1 MULTISPECIES: ATP-dependent chaperone ClpB [Bacteroides]	WP_005785772.1		?		unknown	7	2	1	
+405	true	Empty	metallophosphoesterase [Bacteroides fragilis]	WP_008769920.1		39 kDa		unknown	4	2	2	
+406	true	Empty	WP_032568875.1 BamA/TamA family outer membrane protein [Bacteroides fragilis]	WP_032568875.1		?		unknown	6	1	1	
+407	true	Empty	WP_065849664.1 AsmA family protein [Bacteroides fragilis]	WP_065849664.1		?		unknown	5	5	0	
+408	true	Empty	WP_065849626.1 DUF349 domain-containing protein [Bacteroides fragilis]	WP_065849626.1		?		unknown	5	0	3	
+409	true	Empty	WP_005813169.1 phosphoribosylformylglycinamidine cyclo-ligase [Bacteroides fragilis]	WP_005813169.1		?		unknown	4	5	0	
+410	true	Empty	MULTISPECIES: serine/threonine protein phosphatase [Bacteroides]	WP_005785425.1		41 kDa		unknown	2	7	0	
+411	true	Empty	WP_065849696.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849696.1		?		unknown	6	0	0	
+412	true	Empty	6-bladed beta-propeller [Bacteroides fragilis]	WP_005791935.1		45 kDa		unknown	0	10	0	
+413	true	Empty	WP_065850156.1 hypothetical protein [Bacteroides fragilis]	WP_065850156.1		?		unknown	0	3	3	
+414	true	Empty	tetratricopeptide repeat protein [Bacteroides fragilis]	WP_005789811.1		32 kDa		unknown	5	4	0	
+415	true	Empty	MULTISPECIES: uracil phosphoribosyltransferase [Bacteroides]	WP_005791972.1		24 kDa		unknown	7	2	0	
+416	true	Empty	MULTISPECIES: 3-oxoacyl-[acyl-carrier-protein] reductase [Bacteroides]	WP_005792012.1		26 kDa		unknown	6	2	0	
+417	true	Empty	RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005789827.1		61 kDa		unknown	2	5	0	
+418	true	Empty	WP_005791518.1 MULTISPECIES: 50S ribosomal protein L10 [Bacteroides]	WP_005791518.1		?		unknown	4	3	0	
+419	true	Empty	WP_005800139.1 3-phosphoglycerate dehydrogenase [Bacteroides fragilis]	WP_005800139.1		?		unknown	5	2	0	
+420	true	Empty	MULTISPECIES: electron transfer flavoprotein subunit beta/FixA family protein [Bacteroides]	WP_005789703.1		31 kDa		unknown	5	4	0	
+421	true	Empty	carboxypeptidase regulatory-like domain-containing protein [Bacteroides fragilis]	WP_010992966.1		46 kDa		unknown	0	1	6	
+422	true	Empty	MULTISPECIES: NADH peroxidase [Bacteroides]	WP_005780311.1		21 kDa		unknown	7	2	0	
+423	true	Empty	MULTISPECIES: glycosidase [Bacteroides]	WP_005786056.1		38 kDa		unknown	7	1	0	
+424	true	Empty	MULTISPECIES: 3-methyl-2-oxobutanoate dehydrogenase subunit VorB [Bacteroides]	WP_005786497.1		39 kDa		unknown	3	3	0	
+425	true	Empty	WP_005814886.1 TonB-dependent receptor [Bacteroides fragilis]	WP_005814886.1		?		unknown	6	1	0	
+426	true	Empty	MULTISPECIES: UDP-glucose 4-epimerase GalE [Bacteroides]	WP_005788150.1		38 kDa		unknown	9	0	0	
+427	true	Empty	WP_065850129.1 aminopeptidase P family protein [Bacteroides fragilis]	WP_065850129.1		?		unknown	9	0	0	
+428	true	Empty	MULTISPECIES: 50S ribosomal protein L14 [Bacteroides]	WP_004296340.1		13 kDa		unknown	9	0	0	
+429	true	Empty	WP_009292125.1 DUF4251 domain-containing protein [Bacteroides fragilis]	WP_009292125.1		?		unknown	4	2	2	
+430	true	Empty	MULTISPECIES: RagB/SusD family nutrient uptake outer membrane protein [Bacteroides]	WP_005785254.1		77 kDa	true	unknown	2	2	2	
+431	true	Empty	MULTISPECIES: redoxin domain-containing protein [Bacteroides]	WP_005789107.1		18 kDa		unknown	3	3	1	
+432	true	Empty	WP_032556801.1 SGNH/GDSL hydrolase family protein [Bacteroides fragilis]	WP_032556801.1		?		unknown	0	4	2	
+433	true	Empty	O-acetylhomoserine aminocarboxypropyltransferase/cysteine synthase [Bacteroides fragilis]	WP_005790318.1		46 kDa		unknown	5	3	0	
+434	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005791963.1		18 kDa		unknown	4	4	0	
+435	true	Empty	MULTISPECIES: adenylosuccinate lyase [Bacteroides]	WP_005791759.1		51 kDa		unknown	3	3	0	
+436	true	Empty	WP_009291411.1 porin [Bacteroides fragilis]	WP_009291411.1		?		unknown	6	2	0	
+437	true	Empty	WP_009293001.1 dihydrofolate reductase [Bacteroides fragilis]	WP_009293001.1		?		unknown	5	1	0	
+438	true	Empty	WP_032568641.1 cobaltochelatase subunit CobN [Bacteroides fragilis]	WP_032568641.1		?		unknown	6	1	0	
+439	true	Empty	WP_065849749.1 sialate O-acetylesterase [Bacteroides fragilis]	WP_065849749.1		?		unknown	7	1	0	
+440	true	Empty	MULTISPECIES: DUF4837 family protein [Bacteroides]	WP_005785463.1		40 kDa		unknown	4	2	0	
+441	true	Empty	efflux transporter outer membrane subunit [Bacteroides fragilis]	WP_005798684.1		52 kDa		unknown	3	3	0	
+442	true	Empty	WP_008657202.1 MULTISPECIES: glycoside hydrolase family 97 protein [Bacteroides]	WP_008657202.1		?		unknown	4	2	0	
+443	true	Empty	MULTISPECIES: 50S ribosomal protein L21 [Bacteroides]	WP_005775748.1		12 kDa		unknown	6	0	2	
+444	true	Empty	WP_065849699.1 alpha-2-macroglobulin [Bacteroides fragilis]	WP_065849699.1		?		unknown	7	0	0	
+445	true	Empty	MULTISPECIES: acetylornithine carbamoyltransferase [Bacteroides]	WP_005796520.1		36 kDa		unknown	7	0	0	
+446	true	Empty	WP_005788978.1 outer membrane beta-barrel protein [Bacteroides fragilis]	WP_005788978.1		?		unknown	6	0	0	
+447	true	Empty	WP_005789239.1 OmpH family outer membrane protein [Bacteroides fragilis]	WP_005789239.1		?		unknown	8	0	0	
+448	true	Empty	MULTISPECIES: glutamate--tRNA ligase [Bacteroides]	WP_005791502.1		58 kDa		unknown	8	0	0	
+449	true	Empty	WP_009292942.1 phosphoribosylformylglycinamidine synthase [Bacteroides fragilis]	WP_009292942.1		?		unknown	7	0	0	
+450	true	Empty	MULTISPECIES: peroxiredoxin [Bacteroides]	WP_005787656.1		24 kDa		unknown	7	0	0	
+451	true	Empty	MULTISPECIES: outer membrane beta-barrel protein [Bacteroides]	WP_005788062.1		19 kDa		unknown	3	1	1	
+452	true	Empty	PorT family protein [Bacteroides fragilis]	WP_005790695.1		21 kDa		unknown	2	3	2	
+453	true	Empty	WP_032576462.1 M28 family peptidase [Bacteroides fragilis]	WP_032576462.1		?		unknown	4	3	0	
+454	true	Empty	MULTISPECIES: PepSY-like domain-containing protein [Bacteroides]	WP_005785921.1		17 kDa		unknown	5	0	2	
+455	true	Empty	WP_014299443.1 TolC family protein [Bacteroides fragilis]	WP_014299443.1		?		unknown	3	0	3	
+456	true	Empty	WP_005804273.1 tetratricopeptide repeat protein [Bacteroides fragilis]	WP_005804273.1		?		unknown	2	2	0	
+457	true	Empty	WP_008769925.1 TolC family protein [Bacteroides fragilis]	WP_008769925.1		?		unknown	2	2	0	
+458	true	Empty	MULTISPECIES: 30S ribosomal protein S12 [Bacteroides]	WP_005675419.1		15 kDa		unknown	4	0	2	
+459	true	Empty	MULTISPECIES: 3-phosphoserine/phosphohydroxythreonine transaminase [Bacteroides]	WP_005794503.1		39 kDa		unknown	2	5	0	
+460	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005788549.1		15 kDa		unknown	0	0	3	
+461	true	Empty	MULTISPECIES: glutaminase A [Bacteroides]	WP_005784278.1		34 kDa		unknown	5	0	0	
+462	true	Empty	MULTISPECIES: lactate utilization protein [Bacteroides]	WP_005790403.1		52 kDa		unknown	7	0	0	
+463	true	Empty	MULTISPECIES: citrate/2-methylcitrate synthase [Bacteroides]	WP_005790680.1		51 kDa		unknown	6	0	0	
+464	true	Empty	nucleotide exchange factor GrpE [Bacteroides fragilis]	WP_005800555.1		22 kDa		unknown	7	0	0	
+465	true	Empty	WP_065849976.1 beta-N-acetylhexosaminidase [Bacteroides fragilis]	WP_065849976.1		?		unknown	7	0	0	
+466	true	Empty	MULTISPECIES: methylmalonyl-CoA epimerase [Bacteroides]	WP_005789532.1		15 kDa		unknown	6	0	0	
+467	true	Empty	WP_005812922.1 nucleoside phosphorylase [Bacteroides fragilis]	WP_005812922.1		?		unknown	6	0	0	
+468	true	Empty	WP_009292933.1 endonuclease [Bacteroides fragilis]	WP_009292933.1		?		unknown	3	0	0	
+469	true	Empty	MULTISPECIES: Fe-S cluster assembly ATPase SufC [Bacteroides]	WP_005783928.1		28 kDa		unknown	7	0	0	
+470	true	Empty	WP_008660222.1 MULTISPECIES: ACP S-malonyltransferase [Bacteroides]	WP_008660222.1		?	true	unknown	6	0	0	
+471	true	Empty	WP_009291819.1 glycine cleavage system aminomethyltransferase GcvT [Bacteroides fragilis]	WP_009291819.1		?		unknown	7	0	0	
+472	true	Empty	WP_011203748.1 DUF4932 domain-containing protein [Bacteroides fragilis]	WP_011203748.1		?		unknown	2	3	0	
+473	true	Empty	MULTISPECIES: V-type ATP synthase subunit B [Bacteroides]	WP_005788433.1		48 kDa		unknown	4	1	0	
+474	true	Empty	MULTISPECIES: orotate phosphoribosyltransferase [Bacteroides]	WP_005784381.1		24 kDa		unknown	3	2	0	
+475	true	Empty	MULTISPECIES: DUF3256 family protein [Bacteroides]	WP_005796026.1		24 kDa		unknown	4	1	0	
+476	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005783769.1		57 kDa		unknown	3	2	0	
+477	true	Empty	MULTISPECIES: bifunctional UDP-3-O-[3-hydroxymyristoyl] N-acetylglucosamine deacetylase/3-hydroxyacyl-ACP dehydratase [Bacteroides]	WP_005785120.1		52 kDa		unknown	5	1	0	
+478	true	Empty	MULTISPECIES: 4-hydroxy-tetrahydrodipicolinate synthase [Bacteroides]	WP_005787869.1		33 kDa		unknown	3	2	0	
+479	true	Empty	DUF4857 domain-containing protein [Bacteroides fragilis]	WP_005798820.1		40 kDa		unknown	4	2	0	
+480	true	Empty	WP_008657830.1 MULTISPECIES: erythromycin esterase family protein [Bacteroides]	WP_008657830.1		?		unknown	2	3	0	
+481	true	Empty	WP_005814804.1 alpha-L-fucosidase [Bacteroides fragilis]	WP_005814804.1		?		unknown	5	0	1	
+482	true	Empty	WP_032576604.1 DUF4840 domain-containing protein [Bacteroides fragilis]	WP_032576604.1		?		unknown	3	0	2	
+483	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005783715.1		14 kDa		unknown	0	5	1	
+484	true	Empty	family 43 glycosylhydrolase [Bacteroides fragilis]	WP_005790726.1		42 kDa		unknown	1	4	0	
+485	true	Empty	WP_032556960.1 hypothetical protein [Bacteroides fragilis]	WP_032556960.1		?		unknown	2	4	0	
+486	true	Empty	WP_081309425.1 alpha-galactosidase [Bacteroides fragilis]	WP_081309425.1		?		unknown	2	4	0	
+487	true	Empty	WP_065850120.1 BamA/TamA family outer membrane protein [Bacteroides fragilis]	WP_065850120.1		?		unknown	3	2	0	
+488	true	Empty	MULTISPECIES: 50S ribosomal protein L20 [Bacteroides]	WP_005786577.1		13 kDa		unknown	4	0	2	
+489	true	Empty	WP_009292594.1 lysine--tRNA ligase [Bacteroides fragilis]	WP_009292594.1		?		unknown	5	0	1	
+490	true	Empty	S9 family peptidase [Bacteroides fragilis]	WP_008768998.1		79 kDa		unknown	5	0	0	
+491	true	Empty	MULTISPECIES: putative porin [Bacteroides]	WP_005795080.1		79 kDa		unknown	3	0	0	
+492	true	Empty	MULTISPECIES: succinate--CoA ligase subunit alpha [Bacteroides]	WP_005787631.1		30 kDa		unknown	4	0	0	
+493	true	Empty	WP_005791310.1 MULTISPECIES: aminopeptidase P family protein [Bacteria]	WP_005791310.1		?		unknown	6	0	0	
+494	true	Empty	MULTISPECIES: IMP dehydrogenase [Bacteroides]	WP_005791859.1		53 kDa		unknown	6	0	0	
+495	true	Empty	WP_005812284.1 MULTISPECIES: cysteine--tRNA ligase [Bacteroides]	WP_005812284.1		?		unknown	6	0	0	
+496	true	Empty	WP_032497071.1 type I pullulanase [Bacteroides fragilis]	WP_032497071.1		?		unknown	6	0	0	
+497	true	Empty	WP_065849613.1 alpha-N-acetylglucosaminidase [Bacteroides fragilis]	WP_065849613.1		?		unknown	0	6	0	
+498	true	Empty	WP_032567971.1 alanine--tRNA ligase [Bacteroides fragilis]	WP_032567971.1		?		unknown	3	0	0	
+499	true	Empty	WP_065849785.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849785.1		?	true	unknown	0	0	6	
+500	true	Empty	MULTISPECIES: peptidylprolyl isomerase [Bacteroides]	WP_005792021.1		31 kDa		unknown	4	0	0	
+501	true	Empty	WP_005788076.1 hypothetical protein [Bacteroides fragilis]	WP_005788076.1		?		unknown	0	6	0	
+502	true	Empty	WP_005791925.1 MULTISPECIES: methionine--tRNA ligase [Bacteroides]	WP_005791925.1		?		unknown	6	0	0	
+503	true	Empty	WP_032575637.1 alpha/beta fold hydrolase [Bacteroides fragilis]	WP_032575637.1		?		unknown	1	2	2	
+504	true	Empty	MULTISPECIES: 30S ribosomal protein S9 [Bacteroides]	WP_005791749.1		14 kDa		unknown	3	2	0	
+505	true	Empty	MULTISPECIES: electron transfer flavoprotein subunit alpha/FixB family protein [Bacteroides]	WP_005798976.1		37 kDa		unknown	3	2	0	
+506	true	Empty	MULTISPECIES: hypothetical protein [Bacteroides]	WP_005785732.1		28 kDa		unknown	4	1	0	
+507	true	Empty	WP_032567851.1 beta-N-acetylhexosaminidase [Bacteroides fragilis]	WP_032567851.1		?		unknown	1	4	0	
+508	true	Empty	WP_032534124.1 hypothetical protein [Bacteroides fragilis]	WP_032534124.1		?		unknown	2	3	0	
+509	true	Empty	WP_065849860.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849860.1		?		unknown	2	0	3	
+510	true	Empty	MULTISPECIES: DUF4890 domain-containing protein [Bacteroides]	WP_005816384.1		18 kDa		unknown	3	0	2	
+511	true	Empty	MULTISPECIES: amidophosphoribosyltransferase [Bacteroides]	WP_005793382.1		71 kDa		unknown	4	0	0	
+512	true	Empty	MULTISPECIES: NAD-dependent epimerase/dehydratase family protein [Bacteroides]	WP_005788767.1		35 kDa		unknown	4	0	0	
+513	true	Empty	Na(+)-translocating NADH-quinone reductase subunit C [Bacteroides fragilis]	WP_005787203.1		24 kDa		unknown	5	0	0	
+514	true	Empty	MULTISPECIES: V-type ATP synthase subunit A [Bacteroides]	WP_005788434.1		65 kDa		unknown	4	0	0	
+515	true	Empty	WP_005791976.1 MULTISPECIES: 2-oxoacid:acceptor oxidoreductase subunit alpha [Bacteroides]	WP_005791976.1		?		unknown	5	0	0	
+516	true	Empty	WP_005798358.1 MULTISPECIES: 4Fe-4S dicluster domain-containing protein [Bacteroides]	WP_005798358.1		?		unknown	5	0	0	
+517	true	Empty	MULTISPECIES: aspartate 4-decarboxylase [Bacteroides]	WP_005795269.1		63 kDa		unknown	4	0	0	
+518	true	Empty	WP_005785787.1 MULTISPECIES: recombinase RecA [Bacteroides]	WP_005785787.1		?		unknown	2	0	0	
+519	true	Empty	MULTISPECIES: UMP kinase [Bacteroides]	WP_005784714.1		26 kDa		unknown	5	0	0	
+520	true	Empty	WP_005798822.1 PepSY-associated TM helix domain-containing protein [Bacteroides fragilis]	WP_005798822.1		?		unknown	0	5	0	
+521	true	Empty	MULTISPECIES: riboflavin synthase [Bacteroides]	WP_005788568.1		23 kDa		unknown	4	0	0	
+522	true	Empty	WP_005815968.1 transglycosylase domain-containing protein [Bacteroides fragilis]	WP_005815968.1		?		unknown	0	5	0	
+523	true	Empty	MULTISPECIES: preprotein translocase subunit YajC [Bacteroides]	WP_005775925.1		12 kDa		unknown	3	1	0	
+524	true	Empty	WP_065849600.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849600.1		?	true	unknown	1	3	0	
+525	true	Empty	WP_065849780.1 D-2-hydroxyacid dehydrogenase, partial [Bacteroides fragilis]	WP_065849780.1		?		unknown	2	2	0	
+526	true	Empty	WP_005803369.1 HmuY family protein [Bacteroides fragilis]	WP_005803369.1		?		unknown	2	0	0	
+527	true	Empty	WP_005793230.1 RagB/SusD family nutrient uptake outer membrane protein [Bacteroides fragilis]	WP_005793230.1		?		unknown	4	0	0	
+528	true	Empty	WP_065849765.1 TonB-dependent receptor [Bacteroides fragilis]	WP_065849765.1		?		unknown	4	0	0	
+529	true	Empty	WP_009291732.1 hypothetical protein [Bacteroides fragilis]	WP_009291732.1		?		unknown	4	0	0	
+530	true	Empty	WP_005798580.1 MULTISPECIES: dihydroorotate dehydrogenase-like protein [Bacteroides]	WP_005798580.1		?		unknown	3	0	0	
+531	true	Empty	MULTISPECIES: 50S ribosomal protein L25/general stress protein Ctc [Bacteroides]	WP_005785759.1		21 kDa		unknown	4	0	0	
+532	true	Empty	hypothetical protein [Bacteroides fragilis]	WP_005786370.1		32 kDa		unknown	0	4	0	
+533	true	Empty	MULTISPECIES: ferritin [Bacteroides]	WP_005788812.1		18 kDa		unknown	0	4	0	
+534	true	Empty	MULTISPECIES: 30S ribosomal protein S7 [Bacteroides]	WP_005791536.1		18 kDa		unknown	3	0	0	
+535	true	Empty	MULTISPECIES: 50S ribosomal protein L6 [Bacteroides]	WP_005791561.1		21 kDa		unknown	4	0	0	
+536	true	Empty	WP_005797495.1 4-hydroxy-3-methylbut-2-en-1-yl diphosphate synthase [Bacteroides fragilis]	WP_005797495.1		?		unknown	4	0	0	
+537	true	Empty	MULTISPECIES: nucleoside deaminase [Bacteroides]	WP_008768302.1		17 kDa		unknown	4	0	0	
+538	true	Empty	WP_009291412.1 DUF2264 domain-containing protein [Bacteroides fragilis]	WP_009291412.1		?		unknown	0	4	0	
+539	true	Empty	WP_009291688.1 hypothetical protein [Bacteroides fragilis]	WP_009291688.1		?		unknown	4	0	0	
+540	true	Empty	WP_005793848.1 MULTISPECIES: hypothetical protein [Bacteroides]	WP_005793848.1		?		unknown	0	0	2	
+541	true	Empty	MULTISPECIES: DNA polymerase III subunit beta [Bacteroides]	WP_005788748.1		41 kDa		unknown	4	0	0	
+542	true	Empty	MULTISPECIES: 50S ribosomal protein L22 [Bacteroidaceae]	WP_004291236.1		15 kDa		unknown	0	0	4	
+543	true	Empty	WP_005783772.1 MULTISPECIES: 4-hydroxy-tetrahydrodipicolinate reductase [Bacteroides]	WP_005783772.1		?		unknown	4	0	0	
+544	true	Empty	WP_005786418.1 NAD(P)/FAD-dependent oxidoreductase [Bacteroides fragilis]	WP_005786418.1		?		unknown	3	0	0	
+545	true	Empty	WP_065850115.1 ketoacyl-ACP synthase III [Bacteroides fragilis]	WP_065850115.1		?		unknown	4	0	0	
+546	true	Empty	MULTISPECIES: acyl-CoA carboxylase subunit beta [Bacteroides]	WP_005790286.1		56 kDa		unknown	2	0	0	
+547	true	Empty	MULTISPECIES: dTDP-glucose 4,6-dehydratase [Bacteroides]	WP_005790599.1		44 kDa		unknown	4	0	0	
+548	true	Empty	MULTISPECIES: energy-dependent translational throttle protein EttA [Bacteroides]	WP_005776885.1		64 kDa		unknown	4	0	0	
+549	true	Empty	WP_065849879.1 hypothetical protein, partial [Bacteroides fragilis]	WP_065849879.1		?		unknown	0	0	4	
+550	true	Empty	MULTISPECIES: 30S ribosomal protein S3 [Bacteroides]	WP_005782201.1		27 kDa		unknown	2	0	0	
+551	true	Empty	WP_065849781.1 discoidin domain-containing protein [Bacteroides fragilis]	WP_065849781.1		?		unknown	2	0	0	
+552	true	Empty	MULTISPECIES: 2,3-diphosphoglycerate-dependent phosphoglycerate mutase [Bacteroides]	WP_005789269.1		29 kDa		unknown	3	0	0	
+553	true	Empty	WP_005787210.1 MULTISPECIES: NADH:ubiquinone reductase (Na(+)-transporting) subunit F [Bacteroides]	WP_005787210.1		?		unknown	2	0	0	
+554	true	Empty	MULTISPECIES: class II aldolase/adducin family protein [Bacteroides]	WP_005783908.1		23 kDa		unknown	3	0	0	
+555	true	Empty	WP_005785213.1 TonB-dependent receptor [Bacteroides fragilis]	WP_005785213.1		?		unknown	3	0	0	
+556	true	Empty	MULTISPECIES: ketol-acid reductoisomerase [Bacteroides]	WP_005790693.1		38 kDa		unknown	3	0	0	
+557	true	Empty	bifunctional 3-deoxy-7-phosphoheptulonate synthase/chorismate mutase type II [Bacteroides fragilis]	WP_005791103.1		40 kDa		unknown	3	0	0	
+558	true	Empty	WP_065849700.1 glycoside hydrolase family 97 protein [Bacteroides fragilis]	WP_065849700.1		?		unknown	3	0	0	
+559	true	Empty	TonB-dependent receptor [Bacteroides fragilis]	WP_010993052.1		88 kDa		unknown	3	0	0	
+560	true	Empty	WP_009291985.1 2-oxo acid dehydrogenase subunit E2 [Bacteroides fragilis]	WP_009291985.1		?		unknown	2	0	0	
+561	true	Empty	MULTISPECIES: thioredoxin [Bacteroides]	WP_005784741.1		11 kDa		unknown	3	0	0	
+562	true	Empty	WP_005797520.1 glycoside hydrolase family 16 protein [Bacteroides fragilis]	WP_005797520.1		?		unknown	3	0	0	
+563	true	Empty	MULTISPECIES: Fe-S cluster assembly protein SufB [Bacteroides]	WP_005783924.1		54 kDa		unknown	2	0	0	
+564	true	Empty	MULTISPECIES: cytochrome ubiquinol oxidase subunit I [Bacteroides]	WP_005786918.1		58 kDa		unknown	2	0	0	
+565	true	Empty	MULTISPECIES: ABC transporter ATP-binding protein [Bacteroides]	WP_005789207.1		34 kDa		unknown	0	2	0	
+566	true	Empty	MULTISPECIES: YebC/PmpR family DNA-binding transcriptional regulator [Bacteroides]	WP_008768977.1		28 kDa		unknown	2	0	0	
+567	true	Empty	WP_065849702.1 hypothetical protein [Bacteroides fragilis]	WP_065849702.1		?		unknown	0	2	0	
+568	true	Empty	WP_009292931.1 glycoside hydrolase family 13 protein [Bacteroides fragilis]	WP_009292931.1		?		unknown	2	0	0	
+
+END OF FILE
