@@ -1,0 +1,217 @@
+#!/bin/bash -l
+#PBS -N snippy_raxml_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=36:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate snippy
+
+echo running snippy 
+
+snippy --outdir '86_5443_2_2_new' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/86_5443_2_2_new_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_078320-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_078320-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001095H_141210_E11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001095H_141210_E11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001099B_141217_C6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001099B_141217_C6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001136B_160425_F11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001136B_160425_F11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001175B_160314_C3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001175B_160314_C3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001175st1_C3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001175st1_C3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001254J_160919_G3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001254J_160919_G3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001271B_151109_A3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001271B_151109_A3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1001285H_161024_D4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1001285H_161024_D4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_5' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_5_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_7' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_7_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1007-1-F_9' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1007-1-F_9_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1009-4-F_10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1009-4-F_10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1009-4-F_7' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1009-4-F_7_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_1284' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_1284_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_12905' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_12905_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_14-106904-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_14-106904-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_143' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_143_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_20200206' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_20200206_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_20656-2-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_20656-2-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2-078382-3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2-078382-3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_20793-3v1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_20793-3v1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_20793-3v2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_20793-3v2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2_1_16' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2_1_16_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2_1_56FAA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2_1_56FAA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2d2A' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2d2A_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2-F-2_4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2-F-2_4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2-F-2_5' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2-F-2_5_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_2-F-2_7' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_2-F-2_7_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3_1_12' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3_1_12_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_320_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_320_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_321_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_321_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_322_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_322_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3397_N2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3397_N2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3397_N3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3397_N3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3397_T14' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3397_T14_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_34-F-2_13' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_34-F-2_13_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3719_A10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3719_A10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3719_T6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3719_T6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3725_D9v' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3725_D9v_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3774_T13' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3774_T13_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3783N1-6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3783N1-6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3783N1-8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3783N1-8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3783N2-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3783N2-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3976T7' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3976T7_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3976T8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3976T8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986_N3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986_N3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986_NB19' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986_NB19_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986_NB22' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986_NB22_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986TB10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986TB10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986_TB13' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986_TB13_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3986_TB9' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3986_TB9_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3988_T1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3988_T1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3988TB14' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3988TB14_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3996_NB_6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3996_NB_6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3998TB3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3998TB3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3998_TB_4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3998_TB_4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_3-F-2_6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_3-F-2_6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_4g8B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_4g8B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_638R' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_638R_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_783N1-2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_783N1-2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_82A12' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_82A12_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_86-5443-2-2v1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_86-5443-2-2v1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_885_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_885_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_894_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_894_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_8E3_BL_hyb' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_8E3_BL_hyb_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_915_BFRA' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_915_BFRA_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_A7_UDC12-2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_A7_UDC12-2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AD126T_1B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AD126T_1B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AD126T_2B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AD126T_2B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AD135F_1B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AD135F_1B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AD135F_2B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AD135F_2B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AD135F_3B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AD135F_3B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF14-14AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF14-14AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF14-26' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF14-26_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF15-10LB' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF15-10LB_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF26-6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF26-6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF27-10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF27-10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AF32-10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AF32-10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_am_0171' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_am_0171_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM13-18' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM13-18_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM15-16' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM15-16_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM16-16A' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM16-16A_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM17-19' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM17-19_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM18-6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM18-6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM26-13LB' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM26-13LB_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM31-13AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM31-13AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_AM40-4AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_AM40-4AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_ATCC_25285' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_ATCC_25285_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BE1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BE1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BF8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BF8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ04' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ04_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ05' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ05_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ06' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ06_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ07' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ07_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ08' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ08_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ09' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ09_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BFR_KZ12' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BFR_KZ12_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BOB25' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BOB25_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BSD2780061687_150420_F6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BSD2780061687_150420_F6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_BSD2780061689_150309_H4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_BSD2780061689_150309_H4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CCUG4856T' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CCUG4856T_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CFPLTA004_1B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CFPLTA004_1B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL03T00C08' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL03T00C08_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL03T12C07' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL03T12C07_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL04T03C20' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL04T03C20_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL05T00C42' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL05T00C42_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL05T00C42v2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL05T00C42v2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL05T12C13' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL05T12C13_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL07T00C01' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL07T00C01_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CL07T12C05' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CL07T12C05_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CM13' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CM13_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CMU103' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CMU103_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CMU36' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CMU36_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_CNM20180471' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_CNM20180471_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_COR2-248-WT-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_COR2-248-WT-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_D33t1_170424_C9' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_D33t1_170424_C9_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_D54t1_190329_B1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_D54t1_190329_B1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMOUH0017B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMOUH0017B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMOUH0018B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMOUH0018B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMOUH0042B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMOUH0042B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMOUH0067B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMOUH0067B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMOUH0085B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMOUH0085B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DCMSKEJBY0001B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DCMSKEJBY0001B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DS-166' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DS-166_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DS-208' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DS-208_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_Ds-233' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_Ds-233_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_DS-71' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_DS-71_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_FDAARGOS_1025' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_FDAARGOS_1025_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_FDAARGOS_763' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_FDAARGOS_763_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_GB-124' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_GB-124_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_GUT04' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_GUT04_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HAP130N_1B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HAP130N_1B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HAP130N_2B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HAP130N_2B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HAP130N_3B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HAP130N_3B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HCK-B3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HCK-B3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HMW_610' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HMW_610_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HMW_615' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HMW_615_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_HMW_616' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_HMW_616_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_I1345' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_I1345_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_J1101004_170508_F3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_J1101004_170508_F3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_J1101437_171009_F3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_J1101437_171009_F3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_J-143-4' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_J-143-4_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_J38-1v1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_J38-1v1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_JIM10' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_JIM10_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_KLE1257' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_KLE1257_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_KLE1758' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_KLE1758_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_MC1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_MC1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_MGYG-HGUT-00236' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_MGYG-HGUT-00236_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_MGYG-HGUT-01337' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_MGYG-HGUT-01337_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_NCTC-9343v1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_NCTC-9343v1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_NCTC_9343v2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_NCTC_9343v2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_O21' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_O21_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OF01-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OF01-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OF05-11AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OF05-11AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OF05-13AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OF05-13AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OM02-11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OM02-11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OM02-9' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OM02-9_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OM04-9BH' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OM04-9BH_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OM06-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OM06-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_OM06-30AC' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_OM06-30AC_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_Q1F2' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_Q1F2_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S13_L11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S13_L11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S14' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S14_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S23L17' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S23L17_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S23L24' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S23L24_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S23_R14' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S23_R14_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S24L15' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S24L15_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S24L26' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S24L26_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S24L34' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S24L34_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S36L11' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S36L11_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S36L12' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S36L12_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S36L5' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S36L5_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S38L3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S38L3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S38L5' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S38L5_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S6L3' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S6L3_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S6L8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S6L8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S6R5' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S6R5_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S6R6' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S6R6_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_S6R8' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_S6R8_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_TF05-31' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_TF05-31_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_TF09-1' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_TF09-1_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_TL139C_1B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_TL139C_1B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_TL139C_2B' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_TL139C_2B_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_TM08-15' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_TM08-15_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_US326' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_US326_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy --outdir 'BF_YCH46' --ctgs '/dartfs/rc/lab/R/RossB/SalernoP/WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/BF_YCH46_genomic.fna' --ref BF_NCTC-9343v1_genomic.gbk --cpus 16
+snippy-core --ref '86_5443_2_2_new/ref.fa' 86_5443_2_2_new BF_078320-1 BF_1001095H_141210_E11 BF_1001099B_141217_C6 BF_1001136B_160425_F11 BF_1001175B_160314_C3 BF_1001175st1_C3 BF_1001254J_160919_G3 BF_1001271B_151109_A3 BF_1001285H_161024_D4 BF_1007-1-F_10 BF_1007-1-F_3 BF_1007-1-F_4 BF_1007-1-F_5 BF_1007-1-F_6 BF_1007-1-F_7 BF_1007-1-F_8 BF_1007-1-F_9 BF_1009-4-F_10 BF_1009-4-F_7 BF_1284 BF_12905 BF_14-106904-1 BF_143 BF_2-078382-3 BF_2-F-2_4 BF_2-F-2_5 BF_2-F-2_7 BF_20200206 BF_20656-2-1 BF_20793-3v1 BF_20793-3v2 BF_2_1_16 BF_2_1_56FAA BF_2d2A BF_3-F-2_6 BF_320_BFRA BF_321_BFRA BF_322_BFRA BF_3397_N2 BF_3397_N3 BF_3397_T14 BF_34-F-2_13 BF_3719_A10 BF_3719_T6 BF_3725_D9v BF_3774_T13 BF_3783N1-6 BF_3783N1-8 BF_3783N2-1 BF_3976T7 BF_3976T8 BF_3986TB10 BF_3986_N3 BF_3986_NB19 BF_3986_NB22 BF_3986_TB13 BF_3986_TB9 BF_3988TB14 BF_3988_T1 BF_3996_NB_6 BF_3998TB3 BF_3998_TB_4 BF_3_1_12 BF_4g8B BF_638R BF_783N1-2 BF_82A12 BF_86-5443-2-2v1 BF_885_BFRA BF_894_BFRA BF_8E3_BL_hyb BF_915_BFRA BF_A7_UDC12-2 BF_AD126T_1B BF_AD126T_2B BF_AD135F_1B BF_AD135F_2B BF_AD135F_3B BF_AF14-14AC BF_AF14-26 BF_AF15-10LB BF_AF26-6 BF_AF27-10 BF_AF32-10 BF_AM13-18 BF_AM15-16 BF_AM16-16A BF_AM17-19 BF_AM18-6 BF_AM26-13LB BF_AM31-13AC BF_AM40-4AC BF_ATCC_25285 BF_BE1 BF_BF8 BF_BFR_KZ04 BF_BFR_KZ05 BF_BFR_KZ06 BF_BFR_KZ07 BF_BFR_KZ08 BF_BFR_KZ09 BF_BFR_KZ10 BF_BFR_KZ11 BF_BFR_KZ12 BF_BOB25 BF_BSD2780061687_150420_F6 BF_BSD2780061689_150309_H4 BF_CCUG4856T BF_CFPLTA004_1B BF_CL03T00C08 BF_CL03T12C07 BF_CL04T03C20 BF_CL05T00C42 BF_CL05T00C42v2 BF_CL05T12C13 BF_CL07T00C01 BF_CL07T12C05 BF_CM13 BF_CMU103 BF_CMU36 BF_CNM20180471 BF_COR2-248-WT-1 BF_D33t1_170424_C9 BF_D54t1_190329_B1 BF_DCMOUH0017B BF_DCMOUH0018B BF_DCMOUH0042B BF_DCMOUH0067B BF_DCMOUH0085B BF_DCMSKEJBY0001B BF_DS-166 BF_DS-208 BF_DS-71 BF_Ds-233 BF_FDAARGOS_1025 BF_FDAARGOS_763 BF_GB-124 BF_GUT04 BF_HAP130N_1B BF_HAP130N_2B BF_HAP130N_3B BF_HCK-B3 BF_HMW_610 BF_HMW_615 BF_HMW_616 BF_I1345 BF_J-143-4 BF_J1101004_170508_F3 BF_J1101437_171009_F3 BF_J38-1v1 BF_JIM10 BF_KLE1257 BF_KLE1758 BF_MC1 BF_MGYG-HGUT-00236 BF_MGYG-HGUT-01337 BF_NCTC-9343v1 BF_NCTC_9343v2 BF_O21 BF_OF01-1 BF_OF05-11AC BF_OF05-13AC BF_OM02-11 BF_OM02-9 BF_OM04-9BH BF_OM06-1 BF_OM06-30AC BF_Q1F2 BF_S13_L11 BF_S14 BF_S23L17 BF_S23L24 BF_S23_R14 BF_S24L15 BF_S24L26 BF_S24L34 BF_S36L11 BF_S36L12 BF_S36L5 BF_S38L3 BF_S38L5 BF_S6L3 BF_S6L8 BF_S6R5 BF_S6R6 BF_S6R8 BF_TF05-31 BF_TF09-1 BF_TL139C_1B BF_TL139C_2B BF_TM08-15 BF_US326 BF_YCH46 BF_am_0171
+
+conda activate wgs
+
+echo running raxml
+
+raxml-ng --all --msa core.aln --model GTR+G --bs-trees 500

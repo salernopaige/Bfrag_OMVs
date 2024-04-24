@@ -1,0 +1,1111 @@
+---
+title: "OMV sRNA-Seq BHIS 2/22/21"
+author: "Paige Salerno"
+date: "2/22/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/sRNA_Seq/BHIS_exp_201127/")
+
+library(tidyverse)
+library(dplyr)
+library(ggplot2)
+library(reticulate)
+library(Rsubread)
+library(stringr)
+library(plyr)
+library(DESeq2)
+library(circlize)
+library(RColorBrewer)
+library(ComplexHeatmap)
+library(EnhancedVolcano)
+```
+
+## Experimental Design/Details
+The purpose of this experiment was to do small RNA (sRNA) sequencing on the RNAs obtained from the OMV prep. This specific experiment used BHIS media to grow *B. fragilis* NCTC 9343 (hereby referred to as **NTBF**) and *B. fragilis* 86-5443-2-2 (hereby referred to as **ETBF**) to compare **nontoxigenic (NTBF)** and **enterotoxigenic (ETBF)** *B. fragilis* to one another, respectively. 
+
+## Step 1: FastQC
+The first thing I wanted to do was check the quality of the run especially since these are short reads and only a single end run, I want to make sure the run is of high quality. The run was a 75bp single end read. 
+
+```{bash eval = F}
+fastqc *.fastq.gz
+```
+
+Looking at the `.html` files, it does look like the run is of high quality, so we should be all set to move forward with the analysis. 
+
+## Step 2: Trimming
+**NOTE:** For the steps prior to FeatureCounts, we used bash.
+
+To trim the reads, we used [**fastp**](https://github.com/OpenGene/fastp), and installed this software using the `mypy` conda environment set up previously:
+
+```{bash eval=F}
+conda install -c bioconda fastp
+```
+
+Then we ran fastp on all of the samples using the UMI option to trim the 12bp UMI based on the following image of the Qiagen library structure from the Qiagen miRNA kit:
+
+<center>
+
+![Qiagen Library Structure](miRNAoriginalstructure.png)
+
+</center>
+
+Note: The common sequence in the above image is really just the 3' adapter sequence
+In order to trim both adapters off the ends, I made a fasta file with the adapter sequences and incorporated it into my fastp command: `adapters.fa`
+
+>5' Adapter
+GTTCAGAGTTCTACAGTCCGACGATC
+
+>3' Adapter
+AACTGTAGGCACCATCAAT
+
+Running fastp as a loop with `run_fastp.sh`
+
+```{bash eval=F}
+cd raw_reads/
+
+#!/bin/bash -l  
+#PBS -N fastp
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=0:30:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate mypy
+
+echo running fastp
+ls *.fastq.gz | while read x; do
+
+  # save the file name
+  sample=`echo "$x"`
+  # get everything in file name before "/" (to remove '../smRNA-Seq_201201/')
+  sample=`echo "$sample" | cut -d"/" -f8`
+  # get everything in file name before "_" e.g. "ETBF_" or "NCTC-9343_"
+  sample=`echo "$sample" | cut -d"." -f1`
+  echo processing "$sample"
+
+  fastp -i ${sample}.fastq.gz -o ../fastp/${sample}.fastp.fastq.gz --adapter_sequence=AGATCGGAAGAGCACACGTCTGAACTCCAGTCA --adapter_fasta=adapters.fa -h ../fastp/${sample}.html -j ../fastp/${sample}.json
+  
+done
+```
+
+## Step 3: Prokka
+I wanted to use the genes found in new high quality genome we have for ETBF, so I used [Prokka](https://github.com/tseemann/prokka) to annotate the new high quality genome and NTBF as well. I also ran [Roary](https://sanger-pathogens.github.io/Roary/) just to find common genes between NTBF and ETBF. I also wanted to look at the orthology of NTBF and ETBF to find the common genes, and make reference lists for all experiments we'll do in the future and prokka/Roary assisted with this as well. 
+
+```{bash, eval=F}
+#!/bin/bash -l  
+#PBS -N prokka_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=5:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate prokka_env
+
+for file in *.fa
+do 
+	tag=${file%_genome.fa}
+	echo running prokka on "$tag"
+	prokka --prefix "$tag" --locustag "$tag" --outdir 210202_"$tag"_prokka --rfam --gram neg --addgenes "$file"
+  mv 210202_"$tag"_prokka/*.gff roary
+done
+
+cd roary/
+
+conda activate roary
+
+roary -f ./roary_results -r -v -e -n -p 16 *.gff
+
+```
+
+## Step 4: Alignment using BWA:
+Now that I've done a new annotation of NTBF and ETBF, I have will just use the genome file to align our reads to the whole genome. This way, our alignments are tagged with the appropriate chromosome name so that they can be counted in featureCounts. Therefore I chose [BWA](https://github.com/lh3/bwa) to do so, since it's a non-splice aware aligner that's a bit faster than Bowtie2.
+
+```{bash, eval=F}
+#!/bin/bash -l  
+#PBS -N bwa_aln
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=1:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate mypy
+
+echo running bwa
+
+cat bwa_info_table.txt | while read x; do
+  sample=`echo "$x"`
+  # get fasta file name
+  sample=`echo "$sample" | tr '\t' ' ' | cut -d' ' -f1`
+  sample=`echo "$sample" | cut -d'.' -f1`
+  echo processing "$sample"
+  # get actual strain name
+  ref=`echo "$x"`
+  ref=`echo "$ref" | tr '\t' ' ' | cut -d' ' -f2`
+  ref=`echo "$ref" | cut -d'/' -f4`
+  ref=`echo "$ref" | cut -d'.' -f1`
+  # echo kept adding white space to the strain variable, so to get rid of it:
+  ref=`echo "$ref" | tr -d ' \t\n\r'`
+  echo processing "$ref"
+  
+  bwa index ${ref}.fna
+  bwa aln ${ref}.fna ${sample}.fastp.fastq > ${sample}.genomic.sai; bwa samse ${ref}.fna ${sample}.genomic.sai ${sample}.fastp.fastq > ${sample}.genomic.aln-se.sam 
+
+done
+```
+
+Quickly I want to check the output to make sure I know what's going on:
+
+```{bash,eval=F}
+# Looking at the header of the sam file
+samtools view -H NCTC-9343_S1_R1_001.aln-se.sam  | head
+
+# Looking at the first few alignments to check the gene name
+samtools view NCTC-9343_S1_R1_001.aln-se.sam | head
+```
+
+Now I want to convert my `.sam` files to `.bam` files:
+
+```{bash, eval=F}
+#!/bin/bash -l  
+#PBS -N samtools
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=1:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate mypy
+
+# Using samtools to generate a bam file from our sam files. 
+ls *.genomic.aln-se.sam | while read x; do
+
+  sample=`echo "$x"`
+  # get fasta file name
+  sample=`echo "$sample" | cut -d'.' -f1`
+  echo processing "$sample"
+  
+  samtools sort ${sample}.genomic.aln-se.sam -o ${sample}.genomic.aln-se.sorted.sam
+  samtools view -S -b ${sample}.genomic.aln-se.sorted.sam > ${sample}.genomic.aln-se.sorted.bam
+  samtools index ${sample}.genomic.aln-se.sorted.bam
+
+done
+```
+
+#### FeatureCounts:
+Now that I've realigned using bwa, I'll try to use [FeatureCounts](https://www.rdocumentation.org/packages/Rsubread/versions/1.22.2/topics/featureCounts) in the [Rsubread](https://bioconductor.org/packages/release/bioc/vignettes/Rsubread/inst/doc/Rsubread.pdf) package to make a count matrix. First I might need to generate a common gene file to do so for all samples though.
+
+featureCounts requires a GTF file to use for counts, so I will generate one from our new prokka `.ffa` file using [gffread](http://ccb.jhu.edu/software/stringtie/gff.shtml#gffread):
+
+```{bash, eval=F}
+gffread ETBF.ffa -T -o ../210202_ETBF_prokka/ETBF.gtf
+gffread NCTC-9343.ffa -T -o ../210202_NCTC-9343_prokka/NCTC-9343.gtf
+```
+
+Now we can use the new `.gtf` file for featureCounts
+
+```{r, echo=T, results='hide'}
+NTBF_1_fc_SE <- featureCounts("NCTC-9343_1_S1_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/NCTC-9343.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+NTBF_2_fc_SE <- featureCounts("NCTC-9343_2_S2_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/NCTC-9343.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+NTBF_3_fc_SE <- featureCounts("NCTC-9343_3_S3_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/NCTC-9343.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+ETBF_4_fc_SE <- featureCounts("ETBF_4_S4_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/ETBF.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+ETBF_5_fc_SE <- featureCounts("ETBF_5_S5_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/ETBF.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+ETBF_6_fc_SE <- featureCounts("ETBF_6_S6_R1_001.genomic.aln-se.sorted.bam",annot.ext="bwa_alns/ETBF.gtf", countMultiMappingReads = TRUE, GTF.attrType = "transcript_id", isGTFAnnotationFile = TRUE)
+
+# Merge the replicates into one data frame with the gene names as an extra column
+NTBF_combo <- data.frame(cbind(NTBF_1_fc_SE$counts, NTBF_2_fc_SE$counts, NTBF_3_fc_SE$counts))
+NTBF_combo$names <- rownames(NTBF_combo)
+colnames(NTBF_combo) <- c("NTBF_S1", "NTBF_S2", "NTBF_S3", "RNA_ID")
+
+ETBF_combo <- data.frame(cbind(ETBF_4_fc_SE$counts, ETBF_5_fc_SE$counts, ETBF_6_fc_SE$counts))
+ETBF_combo$names <- rownames(ETBF_combo)
+colnames(ETBF_combo) <- c("ETBF_S1", "ETBF_S2", "ETBF_S3", "RNA_ID")
+```
+
+## Step 5: Finding common sRNAs between the two strains:
+I used **python** to generate data frames with the info from all of the RNAs listed in the Prokka `.ffn` files. This code can be found in `/bwa_alns/python/bfrag_RNA_seqs_db.ipynb` I will paste the code below just to have it all in one place:
+
+```{python, eval=F}
+# import all necessary packages
+import gzip
+import itertools
+from collections import defaultdict
+import numpy as np
+
+import matplotlib.pyplot as plt
+import seaborn as sns
+import pandas as pd
+sns.set(style="whitegrid")
+import random
+```
+
+```{python, eval=F}
+# Organize NTBF
+NTBF = open("NCTC-9343.ffn")
+NTBF = NTBF.read()
+NTBF
+
+# Taking each gene and adding it to a list to count the total number of genes
+n = []
+for i in range(len(NTBF)):
+    if NTBF[i].startswith(">"):
+        n.append(i)
+n
+
+# number of genes
+len(n)
+
+# Getting rid of the > symbol
+NTBF = NTBF.split(">")
+NTBF
+
+# Replace every new line in each gene with a | marker, but only the first instance and adding it to a list
+NTBF_rna = []
+for i in NTBF:
+    x = i.replace("\n", "|", 1)
+    NTBF_rna.append(x)
+NTBF_rna
+
+# Removing all of the remaining new lines to get all of the sequences in one continuous sequence
+NTBF_rna2 = []
+for i in NTBF_rna:
+    x = i.replace("\n", "")
+    NTBF_rna2.append(x)
+NTBF_rna2
+
+# replacing each space with a |, but only the first instance
+NTBF_rna3 = []
+for i in NTBF_rna2:
+    x = i.replace(" ", "|", 1)
+    NTBF_rna3.append(x)
+NTBF_rna3
+
+# Put the final list into a dataframe
+NTBF_df = pd.DataFrame(NTBF_rna3)
+
+# Name the column 
+NTBF_df.columns = ['RNA_ID']
+
+# separate each gene by the | symbols and add new names to the new columns
+NTBF_df[["RNA_ID", "Gene_ID", "Sequence"]] = NTBF_df["RNA_ID"].str.split("|",expand=True)
+
+# Getting rid of the weird blank first line in the dataframe
+NTBF_df = NTBF_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+NTBF_df = NTBF_df.iloc[1:]
+
+# writing the file to a csv and take a quick look at it
+NTBF_df.to_csv("NCTC-9343_RNA_list.csv")
+NTBF_df = pd.read_csv("NCTC-9343_RNA_list.csv")
+NTBF_df
+```
+
+```{python, eval=F}
+# Organize ETBF
+ETBF = open("ETBF.ffn")
+ETBF = ETBF.read()
+
+# Taking each gene and adding it to a list to count the total number of genes
+n = []
+for i in range(len(ETBF)):
+    if ETBF[i].startswith(">"):
+        n.append(i)
+n
+
+# number of genes
+len(n)
+
+# Getting rid of the > symbol
+ETBF = ETBF.split(">")
+ETBF
+
+# Replace every new line in each gene with a | marker, but only the first instance and adding it to a list
+ETBF_rna = []
+for i in ETBF:
+    x = i.replace("\n", "|", 1)
+    ETBF_rna.append(x)
+ETBF_rna
+
+# Removing all of the remaining new lines to get all of the sequences in one continuous sequence
+ETBF_rna2 = []
+for i in ETBF_rna:
+    x = i.replace("\n", "")
+    ETBF_rna2.append(x)
+ETBF_rna2
+
+# replacing each space with a |, but only the first instance
+ETBF_rna3 = []
+for i in ETBF_rna2:
+    x = i.replace(" ", "|", 1)
+    ETBF_rna3.append(x)
+ETBF_rna3
+
+# Put the final list into a dataframe
+ETBF_df = pd.DataFrame(ETBF_rna3)
+
+# Name the column 
+ETBF_df.columns = ['RNA_ID']
+
+# separate each gene by the | symbols and add new names to the new columns
+ETBF_df[["RNA_ID", "Gene_ID", "Sequence"]] = ETBF_df["RNA_ID"].str.split("|",expand=True)
+
+# Getting rid of the weird blank first line in the dataframe
+ETBF_df = ETBF_df.apply(lambda x: x.str.strip() if x.dtype == "object" else x)
+ETBF_df = ETBF_df.iloc[1:]
+
+# writing the file to a csv and take a quick look at it
+ETBF_df.to_csv("ETBF_RNA_list.csv")
+ETBF_df = pd.read_csv("ETBF_RNA_list.csv")
+ETBF_df
+```
+
+It's not elegant, but it works.
+
+So now that I have that list all sorted, I can continue with the actual analysis:
+
+```{r}
+# Load RNA files
+NTBF_all_rnas <- read.csv("bwa_alns/python/NCTC-9343_RNA_list.csv", stringsAsFactors = FALSE)
+ETBF_all_rnas <- read.csv("bwa_alns/python/ETBF_RNA_list.csv", stringsAsFactors = FALSE)
+Sinfo <- read.csv("Sample_info_210214.csv")
+
+# Merge all RNAs into one file, and retain rows that do not match
+NTBF_non_common <- merge(NTBF_all_rnas, ETBF_all_rnas, by = "Sequence", all.x = TRUE)
+
+# Generate a dataframe of only rows that do not match from merged dataframe above
+NTBF_non_common <- NTBF_non_common[is.na(NTBF_non_common$RNA_ID.y),]
+NTBF_non_common <- subset(NTBF_non_common, select = c("RNA_ID.x",
+                                                      "Gene_ID.x",
+                                                      "Sequence"))
+colnames(NTBF_non_common) <- c("RNA_ID",
+                               "Gene_ID",
+                               "Sequence")
+
+write.csv(NTBF_non_common, "NTBF_all_non_common_rnas_210225.csv", row.names = FALSE)
+
+# Merge all RNAs into one file, and retain rows that do not match
+ETBF_non_common <- merge(ETBF_all_rnas, NTBF_all_rnas, by = "Sequence", all.x = TRUE)
+
+# Generate a dataframe of only rows that do not match from merged dataframe above
+ETBF_non_common <- ETBF_non_common[is.na(ETBF_non_common$RNA_ID.y),]
+ETBF_non_common <- subset(ETBF_non_common, select = c("RNA_ID.x",
+                                                      "Gene_ID.x",
+                                                      "Sequence"))
+colnames(ETBF_non_common) <- c("RNA_ID",
+                               "Gene_ID",
+                               "Sequence")
+
+write.csv(ETBF_non_common, "ETBF_all_non_common_rnas_210225.csv", row.names = FALSE)
+
+# Take the average of common RNAs, same name, repeated genes
+NTBF_res <- merge(NTBF_all_rnas, NTBF_combo, by = "RNA_ID")
+NTBF_res_norm <- ddply(NTBF_res, ~Gene_ID + Sequence, summarize, NTBF_S1=mean(NTBF_S1), NTBF_S2=mean(NTBF_S2), NTBF_S3=mean(NTBF_S3))
+nrow(NTBF_res_norm)
+
+# Take the average of common RNAs, same name, repeated genes
+ETBF_res <- merge(ETBF_all_rnas, ETBF_combo, by = "RNA_ID")
+ETBF_res_norm <- ddply(ETBF_res, ~Gene_ID + Sequence, summarize, ETBF_S1=mean(ETBF_S1), ETBF_S2=mean(ETBF_S2), ETBF_S3=mean(ETBF_S3))
+nrow(ETBF_res_norm)
+
+common_res <- merge(NTBF_res_norm, ETBF_res_norm, by = "Sequence")
+colnames(common_res) <- c("Sequence",
+                          "Gene_ID.NTBF",
+                          "NTBF_S1",
+                          "NTBF_S2",
+                          "NTBF_S3",
+                          "Gene_ID.ETBF",
+                          "ETBF_S1",
+                          "ETBF_S2",
+                          "ETBF_S3")
+
+common_res <- subset(common_res, select=c("Gene_ID.NTBF",
+                                          "Gene_ID.ETBF",
+                                          "NTBF_S1",
+                                          "NTBF_S2",
+                                          "NTBF_S3",
+                                          "ETBF_S1",
+                                          "ETBF_S2",
+                                          "ETBF_S3",
+                                          "Sequence"))
+
+write.csv(common_res, "common_results.csv", row.names = FALSE)
+```
+
+Now I only have 57 genes, no need to be concerned about repeats as I averaged based on `Gene_ID` and `Sequence`. This accounts for repetitive genes and whether they align multiple times. I think I can finally move on to DESeq analysis.
+
+### Making DFs for the non-common sRNAs for each strain:
+The last thing I want to do prior to moving forward is find the unique sRNAs for each strain. 
+
+```{r}
+# Finding non-common RNAs in ETBF
+NTBF_non_common_res <- merge(NTBF_non_common, NTBF_combo, by = "RNA_ID")
+NTBF_non_common_res_norm <- ddply(NTBF_non_common_res, ~Gene_ID + Sequence, summarize, NTBF_S1=mean(NTBF_S1), NTBF_S2=mean(NTBF_S2), NTBF_S3=mean(NTBF_S3))
+
+write.csv(NTBF_non_common_res_norm, "NTBF_Non_Common_res.csv")
+
+# Take the average of common RNAs, same name, repeated genes
+ETBF_non_common_res <- merge(ETBF_non_common, ETBF_combo, by = "RNA_ID")
+ETBF_non_common_res_norm <- ddply(ETBF_non_common_res, ~Gene_ID + Sequence, summarize, ETBF_S1=mean(ETBF_S1), ETBF_S2=mean(ETBF_S2), ETBF_S3=mean(ETBF_S3))
+
+write.csv(ETBF_non_common_res_norm, "ETBF_Non_Common_res.csv")
+
+# Making df for IntaRNA for all seqs
+common_res_seq <- subset(common_res, select = c("Gene_ID.NTBF",
+                                                "Sequence"))
+colnames(common_res_seq)[1] <- "Gene_ID"
+all_res <- rbind.fill(NTBF_non_common_res_norm[,1:2], ETBF_non_common_res_norm[,1:2], common_res_seq)
+all_res_fa <- dataframe2fas(all_res)
+write.fasta(all_res_fa, "seq_of_all_results_210326.fa")
+
+# Making df for IntaRNA for NTBF seqs
+NTBF_res_seq <- subset(NTBF_res, select = c("Gene_ID",
+                                            "Sequence"))
+NTBF_res_fa <- dataframe2fas(NTBF_res_seq)
+write.fasta(NTBF_res_fa, "NTBF_seq_res_210412.fa")
+
+# Making df for IntaRNA for ETBF seqs
+ETBF_res_seq <- subset(ETBF_res, select = c("Gene_ID",
+                                            "Sequence"))
+ETBF_res_fa <- dataframe2fas(ETBF_res_seq)
+write.fasta(ETBF_res_fa, "ETBF_seq_res_210412.fa")
+```
+
+## Step 6: General Data QC:
+Now that I have all of my data, I want to make sure it makes sense before moving into DESeq2, and make sure no replicates are going to throw off the analysis.
+
+#### Summary Statistics for Results:
+Next I want to look at the statistics for each sample overall to see how different they are from one another
+
+```{r}
+summary(common_res)
+```
+
+It appears as though they are incredibly close, but since I don't know what I'm doing I'm just going to go through the motions of normalizing them anyway. 
+
+### Looking at Distribution of Samples:
+I want to look at a histogram of what these samples look like. I will Log2 transform them and add the rows together to create the bars for each sample. I will also look to see how many rows have a count of zero in each replicate.
+
+```{r}
+# Making RNA names the row names for figures below:
+common_res2 <- common_res
+rownames(common_res2) <- make.names(common_res[,1], unique = TRUE)
+
+# histogram and boxplots for rowsums:
+hist(log2(rowSums(common_res2[,3:8])), xlab = "Log2 Row Sums of Common RNAs", main = "Histogram of Row Sums")
+sum(rowSums(common_res2[,3:8]) > 6)
+Exp_log2 <- log2(common_res2[,3:8] + 1)
+boxplot(Exp_log2, las = 2, ylab = "Log2 of Raw Counts", main = "Boxplot of Raw Counts")
+```
+
+It looks like the samples cluster around a log2 value between 5-8 for each RNA, with those values containing the highest frequencies. The boxplot also shows they seem to be incredibly similar.
+
+Next I want to calculate the sample medians to see how close they are to one another.
+
+```{r}
+Sample_Medians <- apply(Exp_log2, 2, median)
+Sample_Medians
+t.test(Sample_Medians ~ Sinfo$Strain)
+```
+
+Looking at the boxplot, it looks like there is more variation in the enterotoxigenic samples. The T-test failed, meaning the samples are not significantly different from one another.
+
+Next I wanted to calcualate the raw distances of each replicate from one another so that we could plot a dendrogram to see how they cluster.
+
+```{r}
+# Find distances between samples
+RawDist <- dist(t(Exp_log2), method = "euclidean")
+RawDist
+plot(hclust(RawDist, method = "average"), main = "Dendrogram of Distances Between Samples", xlab = "Sample", ylab = "Branch Height")
+```
+
+The samples do cluster together, although it doesn't look great. I suppose it could be much worse though.
+
+### Normalization of Data
+Next we will want to calculate correction factors and normalize the counts across all genes in all samples, followed by plotting them in a box plot and PCA
+
+```{r}
+# Calculate Correction factors
+Grand_Median <- mean(Sample_Medians)
+Correction_Factors <- Grand_Median - Sample_Medians 
+Correction_Factors
+
+# Make empty matrix with same dimensions to add normalized data to
+ExpNorm <- matrix(nrow = length(rownames(Exp_log2)),
+                  ncol = length(colnames(Exp_log2)),
+                  dimnames = list(rownames(Exp_log2), colnames(Exp_log2)))
+
+# Calculate and Add normalized data into new matrix
+for(col in colnames(ExpNorm)){
+  ExpNorm[ , col] <- Exp_log2[ , col] + Correction_Factors[col]
+}
+
+# Boxplot of normalized data
+boxplot(ExpNorm, ylab = "Log2 Counts", 
+        main = "Normalized Counts", las = 2)
+
+# Cluster dendrogram of normalized data with euclidean
+NormDist <- dist(t(ExpNorm), method = "euclidean")
+plot(hclust(NormDist, method = "average"), main = "Normalized Dendrogram", xlab = "Sample", ylab = "Branch Height")
+```
+
+```{r, include=F}
+# PCA plots for normalized data, colored by strain info
+PCA <- prcomp(t(NormDist))
+plot(PCA$x[ , 1], PCA$x[ , 2], pch = 19, col = as.factor(Sinfo$Strain), xlab = "PCA 1", ylab = "PCA 2", main = "PCA Plot")
+```
+
+Now I just want to plot the raw counts of the sRNAs prior to doing any differential analysis. 
+
+```{r}
+# Calculate standard deviations to find highest across all samples
+NormSD <- apply(ExpNorm, 1, sd)
+
+# Order and find top 50 RNAs
+TopSD <- names(NormSD[order(NormSD, decreasing = TRUE)[1:50]])
+
+# Plot heatmap of top 50 RNAs
+ComplexHeatmap::Heatmap(as.matrix(ExpNorm[TopSD, ]),
+                        row_names_gp = grid::gpar(fontsize = 8),
+                        column_names_gp = grid::gpar(fontsize = 12),
+                        width = 5,
+                        height = 10,
+                        name = "Log2(Count)",
+                        row_title = "sRNAs",
+                        column_title = "Heatmap of Top 50 sRNAs")
+```
+
+This feels like pretty conclusive evidence that there are likely no differentially expressed sRNAs in these samples.
+
+```{r, include=F}
+# Plot heatmap of top 50 RNAs
+png(filename="/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/sRNA_Seq/BHIS_exp_201127/raw_sRNA_heatmap.png", width=800, height=750)
+ComplexHeatmap::Heatmap(as.matrix(ExpNorm[TopSD, ]),
+                        row_names_gp = grid::gpar(fontsize = 12),
+                        column_names_gp = grid::gpar(fontsize = 18),
+                        name = "Log2(Count)")
+graphics.off()
+```
+
+## Step 7: DESeq2
+### Exploratory Analysis
+In this step we generated PCA plots in order to look at the variation in our data:
+
+```{r, message=FALSE}
+# Making sure the data is ready for making the DESeq object
+common_deseq <- subset(common_res, select=c("Gene_ID.NTBF",
+                                            "NTBF_S1",
+                                            "NTBF_S2",
+                                            "NTBF_S3",
+                                            "ETBF_S1",
+                                            "ETBF_S2",
+                                            "ETBF_S3"))
+countDataMatrix <- as.matrix(common_deseq[ , -1])
+rownames(countDataMatrix) <- common_deseq[ , 1]
+Sinfo_da <- Sinfo[1:6,]
+
+# Make sure NTBF is baseline
+Sinfo_da$Strain
+Sinfo_da$Strain <- factor(Sinfo_da$Strain, levels=c("NTBF", "ETBF"))
+
+# Create DESeq object
+dds <- DESeqDataSetFromMatrix(countData = round(countDataMatrix),
+                              colData = Sinfo_da,
+                              design = ~ Strain)
+
+# have a quick look at the object 
+dds
+```
+
+```{r, include=FALSE}
+# print structure 
+str(dds)
+```
+
+```{r}
+# several accessory functions exist to access specific data 'slots'
+head(counts(dds))
+head(colData(dds))
+
+# drop RNAs with low counts 
+keep <- rowSums(counts(dds)) >= 6
+dds <- dds[keep,]
+dim(dds)
+
+save(dds, file = "NTBF_vs_ETBF_dds.rdata")
+
+dds <- estimateSizeFactors(dds)
+
+sizeFactors(dds)
+```
+
+```{r, include=F}
+# Histogram of the size factors
+hist(sizeFactors(dds), 
+     breaks=6, col = "cornflowerblue",
+     xlab="Size factors", ylab="No. of samples", 
+     main= "Size factor distribution over samples")
+```
+
+```{r}
+counts_norm <- counts(dds, normalized=TRUE)
+head(counts_norm)
+
+head(counts(dds, normalized=FALSE))
+```
+
+```{r}
+# PCA plots
+rld <- rlog(dds, blind = FALSE)
+head(assay(rld))
+```
+
+```{r, include=F}
+par(mfrow=c(1,2))
+# plotting correlations of each strain to each other
+plot(log2(countDataMatrix[,1]+1), log2(countDataMatrix[,2]+1), col = "cornflowerblue", xlab = "Sample 1", ylab = "Sample 2", main = "Log2 + 1")
+plot(assay(rld)[,1], assay(rld)[,2], col = "indianred", xlab = "Sample 1", ylab = "Sample 2", main = "rlog")
+```
+
+### Calculating Variation between samples
+```{r}
+# calculate gene expression level variance between samples 
+var <- rev(rowVars(assay(rld))[order(rowVars(assay(rld)))])
+```
+
+```{r, include=F}
+# plot variance for genes across samples
+plot(var, las = 1, main="Sample protein abundance variance", xlab = "Protein", ylab = "Variance")
+abline(v=50, col="red") ; abline(v=100, col="green") ; abline(v=250, col="blue")
+```
+
+```{r}
+# modify variable feature number to be used in PCA and hierarchical clustering based on no. of most variable features 
+var_feature_n <- 500 
+```
+
+
+### PCA Plots of the DESeq Object
+```{r}
+# perform PCA and order by variance 
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing = TRUE)[seq_len(min(var_feature_n, length(rv)))]
+pca <- prcomp(t(assay(rld)[select, ]))
+
+# extract the variance explained by each PC 
+percentVar <- pca$sdev^2/sum(pca$sdev^2)
+names(percentVar)[1:5] <- c("PC1", "PC2", "PC3", "PC4", "PC5")
+percentVar <- percentVar[1:5]
+```
+
+```{r}
+# plot variance for top 10 PCs 
+barplot(percentVar[1:5], col = "indianred", las = 1, ylab = "% Variance", cex.lab = 1.2)
+
+# construct data frame w/ PC loadings and add sample labels 
+pca_df <- as.data.frame(pca$x)
+pca_df$Strain <- dds@colData$Strain
+pca_df$sample_ids <- colnames(dds)
+
+# add colors for plotting to df 
+pca_df$col <- NA
+for(i in 1:length(levels(pca_df$Strain))){
+  ind1 <- which(pca_df$Strain == levels(pca_df$Strain)[i])
+  pca_df$col[ind1] <- i
+}
+```
+
+```{r}
+# plot PC1 vs PC2
+plot(pca_df[, 1], pca_df[, 2], 
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"), 
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main=paste0("PC1 vs PC2 for ", var_feature_n, "most variable genes"),
+     pch=16, cex=1.35, cex.lab=1.3, cex.axis = 1.15, las=1, 
+     panel.first = grid(),
+     col=pca_df$col)
+text((pca_df[, 2])~(pca_df[, 1]), labels = pca_df$sample_ids, cex=0.6, font=2, pos=4)
+
+# select top X no. of variable genes 
+topVarGenes <- head(order(rowVars(assay(rld)), decreasing=TRUE),
+                    var_feature_n)
+
+# set up gene expression matrix 
+mat1 <- assay(rld)[topVarGenes,]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+```
+
+```{r, include=F}
+# save PCA plot
+pdf(file = "NTBF_vs_ETBF_PCA.pdf", width = 11, height = 8.5)
+plot(pca_df[, 1], pca_df[, 2], 
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"), 
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main=paste0("PC1 vs PC2 for ", var_feature_n, " most variable genes"),
+     pch=16, cex=1.35, cex.lab=1.3, cex.axis = 1.15, las=1, 
+     panel.first = grid(),
+     col=pca_df$col)
+text((pca_df[, 2])~(pca_df[, 1]), labels = pca_df$sample_ids, cex=0.6, font=2, pos=4)
+dev.off()
+```
+
+
+```{r}
+# set up colors for heatmap 
+col = colorRamp2(c(-3, 0, 3), c("blue", "white", "red"))
+cols1 <- brewer.pal(11, "Paired")
+cols2 <- brewer.pal(9, "Greens")
+
+# set up annotation bar for samples 
+ha1 = HeatmapAnnotation(Group = colData(dds)$Strain, 
+                        col = list(Group = c("NTBF" = cols1[1], 
+                                             "ETBF" = cols1[2])),
+                        show_legend = TRUE)
+
+# set up column annotation labels (samples)
+ha = columnAnnotation(x = anno_text(colData(dds)$Sample_Name, 
+                                    which="column", rot = 45,
+                                    gp = gpar(fontsize = 10)))
+
+# generate heatmap object 
+ht1 = Heatmap(mat_scaled, 
+              name = "Expression", 
+              col = col, 
+              top_annotation = c(ha1), 
+              bottom_annotation = c(ha),
+              show_row_names = TRUE,
+              row_names_gp = (gp = gpar(fontsize = 10)),
+              cluster_columns = FALSE)
+
+# plot the heatmap 
+draw(ht1, row_title = "sRNA", column_title = "Heatmap of DE sRNAs")
+```
+
+```{r, message=F}
+# run the DEseq2 analysis 
+dds <- DESeq(dds)
+```
+
+```{r}
+hist(counts(dds, normalized=FALSE)[,5], breaks = 500, col="blue",
+     xlab="Raw abundance counts", ylab="Number of sRNAs",
+     main = "Count distribution for sample X")
+
+head(counts(dds, normalized=FALSE))
+
+# calculate mean and variance for group of replicates
+mean_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, mean)
+variance_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, var)
+```
+
+```{r, message=FALSE}
+# quickly check the available coefficients we could extract 
+resultsNames(dds)
+
+# get results for DE analysis (and order by Pval) by specifying design 
+res <- results(dds, 
+               name = "Strain_ETBF_vs_NTBF", 
+               alpha = 0.05, 
+               lfcThreshold = 0)
+
+res <- results(dds, alpha = 0.05, 
+               contrast = c("Strain", "NTBF", "ETBF"), 
+               lfcThreshold = 0)
+
+# order by adj Pval 
+res_ord <- res[order(res$padj),] 
+res_ord
+
+# quick check for how many DEGs with significance @ 5% level in either FC direction 
+sum(res$padj < 0.05, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange > 2, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange < -2, na.rm=TRUE)
+
+# or to get both padj < 0.05 and log2FoldChange > 2 or < -2
+sum(res$padj < 0.05 & res$log2FoldChange > 2| res$padj < 0.05 & res$log2FoldChange< -2, na.rm=TRUE)
+
+table(is.na(res$padj))
+
+res_ord <- res_ord[!is.na(res_ord$padj),]
+```
+
+```{r}
+# save a dataframe from the results() output
+res_tmp <- as.data.frame(res_ord)
+
+# add a column that will be used to save the colors we want to plot 
+res_tmp$cols <- c()
+
+# set the significance cut off (alpha) and fold change threshold to be used for coloring of genes 
+alpha <- 0.05
+fc_cutoff <- 0.5
+
+# loop through our dataframe and add values to the color column based on magnitude of alpha and LFCs 
+res_tmp$cols <- NA
+for(i in 1:nrow(res_tmp)){
+  if(is.na(res_tmp$pvalue[i])){
+    res_tmp$cols[i] <- NA
+  }
+  else if(res_tmp$pvalue[i] <= alpha & res_tmp$log2FoldChange[i] > fc_cutoff){
+    res_tmp$cols[i] <- "indianred"
+  } 
+  else if(res_tmp$pvalue[i] <= alpha & res_tmp$log2FoldChange[i] < -fc_cutoff){
+    res_tmp$cols[i] <- "indianred"
+  } 
+  else if(res_tmp$pvalue[i]<=alpha & res_tmp$log2FoldChange[i]>-fc_cutoff & res_tmp$log2FoldChange[i]<fc_cutoff){
+    res_tmp$cols[i] <- "cornflowerblue"
+  } 
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] > fc_cutoff){
+    res_tmp$cols[i] <- "gray47" 
+  }
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] < -fc_cutoff){
+    res_tmp$cols[i] <- "gray47" 
+  }
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] < fc_cutoff){
+    res_tmp$cols[i] <- "gray10" 
+  }
+}
+
+# Adding Descriptions to the res_tmp file for volcano plotting 
+res_tmp$Gene_ID <- rownames(res_tmp)
+res_tmp_test <- res_tmp
+res_tmp_test$Description <- NA
+
+common_rna <- subset(common_res, select = c("Gene_ID.NTBF", "Sequence"))
+colnames(common_rna) <- c("Gene_ID", "Sequence")
+res_tmp_test <- merge(res_tmp, common_rna, by = "Gene_ID")
+```
+
+**NOTE:** When I labeled the volcano plot, there were very few RNAs that had both a log2foldchange greater than 2 of less than -2. Therefore I changed the labeling to 0.5 and -0.5.
+
+```{r}
+# generate the volcano plot 
+p = ggplot(res_tmp_test, aes(log2FoldChange, -log10(pvalue))) + 
+  geom_point(aes(col=col), alpha = 0.5, size =2.5, colour = res_tmp_test$cols, fill = res_tmp_test$cols)  + 
+  xlab("Log2 Fold Change") + ylab("-Log10 p-value") +
+  ylim(0, 16) + 
+  xlim(-7, 7) +
+  geom_hline(yintercept = -log10(alpha), color = "black", linetype = "dashed", size = 0.4) + 
+  theme(legend.key = element_blank()) + 
+  ggtitle("NTBF vs. ETBF") 
+
+p2 <- p + 
+  # add labels to genes w/ LFC > 2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange > 0.5 & pvalue < alpha), aes(label = Gene_ID), 
+                   box.padding   = 0.35,
+                   nudge_x = 0.1,
+                   nudge_y = 0.1,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add labels to genes w/ LFC < -2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange < -0.5 & pvalue < alpha), aes(label = Gene_ID), 
+                   box.padding   = 0.35,
+                   nudge_x = -0.1,
+                   nudge_y = 0.1,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add vertical fold change lines 
+  geom_vline(xintercept = fc_cutoff, colour = "black", linetype="dotted") + 
+  geom_vline(xintercept = -fc_cutoff, colour = "black", linetype="dotted")
+
+# print the plot 
+print(p2)
+```
+
+```{r, include=F}
+# save volcano plots
+pdf(file = "NTBF_vs_ETBF_volcano.pdf", width = 11, height = 8.5)
+plot(p2)
+dev.off()
+```
+
+```{r}
+# subset @ 5% adjusted pval sig. level 
+res_order_FDR_05 <- res_ord[res_ord$padj<0.05,]
+nrow(res_order_FDR_05)
+```
+
+```{r, include=F}
+# write both to csv files
+write.csv(as.data.frame(res_ord), file= "NTBF_vs_ETBF_DE_results.csv")
+write.csv(as.data.frame(res_order_FDR_05), file="NTBF_vs_ETBF_DE_results.FDR.0.05.csv")
+```
+
+### Creating a hierarchial clustering figure for the data:
+The next thing I wanted to do was do some hierarchical clustering of the genes that have an adjusted p-value of < 0.05 
+
+```{r}
+rld <- rlog(dds, blind = FALSE)
+ind_to_keep <- c(which(colData(rld)$Strain=="NTBF"), which(colData(rld)$Strain=="ETBF"))
+
+# set up RNA abundance matrix 
+mat1 <- assay(rld)[rownames(res_order_FDR_05), ind_to_keep]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+
+# set up colors for heatmap 
+col = colorRamp2(c(-3, 0, 3), c("blue", "white", "red"))
+cols1 <- brewer.pal(11, "Paired")
+cols2 <- brewer.pal(9, "Greens")
+
+# subset coldata for samples in each group
+colData_sub <- colData(dds)[ind_to_keep, ]
+```
+
+```{r}
+# set up annotation bar for samples 
+ha1 = HeatmapAnnotation(Group = colData_sub$Strain, 
+                        col = list(Group = c("NTBF" = cols1[1],
+                                             "ETBF" = cols1[2])), 
+                        show_legend = TRUE)
+
+# set up column annotation labels (samples)
+ha = columnAnnotation(x = anno_text(colData_sub$Sample_Name, 
+                                    which="column", rot = 45, 
+                                    gp = gpar(fontsize = 10)))
+
+# generate heatmap object 
+ht1 = Heatmap(mat_scaled, name = "Abundance", col = col, 
+              top_annotation = c(ha1), 
+              bottom_annotation = c(ha),
+              show_row_names = TRUE,
+              row_names_gp = (gp = gpar(fontsize = 10)),
+              cluster_columns = FALSE)
+
+# plot the heatmap 
+draw(ht1, row_title = "sRNAs", column_title = "Hierachical clustering of DE sRNAs (padj<0.05)")
+```
+
+```{r, include=F}
+# save plot
+pdf(file = "NTBF_vs_ETBF_heatmap.pdf", width = 11, height = 8.5)
+draw(ht1, row_title = "sRNAs", column_title = "Hierachical clustering of DE sRNAs (padj<0.05)")
+dev.off()
+```
+
+## Step 8: Making the final data tables:
+The very last thing I need to do to finish off this data is make a data table containing the gene descriptions with the ETBF and NTBF RNA_IDs that were given during the prokka analysis, just for reference. 
+```{r}
+# make results into a data frame
+results_table <- data.frame(res_ord)
+
+# Make the row names into an additional column called "Gene_ID"
+results_table$Gene_ID <- rownames(results_table)
+
+# Combine the results with the NTBF rna list to get the sequence and RNA_ID info
+NTBF_comm_res_tbl <- merge(results_table, NTBF_all_rnas, by = "Gene_ID")
+colnames(NTBF_comm_res_tbl)[8] <- "RNA_ID.NTBF" 
+
+# Make a gene to RNA_ID reference table for eventual publication
+NTBF_gene_ref_tbl <- subset(NTBF_comm_res_tbl, select = c("Gene_ID",
+                                                          "RNA_ID.NTBF",
+                                                          "Sequence"))
+
+# Combine the results with the ETBF rna list to get the sequence and RNA_ID info
+ETBF_comm_res_tbl <- merge(results_table, ETBF_all_rnas, by = "Gene_ID")
+colnames(ETBF_comm_res_tbl)[8] <- "RNA_ID.ETBF" 
+
+# Make a gene to RNA_ID reference table for eventual publication
+ETBF_gene_ref_tbl <- subset(ETBF_comm_res_tbl, select = c("Gene_ID",
+                                                          "RNA_ID.ETBF",
+                                                          "Sequence"))
+
+```
+
+```{r, include=F}
+# Write NTBF full results and gene to rna reference table 
+write.csv(NTBF_comm_res_tbl, "NTBF_comm_res_tbl_210226.csv", row.names = FALSE)
+write.csv(NTBF_gene_ref_tbl, "NTBF_gene_ref_tbl_210226.csv", row.names = FALSE)
+
+# Write ETBF full results and gene to rna reference table 
+write.csv(ETBF_comm_res_tbl, "ETBF_comm_res_tbl_210226.csv", row.names = FALSE)
+write.csv(ETBF_gene_ref_tbl, "ETBF_gene_ref_tbl_210226.csv", row.names = FALSE)
+```
+
+```{r}
+# Re-load edited NTBF all common rnas
+NTBF_non_common <- read.csv("NTBF_all_non_common_rnas_210225.csv", stringsAsFactors = FALSE)
+
+# Find the average and stdev for the non-common results
+NTBF_non_common_res_norm$Avg_counts <- apply(NTBF_non_common_res_norm[,3:5], 1, mean)
+NTBF_non_common_res_norm$Std_dev <- apply(NTBF_non_common_res_norm[,3:5], 1, sd)
+
+# Merge with RNA_IDs
+NTBF_non_common_res_final <- merge(NTBF_non_common_res_norm, NTBF_non_common, by = "Gene_ID")
+
+# Change column one to be specific to NTBF
+colnames(NTBF_non_common_res_final)[8] <- "RNA_ID.NTBF" 
+colnames(NTBF_non_common_res_final)[2] <- "Sequence" 
+
+# Set up data tables to write to csv
+NTBF_non_common_res_tbl <- subset(NTBF_non_common_res_final, select = c("Gene_ID",
+                                                                  "NTBF_S1",
+                                                                  "NTBF_S2",
+                                                                  "NTBF_S3",
+                                                                  "Avg_counts",
+                                                                  "Std_dev",
+                                                                  "RNA_ID.NTBF"))
+
+NTBF_non_common_gene_ref_tbl <- subset(NTBF_non_common_res_final, select = c("Gene_ID",
+                                                                       "RNA_ID.NTBF",
+                                                                       "Sequence"))
+
+# Find the average a stdev of the non common results specific to ETBF
+ETBF_non_common_res_norm$Avg_counts <- apply(ETBF_non_common_res_norm[,3:5], 1, mean)
+ETBF_non_common_res_norm$Std_dev <- apply(ETBF_non_common_res_norm[,3:5], 1, sd)
+
+# Merge with RNA_IDs
+ETBF_non_common_res_final <- merge(ETBF_non_common_res_norm, ETBF_non_common, by = "Gene_ID")
+
+# Change column 1 to be ETBF specific
+colnames(ETBF_non_common_res_final)[8] <- "RNA_ID.ETBF" 
+colnames(ETBF_non_common_res_final)[2] <- "Sequence" 
+
+# Set up tables for writing to csv
+ETBF_non_common_res_tbl <- subset(ETBF_non_common_res_final, select = c("Gene_ID",
+                                                                  "ETBF_S1",
+                                                                  "ETBF_S2",
+                                                                  "ETBF_S3",
+                                                                  "Avg_counts",
+                                                                  "Std_dev",
+                                                                  "RNA_ID.ETBF"))
+
+ETBF_non_common_gene_ref_tbl <- subset(ETBF_non_common_res_final, select = c("Gene_ID",
+                                                                       "RNA_ID.ETBF",
+                                                                       "Sequence"))
+```
+
+```{r, include=F}
+# Write NTBF non-common results and gene to rna reference table 
+write.csv(NTBF_non_common_res_tbl, "NTBF_non_comm_res_tbl_210301.csv", row.names = FALSE)
+write.csv(NTBF_non_common_gene_ref_tbl, "NTBF_non_comm_gene_ref_tbl_210301.csv", row.names = FALSE)
+
+# Write ETBF non-common results and gene to rna reference table 
+write.csv(ETBF_non_common_res_tbl, "ETBF_non_comm_res_tbl_210301.csv", row.names = FALSE)
+write.csv(ETBF_non_common_gene_ref_tbl, "ETBF_non_comm_gene_ref_tbl_210301.csv", row.names = FALSE)
+```
+
+```{r}
+sessionInfo()
+```

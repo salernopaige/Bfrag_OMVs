@@ -1,0 +1,16 @@
+#!/bin/bash -l
+#PBS -N raxml_repeat_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=72:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate wgs
+
+echo running raxml
+
+raxml-ng --all --msa core.aln --model GTR+G --bs-trees 500

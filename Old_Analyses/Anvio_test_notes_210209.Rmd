@@ -1,0 +1,343 @@
+---
+title: "Anvi'o Test"
+author: "Paige Salerno"
+date: "2/9/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/anvio/")
+```
+
+## Anvi'o test on ETBF and NTBF
+I really wanted tRNAs to be looped into all the common genes between these two strains, so I figured I would give anvi'o a shot since I recently installed it successfully
+
+```{bash, eval=F}
+anvi-script-reformat-fasta ETBF_genome.fa -o ETBF-fixed.fa -l 0 --simplify-names
+anvi-gen-contigs-database -f ETBF-fixed.fa -o ETBF.db -n 'An example contigs database' 
+anvi-run-hmms -c ETBF.db --also-scan-trnas
+
+anvi-script-reformat-fasta NCTC-9343_genome.fa -o NTBF-fixed.fa -l 0 --simplify-names
+anvi-gen-contigs-database -f NTBF-fixed.fa -o NTBF.db -n 'An example contigs database' 
+anvi-run-hmms -c NTBF.db --also-scan-trnas
+
+anvi-setup-ncbi-cogs --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/
+anvi-run-ncbi-cogs -c ETBF.db --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/
+anvi-run-ncbi-cogs -c NTBF.db --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/
+
+#!/bin/bash -l  
+#PBS -N gen.contig.db
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=1:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate anvio-7
+
+echo generating contig databases
+cat refseq_strain_map.txt | while read x; do
+
+  refseq=`echo "$x"`
+  # get fasta file name
+  refseq=`echo "$refseq" | tr '\t' ' ' | cut -d' ' -f1`
+  echo processing "$refseq"
+  # get actual strain name
+  strain=`echo "$x"`
+  strain=`echo "$strain" | tr '\t' ' ' | cut -d' ' -f2`
+  strain=`echo "$strain" | cut -d'/' -f4`
+  strain=`echo "$strain" | cut -d'.' -f1`
+  strain=`echo "$strain" | tr '-' '_'`
+  # echo kept adding white space to the strain variable, so to get rid of it:
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo processing "$strain"
+
+anvi-script-reformat-fasta ${refseq} -o ${strain}.fixed.fa -l 0 --simplify-names
+anvi-gen-contigs-database -f ${strain}.fixed.fa -o databases/${strain}.db -n '${strain} i
+n a contigs database'
+anvi-run-hmms -c databases/${strain}.db --also-scan-trnas
+anvi-run-ncbi-cogs -c databases/${strain}.db --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/
+
+done
+
+## Make the external genomes file:
+# list databases in file
+ls databases/*.db > databases.txt
+
+# make file with databases with full file paths
+cat databases.txt | while read x; do
+  path=`echo /dartfs/rc/lab/R/RossB/SalernoP/anvio/Test`
+  file=`echo "$x"`
+  echo ${path}/${file} >> db_paths.txt
+done
+
+# Make file with strain names 
+cat databases.txt | while read x; do
+  strain=`echo "$x"`
+  strain=`echo "$strain" | cut -d'/' -f2`
+  strain=`echo "$strain" | cut -d'.' -f1`
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo bfrag_${strain} >> strains.txt
+done
+
+# paste the two together
+paste strains.txt db_paths.txt > anvio_genomes_final.txt
+
+#### Add header to the final.txt file
+'name'
+'contigs_db_path'
+
+#!/bin/bash -l  
+#PBS -N run_anvio
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=24:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate anvio-7
+
+# run anvi genomes storage for the pangenome analysis
+anvi-gen-genomes-storage -e anvio_genomes_final.txt \
+                         -o NTBF_vs_ETBF-GENOMES.db
+
+# run the actual pangenome analysis. Takes 8-9 hours for 20-30 genomes.          
+anvi-pan-genome -g NTBF_vs_ETBF-GENOMES.db \
+                --project-name "NTBF_vs_ETBF" \
+                --output-dir Results \
+                --num-threads 6 \
+                --minbit 0.5 \
+                --mcl-inflation 10 \
+                --use-ncbi-blast
+                
+# Add layers for visualization                
+anvi-import-misc-data Results/mcl-clusters.txt \
+                      -p Results/NTBF_vs_ETBF-PAN.db \
+                      --target-data-table layers
+
+### Display the results
+anvi-display-pan -p Results/NTBF_vs_ETBF-PAN.db -g NTBF_vs_ETBF-GENOMES.db
+```
+
+
+
+## Running Anvi'o on B fragilis genomes
+The first thing I had to do was set up all of the databases, and run `anvi-run-ncbi-cogs` on each. I did this using discovery since I knew it would take a very significant amount of time for 200 genomes:
+
+```{bash, eval=F}
+#!/bin/bash -l  
+#PBS -N gen.contig.db
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=24:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate anvio-7
+
+echo generating contig databases
+cat refseq_strain_map.txt | while read x; do
+
+  refseq=`echo "$x"`
+  # get fasta file name
+  refseq=`echo "$refseq" | tr '\t' ' ' | cut -d' ' -f1`
+  echo processing "$refseq"
+  # get actual strain name
+  strain=`echo "$x"`
+  strain=`echo "$strain" | tr '\t' ' ' | cut -d' ' -f2`
+  strain=`echo "$strain" | cut -d'/' -f4`
+  strain=`echo "$strain" | cut -d'.' -f1`
+  strain=`echo "$strain" | tr '-' '_'`
+  # echo kept adding white space to the strain variable, so to get rid of it:
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo processing "$strain"
+
+anvi-script-reformat-fasta ../../WGS_Bfrag_Strains/Pangenomics/ncbi_whole_genomes/${refseq} -o databases/${strain}.fixed.fa -l 0 --simplify-names
+anvi-gen-contigs-database -f databases/${strain}.fixed.fa -o databases/${strain}.db -n '${strain} i
+n a contigs database'
+anvi-run-hmms -c databases/${strain}.db --also-scan-trnas
+anvi-run-ncbi-cogs -c databases/${strain}.db --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/
+
+done
+```
+
+Separately, I needed to make a file that contained all of the info for anvi'o to know where our databases are, and what the names of our strains are. 
+
+Let the record show that anvi'o does not appreciate strain names that begin with a digit. Because of this I replaced it with "bfrag_" for each of the numeric strains. It also does not appreciate dashes in strain names, so I replaced those with underscores. For the future just plan that in advance:
+
+```{bash, eval=F}
+## Make the external genomes file:
+# list databases in file
+ls databases/*.db > databases.txt
+
+# make file with databases with full file paths
+cat databases.txt | while read x; do
+  path=`echo /dartfs/rc/lab/R/RossB/SalernoP/anvio/bfrag_pangenome`
+  file=`echo "$x"`
+  echo ${path}/${file} >> db_paths.txt
+done
+
+# Make file with strain names 
+cat databases.txt | while read x; do
+  strain=`echo "$x"`
+  strain=`echo "$strain" | cut -d'/' -f2`
+  strain=`echo "$strain" | cut -d'.' -f1`
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo bfrag_${strain} >> strains.txt
+done
+
+# paste the two together
+paste strains.txt db_paths.txt > anvio_genomes_final.txt
+
+```
+
+After setting up our databases, I had to add a header that was tab separated with the titles `name` and `contigs_db_path`. Now I'm able to perform the actual analysis by putting all the databases together, and running the actual analysis:
+
+```{bash, eval=F}
+#!/bin/bash -l  
+#PBS -N gen.contig.db
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=100:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate anvio-7
+
+# run anvi genomes storage for the pangenome analysis
+anvi-gen-genomes-storage -e anvio_genomes_final.txt \
+                         -o BFRAG-GENOMES.db
+
+# run the actual pangenome analysis. Takes 8-9 hours for 20-30 genomes.          
+anvi-pan-genome -g BFRAG-GENOMES.db \
+                --project-name "Bfrag_pan" \
+                --output-dir BFRAG \
+                --num-threads 6 \
+                --minbit 0.5 \
+                --mcl-inflation 10 \
+                --use-ncbi-blast
+                
+# Add layers for visualization                
+anvi-import-misc-data BFRAG/mcl-clusters.txt \
+                      -p BFRAG/Bfrag_pan-PAN.db \
+                      --target-data-table layers
+```
+
+```
+New layer_orders data...
+===============================================
+Data key "gene_cluster presence absence" .....: Type: newick
+Data key "gene_cluster frequencies" ..........: Type: newick
+
+New order data added to the db for layer_orders : gene_cluster presence absence,
+                                                gene_cluster frequencies.
+
+New data for 'layers' in data group 'default'
+===============================================
+Data key "total_length" ......................: Predicted type: int
+Data key "gc_content" ........................: Predicted type: float
+Data key "percent_completion" ................: Predicted type: float
+Data key "percent_redundancy" ................: Predicted type: float
+Data key "num_genes" .........................: Predicted type: int
+Data key "avg_gene_length" ...................: Predicted type: float
+Data key "num_genes_per_kb" ..................: Predicted type: float
+Data key "singleton_gene_clusters" ...........: Predicted type: int
+Data key "num_gene_clusters" .................: Predicted type: int
+
+
+New data for 'items' in data group 'default'
+===============================================
+Data key "functional_homogeneity_index" ......: Predicted type: float
+Data key "geometric_homogeneity_index" .......: Predicted type: float
+Data key "combined_homogeneity_index" ........: Predicted type: float
+```
+
+
+Then I ran this using the polaris alias that I set up to connect the server to my local drive to interact on chrome:
+
+```{bash, eval=F}
+# display the results
+anvi-display-pan -p BFRAG/Bfrag_pan-PAN.db -g BFRAG-GENOMES.db
+
+# anvi-split into NTBF and ETBF?
+```
+
+Next I want to actually make the picture pretty because right now it's hideous. I'm going to try to use `anvi-export-misc-data` for this:
+
+```{bash, eval=F}
+anvi-export-misc-data -p Bfrag_pan-PAN.db -t items -o items_additional_data.txt
+anvi-export-misc-data -p Bfrag_pan-PAN.db -t layers -o layers_additional_data.txt
+anvi-export-misc-data -p Bfrag_pan-PAN.db -t layer_orders -o layer_orders_additional_data.txt
+anvi-matrix-to-newick items_additional_data.txt -o tree.txt
+```
+
+Let's get fancy beech (from the BFRAG directory)
+
+```{bash, eval=F}
+anvi-display-pan -p Bfrag_pan-PAN.db -g ../BFRAG-GENOMES.db -d items_additional.data.txt -A layers_additional_data.txt --title 'Bacteroides Fragilis Genomes'
+```
+
+**Category** is the column you chose from your layers additional data table, in order to identify groups within your genomes. In the Prochlorococcus case we have two light groups: low light (LL), and high light (HL). The output table is ordered according to this column first, and within each group, the table is ordered according to the enrichment score
+
+## Summarizing the data:
+```{bash, eval=F}
+# To get core functions
+wget https://gist.githubusercontent.com/ShaiberAlon/2a8c1b12a372c77a7569dec7c317d37b/raw/55603505c2d1d40ce0528671e25e9f5c82b4bf43/get-core-functions.py
+
+python get-core-functions.py --input PROCHLORO-functions-occurrence-frequency-fixed.txt \
+                             --output PROCHLORO-functions-collection.txt
+
+anvi-summarize -p BFRAG/Bfrag_pan-PAN.db -g BFRAG-GENOMES.db --report-DNA-sequences -o Bfrag_pan_summary --cog-data-dir /dartfs/rc/lab/R/RossB/SalernoP/anvio/ 
+
+```
+## Figure out how to make collections and bins http://merenlab.org/2016/06/22/anvio-tutorial-v2/#anvi-import-collection
+```{bash, eval=F}
+# Finding the protein sequences for gene calls to look for BFT
+anvi-get-sequences-for-gene-calls -g BFRAG-GENOMES.db -o gene_calls.txt
+
+# Look for BFT in gene_calls.txt
+grep 'MFILNFNKMKNVKLLLMLGTAALLAACSNEADSLTTSIDTPVTASIDLQSVSYTDLATQLNDVSDFGKMIILKDNGFNRQVHVSMDKRTKIQLDNENVRLFNGRDKDSTSFILGDEFAVLRFYRNGESISYIAYKEAQMMNEIAEFYAAPFKKTRAINEKEAFECIYDSRTRSAGKDLVSVKINIDKAKKILNLPECDYINDYIKTPQVPHGITESQTRAVPSEPKTVYVICLRESGSTVYPNEVSAQMQDAANSVYAVHGLKRFVNLHFVLYTTEYSCPSGNADEGLDGFTASLKANPKAEGYDDQIYFLIRWGTWDNNILGISWLDSYNVNTASDFKASGMSTTQLMYPGVMAHELGHILGARHADDPKDLMYSKYTGYLFHLSEENMYRIAKNLGWEIADGD' -B 1 gene_calls.txt
+
+# Gene names for BFT:
+hashf04cabf5_2898
+hash13153bca_1531
+hash45a18a0a_2198
+hashd37d6319_1559
+hash067f0306_2940
+hash067f0306_3827
+hash93ee10c3_2962
+hashce7df301_4079
+hash416e51a3_1645
+# Partial
+hash2c97fc5d_1285
+
+# Get sequences for gene clusters
+anvi-get-sequences-for-gene-clusters -p BFRAG/Bfrag_pan-PAN.db -g BFRAG-GENOMES.db -o gene_clusters.txt
+
+# Get collections and bins (don't have any yet though)
+anvi-show-collections-and-bins -p Bfrag_pan-PAN.db
+
+# Split the bins into their own little pangenomes
+anvi-split -p Bfrag_pan-PAN.db -g ../BFRAG-GENOMES.db -C default -o Split_pans
+```
+
+```{bash, eval=F}
+# Getting the practice data set:
+wget https://ndownloader.figshare.com/files/11857577 -O Prochlorococcus_31_genomes.tar.gz
+tar -zxvf Prochlorococcus_31_genomes.tar.gz
+cd Prochlorococcus_31_genomes
+anvi-migrate *.db --migrate-dbs-safely
+```
+

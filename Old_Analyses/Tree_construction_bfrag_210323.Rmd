@@ -1,0 +1,348 @@
+---
+title: "Tree Building with B. Fragilis"
+author: "Paige Salerno"
+date: "3/23/2021"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/")
+library(ggtree)
+library(treeio)
+library(ggnewscale)
+library(ggtreeExtra)
+library(ggplot2)
+```
+
+## 
+
+```{bash, eval=F}
+#!/bin/bash -l
+#PBS -N pangenome_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=36:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate prokka_env
+
+cat refseq_strain_map.txt | while read x; do
+  file=`echo "$x"`
+  file=`echo "$file" | tr '\t' ' ' | cut -d' ' -f1`
+  echo processing "$file"
+  strain=`echo "$x"`
+  strain=`echo "$strain" | tr '\t' ' ' | cut -d' ' -f2`
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo processing "$strain"
+  prokka --prefix ${strain} --locustag ${strain} --outdir ../prokka_results_2.0/${strain}_prokka_210203 --rfam --addgenes ${file}
+  mv ../prokka_results_2.0/${strain}_prokka_210203/*.gff ../roary_2.0/
+done
+
+cd ../roary_2.0/
+
+conda activate roary
+
+echo running roary
+
+roary -f ./roary_results_2.0 -r -v -e -n -p 16 *.gff
+```
+
+
+```{bash, eval=F}
+emacs run_snippy_raxml.pbs
+
+#!/bin/bash -l
+#PBS -N pangenome_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=36:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate snippy
+
+echo running snippy 
+
+# exit out to run the next line
+
+snippy-multi snippy_multi_input.tab --ref BF_NCTC-9343v1_genomic.gbk --cpus 16 >> run_snippy_raxml.pbs
+
+# go back in and add the following:
+
+conda activate wgs
+
+echo running raxml
+
+raxml-ng --all --msa core.aln --model GTR+G --bs-trees 500
+
+```
+
+## Find all BFT variants using a local BLAST directory
+```{bash, eval=F}
+# Make file with all genomes for blast
+cat *genomic.fna > All_seq_for_blastdb.fa
+
+# Make blast database for searching
+makeblastdb -in All_seq_for_blastdb.fa -dbtype nucl -parse_seqids -out refseq_bfrag_genomes_210325
+```
+
+### Then make files with each BFT sequence:
+`BFT-1.fa`:
+'>BFT-1 genomic sequence
+ATGATTATTCTAAAAGACAATGGTTTCAACCGTCAGGTACATGTTTCTATGGATAAGCGTACTAAAATACAGCTGGATAATGAGAATGTCCGTCTGTTCAACGGCAGGGACAAGGATTCTACCAGCTTTATACTGGGAGATGAGTTCGCAGTATTACGTTTTTATCGCAATGGCGAATCCATCAGCTACATCGCATACAAGGAAGCGCAAATGATGAATGAGATTGCCGAATTTTATGCTGCACCATTTAAAAAGACACGTGCAATAAACGAGAAGGAGGCTTTTGAATGCATTTATGATTCAAGGACAAGAAGTGCTGGAAAGGATATTGTTTCAGTAAAAATCAATATTGACAAGGCAAAAAAAATATTGAATCTTCCTGAATGCGATTATATAAATGATTACATAAAAACGCCTCAAGTACCTCATGGAATAACTGAAAGTCAGACACGTGCAGTACCTTCTGAACCTAAAACGGTATATGTCATTTGTCTGAGAGAGAATGGAAGTACTATCTATCCTAATGAAGTTAGTGCCCAGATGCAGGATGCGGCGAACTCGGTTTATGCAGTTCATGGACTGAAAAGATATGTCAATTTCCACTTTGTACTGTATACTACTGAATACAGTTGTCCAAGTGGCGACGCCAAAGAGGGACTGGAAGGCTTTACTGCTTCACTAAAAAGTAATCCAAAAGCAGAAGGTTATGACGATCAAATTTATTTTTTAATACGCTGGGGTACTTGGGATAATAAAATCTTAGGGATGTCCTGGTTCAATTCTTATAATGTGAATACGGCTTCGGATTTTGAAGCCAGTGGGATGTCTACAACCCAGCTGATGTATCCCGGGGTGATGGCACACGAACTAGGTCATATACTGGGCGCTGAGCATACGGATAATTCAAAAGATTTGATGTATGCTACATTTACTGGATACTTATCCCATTTGTCCGAGAAAAATATGGATATAATCGCTAAAAATCTCGGTTGGGAAGCTGCAGATGGCGATTAG'
+
+`BFT-2.fa`:
+'>BFT-2 genomic sequence
+ATGAAGAATGTAAAGTTACTTTTAATGCTAGGAACCGCGGCATTATTAGCTGCATGTTCTAATGAAGCTGATTCTCTAACAACATCTATTGATACTCCAGTTACAGCTTCCATTGACTTACAATCAGTAAGTTATACTGATTTAGCGACACAACTTAACGATGTATCGGACTTTGGCAAAATGATTATTCTAAAAGACAATGGTTTCAACCGTCAGGTACATGTTTCTATGGATAAGCGTACTAAAATACAGCTGGATAATGAGAATGTCCGTCTGTTCAACGGCAGGGACAAGGATTCTACCAGCTTTATACTGGGAGATGAGTTCGCAGTATTACGTTTTTATCGCAATGGCGAATCCATCAGCTACATCGCATACAAGGAAGCGCAAATGATGAATGAGATTGCCGAATTTTATGCTGCACCATTTAAAAAGACACGTGCAATAAATGAGAAGGAGGCTTTTGAATGCATTTATGATTCAAGGACAAGAAGTGCTGGAAAGGATCTTGTTTCAGTAAAAATCAATATTGACAAAGCCAAGAAAATATTGAATCTTCCTGAATGCGATTATATAAATGATTACATAAAAACGCCTCAAGTACCTCATGGAATAACTGAAAGTCAGACACGTGCAGTACCTTCTGAACCTAAAACGGTATATGTCATTTGTCTGAGAGAGAGTGGAAGTACTGTTTATCCTAATGAGGTTAGTGCCCAGATGCAGGATGCGGCGAACTCGGTTTATGCAGTTCATGGACTGAAAAGATTTGTCAATCTCCACTTTGTACTTTATACTACTGAATATAGTTGCCCGAGCGGCAATGCCGATGAAGGGCTGGATGGCTTTACTGCTTCACTAAAAGCTAATCCGAAAGCAGAAGGTTATGACGACCAAATTTATTTTTTAATACGCTGGGGTACTTGGGATAACAACATCTTAGGCATATCTTGGCTTGATTCTTACAATGTGAATACGGCTTCGGATTTTAAAGCCAGTGGGATGTCTACAACCCAGCTGATGTATCCCGGGGTGATGGCACACGAACTAGGGCATATATTGGGTGCTAGGCATGCGGATGATCCAAAAGATTTGATGTATTCTAAATATACGGGATATTTATTCCATTTGTCCGAGGAGAACATGTATAGAATCGCTAAAAATCTCGGATGGGAAATAGCAGATGGCGAT'
+
+`BFT-3.fa`:
+'>BFT-3 genomic sequence
+ATGATTATTCTAAAAGACAATGGTTTCAACCGTCAGGTACATGTTTCTATGGATAAGCGTACTAAAATACAGCTGGATAATGAGAATGTCCGTCTGTTTAACGGCAGGGACAAGGATTCTACCAACTTTATACTGGGAGATGAGTTCGCAGTATTACGTTTTTATCGCAATGGCGAATCCATCAGCTACATCGCATACAAGGAAGCGCAAATGATGAATGAGATTGCCGAATTTTATGCTGCACCATTTAAAAAGACACGTGCAATAAACGAGAAGGAGGCTTTTGAATGCATTTATGATTCAAGGACAAGAAGTGCTGGAAAGTATCCTGTTTCAGTAAAAATCAATGTTGACAAAGCCAAGAAAATATTGAATCTTCCTGAATGCGATTATATAAATGATTACATAAAAACGCCTCAGGTACCTCATGGAATAACTGAAAGTCAGACACGTGCAGTACCTTCTGAACCTAAAACGGTATATGTCATTTGTCTGAGAGAGAATGGAAGTACTGTTTATCCTAACGAAGTTAGTGCCCAGATGCAGGATGCGGCGAACTCGGTTTATGCAGTTCATGGACTGAAAAGATATGTCAATCTCCACTTTGTACTTTATACTACTGAATATGCTTGTCCGAGCGGCAATGCCGATGAAGGGCTGGATGGCTTTACTGCCTCATTAAAAGCTAATCCGAAAGCAGAAGGTTATGACGATCAAATTTATTTTTTGATACGCTGGGGAACTTGGGACAACAACATTTTGGGCATATCTTGGCTCAATTCTTATAATGTTAATACGGCTTCGGATTTTAAAGCCAGTGGGATGTCTACAACCCAGCTGATGTATCCTGGGGTTATGGCACACGAACTAGGTCATATATTGGGTGCTAACCATGCGGATGATCCAAAAGATTTGATGTATTCTAAATATACGGGATATTTATTCCATTTGTCCGAGAAGAATATGGATATAATTGCTAAAAATCTCGGATGGGAAATAGCAGATGGCGATTAG'
+
+
+
+```{bash, eval=F}
+# Actually blast for each BFT sequence
+blastn -db refseq_bfrag_genomes_blastdb/refseq_bfrag_genomes_210325 -query BFT-1.fa -out BFT-1_blast_results
+blastn -db refseq_bfrag_genomes_blastdb/refseq_bfrag_genomes_210325 -query BFT-2.fa -out BFT-2_blast_results
+blastn -db refseq_bfrag_genomes_blastdb/refseq_bfrag_genomes_210325 -query BFT-3.fa -out BFT-3_blast_results
+
+# CTn86 right end 
+blastn -db refseq_bfrag_genomes_blastdb/refseq_bfrag_genomes_210325 -query CTn86_right_end.fa -out CTn86_right_blast_results
+
+# CTn86 left end
+blastn -db refseq_bfrag_genomes_blastdb/refseq_bfrag_genomes_210325 -query CTn86_left_end.fa -task megablast -out CTn86_left_blast_results #-outfmt '6 qacc qseqid sseqid sseq evalue'
+
+# Put the strain names into a new file for safe keeping, should do for each percentage to 100%? Probably a better way to do this
+grep -B 5 "100%" BFT-1_blast_results | grep ">" > BFT-1_containing_strains.txt
+grep -B 5 "100%" BFT-2_blast_results | grep ">" > BFT-2_containing_strains.txt
+grep -B 5 "97%" CTn86_right_blast_results | grep ">" > CTn86_right_containing_strains_2.txt
+grep -B 5 "96%" flanking_region_blast_results | grep ">" > flank_containing_strains.txt
+grep -B 5 "97%" CTn86_left_blast_results | grep ">" > CTn86_left_containing_strains.txt
+##### There was no BFT-3 containing strains
+
+
+
+## Custom blast output
+echo 1786181 | ./blastn -db ecoli -outfmt "7 qacc sacc evalue 
+qstart qend sstart send"
+
+```
+
+## Trying Bactopia 
+### First I have to make a file of file names (FOFN)
+The file I made is called `input_for_bactopia.txt`
+The header needs to be the following:
+sample    runtype   extra
+
+With the following lines being:
+S1    assembly    path/to/assembly
+
+```{bash,eval=F}
+bactopia datasets --species "Bacteroides fragilis" --include_genus --outdir bfrag_datasets
+
+#!/bin/bash -l
+#PBS -N bfrag_bactopia
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=72:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate bactopia
+
+bactopia --fastqs bactopia_input_test.txt --datasets bfrag_datasets --outdir bfrag_bactopia_results --cpus 16 --overwrite
+```
+
+## Drawing a tree using FastTree:
+I decided to give fasttree a go after Roary just to be able to visualize it with the package below:
+```{bash, eval=F}
+fasttree -nome -nt core_gene_alignment.aln > bfrag_ml.tre
+```
+
+### Drawing using ggtree:
+```{bash, eval=F}
+#!/bin/bash -l
+#PBS -N raxml_roary
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=72:00:00
+#PBS -m ea
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu
+cd $PBS_O_WORKDIR
+
+conda init bash
+conda activate wgs
+
+echo running raxml
+
+raxmlHPC-PTHREADS -T 16 -m GTRGAMMA -p 12345 -b 12345 -# 100 -s core_gene_alignment.aln -n bfrag_bs_100
+raxmlHPC -m GTRCAT -p 12345 -f b -t RAxML_bestTree.bfrag_bs_100 -z RAxML_bootstrap.bfrag_bs_100 -n bfrag_bs_100_dendroscope
+```
+
+```{r}
+library(ggtree)
+library(treeio)
+library(ggnewscale)
+library(ggtreeExtra)
+library(ggplot2)
+info <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv")
+raxml <- read.tree("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/bfrag_10bs.raxml.support")
+plot(raxml)
+cols <- c(None="gray30", BFT_1="skyblue2", BFT_2="purple2", Flanking_region="green")
+
+
+p <- ggtree(raxml, branch.length = "none", layout='fan', open.angle = 15) %<+% info + 
+  #geom_tippoint(aes(color=BFT_Isotype)) + 
+  scale_color_manual(values=cols) + 
+  geom_tiplab2(aes(label=label), align=T, linetype=NA,
+               right = TRUE, size=4, offset=10, hjust=0,) 
+plot(p)
+
+heatmapData=read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv", row.names = 1)
+rn <- rownames(heatmapData)
+
+heatmap.colors <- c(None="white", BFT_1="cyan4", BFT_2="purple3", Flanking_region="green4", NTBF="red4", ETBF="navy")
+
+p2 <- gheatmap(p, heatmapData, offset = 0, width=0.3, color=NULL, 
+         colnames_position="top", 
+         colnames_angle=80, colnames_offset_y = 0, 
+         hjust=0, font.size=3.5) +
+  scale_fill_manual(values=heatmap.colors, name = "Genomic Feature:",
+                    breaks = c("NTBF", "ETBF", "BFT_1", "BFT_2", "Flanking_region"),
+                    labels = c("NTBF", "ETBF", "BFT-1", "BFT-2", "Flanking Region")) +
+  theme(legend.position = 'left', legend.justification = 'top')
+
+p2
+ggsave(filename = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/Bfrag_tree.pdf", plot=p2, width=15, height=15, units="in")
+
+```
+
+```{r}
+library(ggtree)
+library(treeio)
+library(ggnewscale)
+library(ggtreeExtra)
+info2 <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv")
+raxml2 <- read.tree("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/bfrag_500bs.raxml.support")
+cols <- c(None="gray30", BFT_1="skyblue2", BFT_2="purple2", Flanking_region="green")
+
+
+p3 <- ggtree(raxml2, branch.length = 'none', layout='fan', open.angle = 15) %<+% info2 + 
+  scale_color_manual(values=cols) + 
+  geom_tiplab2(aes(label=label), align=T, linetype=NA,
+               right = TRUE, size=4, offset=10, hjust=0)
+
+heatmapData=read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv", row.names = 1)
+rn <- rownames(heatmapData)
+
+heatmap.colors <- c(None="white", BFT_1="cyan4", BFT_2="purple3", Flanking_region="green4", NTBF="red4", ETBF="navy")
+
+p4 <- gheatmap(p3, heatmapData, offset = 0, width=0.3, color=NULL, 
+         colnames_position="top", 
+         colnames_angle=80, colnames_offset_y = 0, 
+         hjust=0, font.size=3.5) +
+  scale_fill_manual(values=heatmap.colors, name = "Genomic Feature:",
+                    breaks = c("NTBF", "ETBF", "BFT_1", "BFT_2", "Flanking_region"),
+                    labels = c("NTBF", "ETBF", "BFT-1", "BFT-2", "Flanking Region")) +
+  theme(legend.position = 'left', legend.justification = 'top')
+
+p4
+ggsave(filename = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/Bfrag_tree_500bs.pdf", plot=p4, width=15, height=15, units="in")
+```
+
+# highlighting the strains that had WGS on them from Courtney 
+```{r}
+
+info <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv")
+colnames(info)
+info_edit <- subset(info, select = c("Strain_ID", "Strain_Type", "Dartmouth_Isolate"))
+raxml <- read.tree("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/bfrag_500bs.raxml.support")
+plot(raxml)
+cols <- c(Yes="green4", No="black")
+
+
+p5 <- ggtree(raxml, branch.length = "none", layout='fan', open.angle = 15) %<+% info +
+  geom_tiplab2(aes(label=label, color=Dartmouth_Isolate), align=T, linetype=NA, right = TRUE, size=4, offset=8, hjust=0) +
+  scale_color_manual(name = "Dartmouth Isolate:", values=cols)
+plot(p5)
+
+heatmapData=read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv", row.names = 1)
+heatmapData <- subset(heatmapData, select = c("Strain_Type"))
+colnames(heatmapData)[1] <- "Strain Type"
+rn <- rownames(heatmapData)
+
+heatmap.colors <- c(NTBF="red4", ETBF="navy")
+
+p6 <- gheatmap(p5, heatmapData, offset = 0, width=0.15, color=NULL, 
+         colnames_position="top", 
+         colnames_angle=80, colnames_offset_y = 0, 
+         hjust=0, font.size=3) +
+  scale_fill_manual(values=heatmap.colors, name = "B. fragilis Type:",
+                    breaks = c("NTBF", "ETBF"),
+                    labels = c("NTBF", "ETBF")) +
+  theme(legend.position = 'left', legend.justification = 'top')
+
+p6
+#ggsave(filename = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/Bfrag_tree_210511.pdf", plot=p6, width=13, height=13, units="in")
+#dartmouth clade nos: 195 303 309 239 260
+```
+
+# Trying to add padded colored labels around each name
+```{r}
+# makes padded labels around names and colors them based on whether it's a dartmouth isolate
+cols <- c(Yes="green4", No="white")
+
+p7 <- ggtree(raxml, branch.length = "none", layout='fan', open.angle = 15) %<+% info +
+  geom_tiplab2(aes(label=label, fill = factor(Dartmouth_Isolate)), color = "black", geom = "label", label_pad(label, justify = "right"), align=T, linetype=NA, size=3, offset=8, hjust=0) +
+  scale_fill_manual(values=cols)
+plot(p7)
+```
+
+# For qual
+```{r}
+info <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv")
+colnames(info)
+info_edit <- subset(info, select = c("Strain_ID", "Strain_Type", "Dartmouth_Isolate"))
+raxml <- read.tree("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/bfrag_500bs.raxml.support")
+plot(raxml)
+
+p8 <- ggtree(raxml, branch.length = "none", layout='fan', open.angle = 15) %<+% info
+plot(p8)
+
+heatmapData=read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/tree_info_no_CTn86_210330.csv", row.names = 1)
+heatmapData <- subset(heatmapData, select = c("Strain_Type", "Dartmouth_Isolate"))
+colnames(heatmapData)[1] <- "Strain Type"
+colnames(heatmapData)[2] <- "Dartmouth Isolate"
+rn <- rownames(heatmapData)
+
+heatmap.colors <- c(NTBF="red4", ETBF="navy", Yes="green4", No="white")
+
+p9 <- gheatmap(p8, heatmapData, offset = 0, width=0.35, color="white", 
+         colnames_position="top", 
+         colnames_angle=80, colnames_offset_y = 0, 
+         hjust=0, font.size=3) +
+  scale_fill_manual(values=heatmap.colors, name = "Genomic Feature",
+                    breaks = c("NTBF", "ETBF", "Yes"),
+                    labels = c("NTBF", "ETBF", "Dartmouth Isolate")) +
+  theme(legend.position = 'left', legend.justification = 'top')
+
+p9
+pdf(file = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/WGS/Bfrag_tree_for_qual_210602.pdf", width=6, height=7)
+plot(p9)
+dev.off()
+
+
+#dartmouth clade nos: 195 303 309 239 260
+```

@@ -1,0 +1,1209 @@
+---
+title: "Proteomics Analysis 11/27/20"
+author: "Paige Salerno"
+date: "11/27/2020"
+output: html_document
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(root.dir = "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/201127_BHIS_proteomics_exp/BHIS_Proteomics_Analysis_201127/")
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+library(dplyr)
+library(tidyr)
+library(VennDiagram)
+library(gplots)
+library(DESeq2)
+library(ggrepel)
+library(circlize)
+library(ggplot2)
+library(RColorBrewer)
+library(ComplexHeatmap)
+library(stringr)
+library(tmhmm)
+```
+
+## Rationale:
+For this experiment we tested 3 samples each of *B. fragilis* NCTC 9343 and *B. fragilis* 86-5443-2-2 (Enterotoxigenic, ETBF). We grew these samples up in 150mL of BHIS medium, isolated the OMVs, and split the samples into two aliquots. One aliquot was for small RNA-Seq, and one was for Proteomics. The proteomics samples were sent to Young Ah Goo and here we analyze them for interesting findings. Ultimately this is an exploratory experiment, and we will follow with more hypothesis driven experiments based on these findings. The initial results files are found at:
+
+`ETBF_Raw_from_Young.csv`
+`NCTC_Raw_from_Young.csv`
+
+**NOTE:** Using initial analysis, all of the proteins identified in the NCTC files actually matched the protein list of the ETBF proteome, including proteins such as BFT which is not at all found in the NCTC proteome. This suggests the files are mislabelled and will be treated as such moving forward.
+
+## Reformatting Proteome into DataFrame:
+The first thing I wanted to do was find all of the common and unique proteins between NCTC and ETBF to see how similar/different they really are. For this I wrote a python script, which can be found at `"Python_Analysis/Protein_similarities_NCTC_ETBF_200909.ipynb"`, and saved the corresponding lists as csv files to be loaded here:
+
+```{r}
+## Load Files required:
+# Sample info file
+Sinfo <- read.csv("sample_info.csv", stringsAsFactors = FALSE)
+
+# Merged df2 by accession
+Common_protein_list <- data.frame(read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Common_proteins_Final_201001.csv", stringsAsFactors = FALSE))
+
+# NCTC results from Young's group
+NCTC_res <- read.csv("NCTC_Raw_from_Young.csv", stringsAsFactors = FALSE, header = TRUE)
+
+# ETBF results from Young's group
+ETBF_res <- data.frame(read.csv("ETBF_Raw_from_Young.csv", stringsAsFactors = FALSE, header = TRUE))
+```
+
+## Reformatting Files for Easier Manipulation:
+The way the files were sent to us were slightly messy and not easy to wrangle, so I wanted to reformat them to a better, more pleasing format. 
+The results files for ETBF and NCTC with the rows at the top of the initial files removed are as follows:
+
+```{r}
+# Renaming columns for NCTC results
+colnames(NCTC_res)
+colnames(NCTC_res) <- c("x",
+                        "Visible",
+                        "Starred",
+                        "Protein_Name",
+                        "Accession",
+                        "Alternate.ID",
+                        "Mol_weight",
+                        "Protein_Grouping_Ambiguity",
+                        "Taxonomy",
+                        "NCTC_1",
+                        "NCTC_2",
+                        "NCTC_3")
+
+# Making a dataframe containing only accession, sample counts and protein descriptions
+NCTC_subset <- subset(NCTC_res, select = c("Accession",
+                                           "NCTC_1",
+                                           "NCTC_2",
+                                           "NCTC_3",
+                                           "Protein_Name"))
+nrow(NCTC_subset)
+
+# Renaming columns for ETBF
+colnames(ETBF_res)
+colnames(ETBF_res) <- c("x",
+                        "Visible",
+                        "Starred",
+                        "Protein_Name",
+                        "Accession",
+                        "Alternate.ID",
+                        "Mol_weight",
+                        "Protein_Grouping_Ambiguity",
+                        "Taxonomy",
+                        "ETBF_1",
+                        "ETBF_2",
+                        "ETBF_3")
+
+# Making a dataframe containing only accession, sample counts and protein descriptions
+ETBF_subset <- subset(ETBF_res, select = c("Accession",
+                                           "ETBF_1",
+                                           "ETBF_2",
+                                           "ETBF_3",
+                                           "Protein_Name"))
+nrow(ETBF_subset)
+```
+
+### Combining Both Files for Common Proteins:
+In order to compare both strains, we need to know what the strains have in common between these results. Later on we will look at ontology for differences between the strains to see if there is anything interesting there as well. 
+
+```{r}
+# Finding the intersection between results files, using subset data frames and making a new df for it
+ETBF_res_common <- merge(ETBF_subset, Common_protein_list, by = "Accession")
+nrow(ETBF_res_common)
+
+NCTC_res_common <- merge(NCTC_subset, Common_protein_list, by = "Accession")
+nrow(NCTC_res_common)
+
+res_join <- merge(ETBF_res_common, NCTC_res_common, by = c("Description"))
+
+colnames(res_join)
+
+res_join_filter <- subset(res_join, select = c("Accession.x", "Accession.y", "Description", "Sequence.x", "Sequence.y", "ETBF_1", "ETBF_2", "ETBF_3", "NCTC_1", "NCTC_2", "NCTC_3"))
+
+# Renaming columns for common protein dataframe
+colnames(res_join_filter) <-c("Accession_ETBF",
+                              "Accession_NCTC",
+                              "Description",
+                              "Protein_Name.ETBF",
+                              "Protein_Name.NCTC",
+                              "ETBF_1",
+                              "ETBF_2",
+                              "ETBF_3",
+                              "NCTC_1",
+                              "NCTC_2",
+                              "NCTC_3")
+write.csv(res_join_filter, "raw_data_full.csv", row.names = FALSE)
+
+# Reorganizing the columns for common proteins so descriptions for both are at the end
+Common_proteins <- data.frame(read.csv("raw_data_full_edited.csv", stringsAsFactors = FALSE))
+
+# Eliminating terms in brackets after protein descriptions
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, "Bacteria", "")
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, "Bacteroides", "")
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, "Bacteroides fragilis", "")
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, "Bacteroidaceae", "")
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, " fragilis", "")
+Common_proteins$Description <- str_replace_all(Common_proteins$Description, "\\[\\]", "")
+
+# Subsetting the common protein df to exclude protein names
+Common <- subset(Common_proteins, select = c("Accession_ETBF",
+                                             "NCTC_1",
+                                             "NCTC_2",
+                                             "NCTC_3",
+                                             "ETBF_1",
+                                             "ETBF_2",
+                                             "ETBF_3"))
+dim(Common)
+```
+
+## Summary Statistics for Results:
+Next I want to look at the statistics for each sample overall to see how different they are from one another
+
+```{r}
+summary(Common)
+```
+
+It appears as though they are incredibly close, but since I don't know what I'm doing I'm just going to go through the motions of normalizing them anyway. 
+
+## Looking at Distribution of Samples:
+I want to look at a histogram of what these samples look like. I will Log2 transform them and add the rows together to create the bars for each sample. I will also look to see how many rows have a count of zero in each replicate.
+
+```{r}
+hist(log2(rowSums(Common[, 2:7])), xlab = "Log2 Row Sums of Common Proteins", main = "Histogram of Row Sums")
+sum(rowSums(Common[,2:7]) > 6)
+Exp_log2 <- log2(Common[,2:7] + 1)
+boxplot(Exp_log2, las = 2, ylab = "Log2 of Raw Counts", main = "Boxplot of Raw Counts")
+```
+
+It looks like the samples cluster around a log2 value between 5-8 for each protein, with those values containing the highest frequencies. The boxplot also shows they seem to be incredibly similar.
+
+Next I want to calculate the sample medians to see how close they are to one another.
+
+```{r}
+Sample_Medians <- apply(Exp_log2, 2, median)
+Sample_Medians
+boxplot(Sample_Medians ~ Sinfo$Strain, xlab = "Strain", ylab = "Sample Medians", main = "Boxplot of Sample Medians")
+t.test(Sample_Medians ~ Sinfo$Strain)
+```
+
+Looking at the boxplot, it looks like there is more variation in the enterotoxigenic samples. The T-test failed, meaning the samples are not significantly different from one another? I think?
+
+Next I wanted to calcualate the raw distances of each replicate from one another so that we could plot a dendrogram to see how they cluster.
+
+```{r}
+# Find distances between samples
+RawDist <- dist(t(Exp_log2), method = "euclidean")
+RawDist
+plot(hclust(RawDist, method = "average"), main = "Dendrogram of Distances Between Samples", xlab = "Sample", ylab = "Branch Height")
+```
+
+Looking at the dendrogram, it looks like NCTC samples 1-3 cluster well together, but ETBF sample 3 has lost her way clustering with the NCTC replicates. The other ETBF replicates also cluster together and separately from the other 4 samples. I'm wondering if this makes sense considering ETBF showed a bit more variation in the boxplot above using the sample medians.  
+
+## Normalization of Data
+Next we will want to calculate correction factors and normalize the counts across all genes in all samples, followed by plotting them in a boxplot and PCA
+
+```{r}
+# Calculate Correction factors
+Grand_Median <- mean(Sample_Medians)
+Correction_Factors <- Grand_Median - Sample_Medians 
+Correction_Factors
+
+# Make empty matrix with same dimensions to add normalized data to
+ExpNorm <- matrix(nrow = length(rownames(Exp_log2)),
+                  ncol = length(colnames(Exp_log2)),
+                  dimnames = list(rownames(Exp_log2), colnames(Exp_log2)))
+
+# Calculate and Add normalized data into new matrix
+for(col in colnames(ExpNorm)){
+  ExpNorm[ , col] <- Exp_log2[ , col] + Correction_Factors[col]
+}
+
+# Boxplot of normalized data
+boxplot(ExpNorm, ylab = "Log2 Counts", 
+        main = "Normalized Counts", las = 2)
+
+# Cluster dendrogram of normalized data with euclidean
+NormDist <- dist(t(ExpNorm), method = "euclidean")
+plot(hclust(NormDist, method = "average"), main = "Normalized Dendrogram", xlab = "Sample", ylab = "Branch Height")
+
+# PCA plots for normalized data, colored by strain info
+PCA <- prcomp(t(NormDist))
+plot(PCA$x[ , 1], PCA$x[ , 2], pch = 19, col = as.factor(Sinfo$Strain), xlab = "PCA 1", ylab = "PCA 2", main = "PCA Plot")
+
+# Calculate standard deviations to find highest across all samples
+NormSD <- apply(ExpNorm, 1, sd)
+
+# Order and find top 50 proteins
+TopSD <- names(NormSD[order(NormSD, decreasing = TRUE)[1:50]])
+```
+
+Looking at the boxplot of normalized data it looks almost exactly the same as before. The dendrogram also looks the same. The PCA plot shows clustering similar to that seen in the dendrogram as well, with one ETBF replicate clustering with the NCTC replicates. 
+
+```{r}
+# Plot heatmap of top 50 proteins
+ComplexHeatmap::Heatmap(as.matrix(ExpNorm[TopSD, ]),
+                        row_names_gp = grid::gpar(fontsize = 8),
+                        column_names_gp = grid::gpar(fontsize = 12),
+                        name = "Log2(Count)",
+                        row_title = "Proteins",
+                        column_title = "Heatmap of Top 50 Proteins")
+```
+
+```{r, include=F}
+# Plot heatmap of top 50 proteins
+png(filename="/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/201127_BHIS_proteomics_exp/BHIS_Proteomics_Analysis_201127/Protein_heatmap.png", width=800, height=750)
+ComplexHeatmap::Heatmap(as.matrix(ExpNorm[TopSD, ]),
+                        row_names_gp = grid::gpar(fontsize = 15),
+                        column_names_gp = grid::gpar(fontsize = 20),
+                        name = "Log2(Count)")
+graphics.off()
+```
+
+### Making DFs for the non-common proteins for each strain:
+Since ETBF_3 looks to be strangely different than ETBF_1 and ETBF_2, we want to look at what the non-common proteins are to ensure ETBF_3 is what we think it is. Otherwise we will drop it from the differential analysis afterwards. 
+
+```{r}
+# Finding non-common proteins in ETBF
+subs_ETBF_res_common <- subset(ETBF_res_common, select = c("Accession", "ETBF_1", "ETBF_2", "ETBF_3", "Protein_Name"))
+ETBF_res_non_common <- rbind(ETBF_subset, subs_ETBF_res_common)
+ETBF_res_non_common <- ETBF_res_non_common %>%
+  group_by(Accession, Protein_Name) %>%
+  filter(n() == 1)
+ETBF_res_non_common
+write.csv(ETBF_res_non_common, "Differential_Analysis/ETBF_Non_Common_Proteins.csv")
+
+# Finding non-common proteins in NCTC
+subs_NCTC_res_common <- subset(NCTC_res_common, select = c("Accession", "NCTC_1", "NCTC_2", "NCTC_3", "Protein_Name"))
+NCTC_res_non_common <- rbind(NCTC_subset, subs_NCTC_res_common)
+NCTC_res_non_common <- NCTC_res_non_common %>%
+  group_by(Accession, Protein_Name) %>%
+  filter(n() == 1)
+View(NCTC_res_non_common)
+write.csv(NCTC_res_non_common, "Differential_Analysis/NCTC_Non_Common_Proteins.csv")
+
+```
+### Differential Analysis with Qprot
+Now that we've done some QC work, we can do differential analysis on our data to look at how the two strains differ. 
+
+In the list of proteins that are not common between the two strains (see above), ETBF_3 had mostly 0 counts for the 25 proteins that were detected in ETBF_1 and ETBF_2, leading me to believe ETBF_3 should be dropped for differential analysis so that it will not greatly impact us for the statistics.
+
+```{r}
+# Writing file for protein counts for differential analysis
+Common_subs <- Common[, 1:7]
+colnames(Common_subs) <- c("Accession", 
+                           "NCTC_1",
+                           "NCTC_2",
+                           "NCTC_3",
+                           "ETBF_1",
+                           "ETBF_2",
+                           "ETBF_3")
+write.csv(Common_subs, "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/201127_BHIS_proteomics_exp/BHIS_Proteomics_Analysis_201127/Protein_counts_for_Diff_Analysis.csv", row.names = FALSE)
+```
+
+### Differential Analysis with DESeq
+```{r}
+# Making sure the data is ready for making the DESeq object
+countDataMatrix <- as.matrix(Common_subs[ , -1])
+rownames(countDataMatrix) <- Common_subs[ , 1]
+Sinfo_da <- Sinfo[1:6,]
+
+# Make sure NCTC is baseline
+Sinfo_da$Strain
+Sinfo_da$Strain <- factor(Sinfo_da$Strain, levels=c("NCTC", "ETBF"))
+
+# Create DESeq object
+dds <- DESeqDataSetFromMatrix(countData = countDataMatrix,
+                              colData = Sinfo_da,
+                              design = ~ Strain)
+
+# have a quick look at the object 
+dds
+
+# print structure 
+str(dds)
+
+# several accessor functions exist to access specific data 'slots'
+head(counts(dds))
+head(colData(dds))
+
+# drop proteins with low counts 
+keep <- rowSums(counts(dds)) >= 6
+dds <- dds[keep,]
+dim(dds)
+
+save(dds, file = "NCTC_vs_ETBF_dds.rdata")
+
+dds <- estimateSizeFactors(dds)
+
+sizeFactors(dds)
+
+# Histogram of the size factors
+hist(sizeFactors(dds), 
+     breaks=6, col = "cornflowerblue",
+     xlab="Size factors", ylab="No. of samples", 
+     main= "Size factor distribution over samples")
+
+counts_norm <- counts(dds, normalized=TRUE)
+head(counts_norm)
+
+head(counts(dds, normalized=FALSE))
+```
+
+##### PCA Plots of the DESeq Object
+
+```{r}
+# PCA plots
+rld <- rlog(dds, blind = FALSE)
+head(assay(rld))
+
+par(mfrow=c(1,2))
+plot(log2(countDataMatrix[,1]+1), log2(countDataMatrix[,2]+1), col = "cornflowerblue", xlab = "Sample 1", ylab = "Sample 2", main = "Log2 + 1")
+plot(assay(rld)[,1], assay(rld)[,2], col = "indianred", xlab = "Sample 1", ylab = "Sample 2", main = "rlog")
+```
+
+##### Calculating Variation between samples
+```{r}
+# calculate gene expression level variance between samples 
+var <- rev(rowVars(assay(rld))[order(rowVars(assay(rld)))])
+
+# plot variance for genes across samples
+plot(var, las = 1, main="Sample protein abundance variance", xlab = "Protein", ylab = "Variance")
+abline(v=50, col="red") ; abline(v=100, col="green") ; abline(v=250, col="blue")
+
+# modify variable feature number to be used in PCA and hierachical clustering based on no. of most variable features 
+var_feature_n <- 500 
+
+```
+
+```{r}
+# perform PCA and order by variance 
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing = TRUE)[seq_len(min(var_feature_n, length(rv)))]
+pca <- prcomp(t(assay(rld)[select, ]))
+
+# extract the variance explained by each PC 
+percentVar <- pca$sdev^2/sum(pca$sdev^2)
+names(percentVar)[1:5] <- c("PC1", "PC2", "PC3", "PC4", "PC5")
+percentVar <- percentVar[1:5]
+```
+
+```{r}
+# plot variance for top 10 PCs 
+barplot(percentVar[1:5], col = "indianred", las = 1, ylab = "% Variance", cex.lab = 1.2)
+
+# construct data frame w/ PC loadings and add sample labels 
+pca_df <- as.data.frame(pca$x)
+pca_df$Strain <- dds@colData$Strain
+pca_df$sample_ids <- colnames(dds)
+
+# add colors for plotting to df 
+pca_df$col <- NA
+for(i in 1:length(levels(pca_df$Strain))){
+  ind1 <- which(pca_df$Strain == levels(pca_df$Strain)[i])
+  pca_df$col[ind1] <- i
+}
+```
+
+```{r}
+# plot PC1 vs PC2
+plot(pca_df[, 1], pca_df[, 2], 
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"), 
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main=paste0("PC1 vs PC2 for ", var_feature_n, " most variable genes"),
+     pch=16, cex=1.35, cex.lab=1.3, cex.axis = 1.15, las=1, 
+     panel.first = grid(),
+     col=pca_df$col)
+text((pca_df[, 2])~(pca_df[, 1]), labels = pca_df$condition, cex=0.6, font=2, pos=4)
+
+# select top X no. of variable genes 
+topVarGenes <- head(order(rowVars(assay(rld)), decreasing=TRUE),
+                    var_feature_n)
+
+# set up gene expression matrix 
+mat1 <- assay(rld)[topVarGenes,]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+```
+
+```{r}
+# set up colors for heatmap 
+col = colorRamp2(c(-3, 0, 3), c("blue", "white", "red"))
+cols1 <- brewer.pal(11, "Paired")
+cols2 <- brewer.pal(9, "Greens")
+
+# set up annotation bar for samples 
+ha1 = HeatmapAnnotation(Group = colData(dds)$Strain, 
+                        col = list(Group = c("NCTC" = cols1[1], 
+                                             "ETBF" = cols1[2])), 
+                        show_legend = TRUE)
+
+# set up column annotation labels (samples)
+ha = columnAnnotation(x = anno_text(colData(dds)$Strain_rep, 
+                                    which="column", rot = 45, 
+                                    gp = gpar(fontsize = 10)))
+
+# generate heatmap object 
+ht1 = Heatmap(mat_scaled, 
+              name = "Expression", 
+              col = col, 
+              top_annotation = c(ha1), 
+              bottom_annotation = c(ha),
+              show_row_names = FALSE,
+              cluster_columns = FALSE)
+
+# plot the heatmap 
+draw(ht1, row_title = "Proteins", column_title = "Heatmap of DE Proteins")
+```
+
+```{r}
+# run the DEseq2 analysis 
+dds <- DESeq(dds)
+
+hist(counts(dds, normalized=FALSE)[,5], breaks = 500, col="blue",
+     xlab="Raw abundance counts", ylab="Number of proteins",
+     main = "Count distribution for sample X")
+
+head(counts(dds, normalized=FALSE))
+
+# calculate mean and variance for group of replicates
+mean_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, mean)
+variance_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, var)
+```
+
+```{r}
+# plot the mean variance trend 
+plot(log10(mean_counts), log10(variance_counts), 
+     ylim=c(0,9), xlim=c(0,9), 
+     ylab = "log10 (variance)", xlab = "log10 (mean counts)", 
+     main = "Mean-variance trend", las = 1)
+
+# add line for x=y
+abline(0,1,lwd=2,col="red")
+```
+
+```{r}
+# generate a random variable using the negative binomial distribution
+### dispersion = 10
+par(mfrow=c(3,1))
+hist(rnbinom(n = 10000, mu = 100, size = 1/0.001), 
+     xlim = c(0, 300), xlab = "", breaks = 500, 
+     main = " Dispersion 0.001")
+### dispersion = 10
+hist(rnbinom(n = 10000, mu = 100, size = 1/0.01), 
+     xlim = c(0, 300), xlab = "", breaks = 500, 
+     main = " Dispersion 0.01")
+### dispersion = 10
+hist(rnbinom(n = 10000, mu = 100, size = 1/0.1), 
+     xlim = c(0, 300), xlab = "", breaks = 500, 
+     main = " Dispersion 0.1")
+```
+
+```{r}
+# Plot dispersion estimates
+plotDispEsts(dds)
+
+# quickly check the available coefficients we could extract 
+resultsNames(dds)
+
+# get results for DE analysis (and order by Pval) by specifying design 
+res <- results(dds, 
+               name = "Strain_ETBF_vs_NCTC", 
+               alpha = 0.05, 
+               lfcThreshold = 0)
+res
+
+
+res <- results(dds, alpha = 0.05, 
+               contrast = c("Strain", "NCTC", "ETBF"), 
+               lfcThreshold = 0)
+res
+
+# order by adj Pval 
+res_ord <- res[order(res$padj),] 
+res_ord
+
+# quick check for how many DEGs with significance @ 5% level in either FC direction 
+sum(res$padj < 0.05, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange > 2, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange < -2, na.rm=TRUE)
+
+# or to get both padj < 0.05 and log2FoldChange > 2 or < -2
+sum(res$padj < 0.05 & res$log2FoldChange > 2| res$padj < 0.05 & res$log2FoldChange< -2, na.rm=TRUE)
+
+table(is.na(res$padj))
+```
+
+```{r}
+# Plot num rej to null hyp
+plot(metadata(res_ord)$filterNumRej, 
+     type="b", ylab="Number of Rejections",
+     xlab="Quantiles of Filter (Mean Norm. Counts)")
+lines(metadata(res_ord)$lo.fit, col="red")
+abline(v=metadata(res_ord)$filterTheta)
+
+res_ord <- res_ord[!is.na(res_ord$padj),]
+```
+
+```{r}
+# Plot volcano plot
+plot(res$log2FoldChange, -log10(res$pvalue), 
+     main = "Volcano plot", 
+     las = 1, col = "indianred",
+     ylab = "- Log10 P-value", xlab = "Log2 Fold Change")
+
+# add horizontal lines to help guide interpretation
+abline(h=-log10(0.05/nrow(res)), lty = 2, col = "black") # Bonferonni 
+abline(h=-log10(0.05), lty = 2, col = "black") # nominal P-value 
+
+# save a dataframe from the results() output
+res_tmp <- as.data.frame(res_ord)
+
+# add a column that will be used to save the colors we want to plot 
+res_tmp$cols <- c()
+
+# set the significance cut off (alpha) and fold change threshold to be used for coloring of genes 
+alpha <- 0.05
+fc_cutoff <- 2
+
+# loop through our dataframe and add values to the color column based on magnitude of alpha and LFCs 
+res_tmp$cols <- NA
+for(i in 1:nrow(res_tmp)){
+  if(is.na(res_tmp$pvalue[i])){
+    res_tmp$cols[i] <- NA
+  }
+  else if(res_tmp$pvalue[i] <= alpha & res_tmp$log2FoldChange[i] > fc_cutoff){
+    res_tmp$cols[i] <- "indianred"
+  } 
+  else if(res_tmp$pvalue[i] <= alpha & res_tmp$log2FoldChange[i] < -fc_cutoff){
+    res_tmp$cols[i] <- "indianred"
+  } 
+  else if(res_tmp$pvalue[i]<=alpha & res_tmp$log2FoldChange[i]>-fc_cutoff & res_tmp$log2FoldChange[i]<fc_cutoff){
+    res_tmp$cols[i] <- "cornflowerblue"
+  } 
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] > fc_cutoff){
+    res_tmp$cols[i] <- "gray47" 
+  }
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] < -fc_cutoff){
+    res_tmp$cols[i] <- "gray47" 
+  }
+  else if(res_tmp$pvalue[i]>alpha & res_tmp$log2FoldChange[i] < fc_cutoff){
+    res_tmp$cols[i] <- "gray10" 
+  }
+}
+
+# Adding Descriptions to the res_tmp file for volcano plotting 
+res_tmp$protein <- rownames(res_tmp)
+res_tmp_test <- res_tmp
+res_tmp_test$Description <- NA
+
+Common_proteins_test <- subset(Common_proteins, select = c("Accession_ETBF", "Description"))
+colnames(Common_proteins_test) <- c("protein", "description")
+res_tmp_test <- merge(res_tmp, Common_proteins_test, by = "protein")
+
+colnames(res_tmp_test)
+
+```
+
+```{r}
+# generate the volcano plot 
+p = ggplot(res_tmp_test, aes(log2FoldChange, -log10(pvalue))) + 
+  geom_point(aes(col=col), alpha = 0.5, size =2.5, colour = res_tmp_test$cols, fill = res_tmp_test$cols)  + 
+  xlab("Log2 Fold Change") + ylab("-Log10 Q-value") +
+  ylim(0, 16) + 
+  xlim(-7, 7) +
+  geom_hline(yintercept = -log10(alpha), color = "black", linetype = "dashed", size = 0.4) + 
+  theme(legend.key = element_blank()) + 
+  ggtitle("NCTC vs. ETBF") 
+
+p2 <- p + 
+  # add labels to genes w/ LFC > 2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange > 2 & pvalue < alpha), aes(label = protein), 
+                   box.padding   = 0.35,
+                   nudge_x = 0.2,
+                   nudge_y = 0.2,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add labels to genes w/ LFC < -2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange < -2 & pvalue < alpha), aes(label = protein), 
+                   box.padding   = 0.35,
+                   nudge_x = -0.2,
+                   nudge_y = 0.2,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add vertical fold change lines 
+  geom_vline(xintercept = fc_cutoff, colour = "black", linetype="dotted") + 
+  geom_vline(xintercept = -fc_cutoff, colour = "black", linetype="dotted")
+
+# print the plot 
+print(p2)
+
+# generate the volcano plot 
+p3 = ggplot(res_tmp_test, aes(log2FoldChange, -log10(pvalue))) + 
+  geom_point(aes(col=col), alpha = 0.5, size =2.5, colour = res_tmp_test$cols, fill = res_tmp_test$cols)  + 
+  xlab("Log2 Fold Change") + ylab("-Log10 p-value") +
+  ylim(0, 12) + 
+  xlim(-8, 8) +
+  geom_hline(yintercept = -log10(alpha), color = "black", linetype = "dashed", size = 0.4) + 
+  theme(legend.key = element_blank()) + 
+  ggtitle("NCTC vs. ETBF") 
+
+p4 <- p3 + 
+  # add labels to genes w/ LFC > 2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange > 2 & pvalue < alpha), aes(label = description), 
+                   box.padding   = 0.35,
+                   nudge_x = 0.2,
+                   nudge_y = 0.3,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add labels to genes w/ LFC < -2 and above alpha threshold
+  geom_label_repel(data = subset(res_tmp_test, log2FoldChange < -2 & pvalue < alpha), aes(label = description), 
+                   box.padding   = 0.35,
+                   nudge_x = -0.2,
+                   nudge_y = -0.3,
+                   point.padding = 1,
+                   label.size = 0.1,
+                   segment.size = 0.3,
+                   segment.color = 'grey50', size = 3) +
+  # add vertical fold change lines 
+  geom_vline(xintercept = fc_cutoff, colour = "black", linetype="dotted") + 
+  geom_vline(xintercept = -fc_cutoff, colour = "black", linetype="dotted")
+
+# print the plot 
+print(p4)
+
+
+# generate the volcano plot for qual
+qual = ggplot(res_tmp_test, aes(log2FoldChange, -log10(pvalue))) + 
+  geom_point(aes(col=col), alpha = 0.5, size =2.5, colour = res_tmp_test$cols, fill = res_tmp_test$cols)  + 
+  xlab("Log2 Fold Change") + ylab("-Log10 p-value") +
+  ylim(0, 11) + 
+  xlim(-7, 7) +
+  geom_hline(yintercept = -log10(alpha), color = "black", linetype = "dashed", size = 0.4) + 
+  theme(legend.key = element_blank()) + 
+  ggtitle("NCTC vs. ETBF") +
+  geom_vline(xintercept = fc_cutoff, colour = "black", linetype="dotted") + 
+  geom_vline(xintercept = -fc_cutoff, colour = "black", linetype="dotted")
+
+# print the plot 
+print(qual)
+
+pdf(file = "Volcano_for_qual_210606.pdf", width = 8, height = 6)
+plot(qual)
+dev.off()
+```
+
+```{r, include=F}
+# save volcano plots
+pdf(file = "NCTC_vs_ETBF_volcano.pdf", width = 11, height = 8.5)
+plot(p2)
+dev.off()
+
+# save volcano plots
+pdf(file = "NCTC_vs_ETBF_volcano_protein_names.pdf", width = 12, height = 9)
+plot(p4)
+dev.off()
+```
+
+```{r}
+# subset @ 5% adjusted pval sig. level 
+res_order_FDR_05 <- res_ord[res_ord$padj<0.05,]
+nrow(res_order_FDR_05)
+
+# write both to csv files
+write.csv(as.data.frame(res_ord), file= "NCTC_vs_ETBF_DE_results.csv")
+write.csv(as.data.frame(res_order_FDR_05), file="NCTC_vs_ETBF_DE_results.FDR.0.05.csv")
+
+# Add protein names to DE results 
+de_res <- read.csv("NCTC_vs_ETBF_DE_results.csv", stringsAsFactors = FALSE)
+colnames(de_res)[1] <- c("Accession")
+res_ord_fin <- merge(de_res, Common_protein_list, by = "Accession")
+colnames(res_ord_fin)
+res_ord_fin <- subset(res_ord_fin, select = c("Accession",
+                                              "Description",
+                                              "baseMean",
+                                              "log2FoldChange",
+                                              "lfcSE",
+                                              "stat",
+                                              "pvalue",
+                                              "padj",
+                                              "Sequence",
+                                              "Length"))
+write.csv(res_ord_fin, "DE_results_annotated_210105.csv", row.names = FALSE)
+
+# MA plot
+plotMA(res_ord, ylim=c(-6,6), main = "Raw Log2 Fold change")
+
+# calculate shrunken fold change estimate
+res_shrink <- lfcShrink(dds, 
+                        coef=paste0(resultsNames(dds)[which(resultsNames(dds)=="Strain_ETBF_vs_NCTC")]), 
+                        type="apeglm")
+```
+
+```{r}
+plotMA(res_ord, ylim=c(-6,6), main = "Raw Log2 Fold change")
+```
+
+```{r}
+plotMA(res_shrink, ylim=c(-6,6), main = "Shrunken Log2 Fold change")
+
+rld <- rlog(dds, blind = FALSE)
+ind_to_keep <- c(which(colData(rld)$Strain=="NCTC"), which(colData(rld)$Strain=="ETBF"))
+
+# set up protein abundance matrix 
+mat1 <- assay(rld)[rownames(res_order_FDR_05), ind_to_keep]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+
+# set up colors for heatmap 
+col = colorRamp2(c(-3, 0, 3), c("blue", "white", "red"))
+cols1 <- brewer.pal(11, "Paired")
+cols2 <- brewer.pal(9, "Greens")
+
+# subset coldata for samples in each group
+colData_sub <- colData(dds)[ind_to_keep, ]
+```
+
+```{r}
+# set up annotation bar for samples 
+ha1 = HeatmapAnnotation(Group = colData_sub$Strain, 
+                        col = list(Group = c("NCTC" = cols1[1],
+                                             "ETBF" = cols1[2])), 
+                        show_legend = TRUE)
+
+# set up column annotation labels (samples)
+ha = columnAnnotation(x = anno_text(colData_sub$Strain_rep, 
+                                    which="column", rot = 45, 
+                                    gp = gpar(fontsize = 10)))
+
+# generate heatmap object 
+ht1 = Heatmap(mat_scaled, name = "Abundance", col = col, 
+              top_annotation = c(ha1), 
+              bottom_annotation = c(ha),
+              show_row_names = TRUE,
+              row_names_gp = (gp = gpar(fontsize = 10)),
+              cluster_columns = FALSE)
+
+# plot the heatmap 
+draw(ht1, row_title = "Proteins", column_title = "Hierachical clustering of DEPs (padj<0.05)")
+```
+
+```{r, include=F}
+# save plot
+pdf(file = "NCTC_vs_ETBF_heatmap.pdf", width = 11, height = 8.5)
+draw(ht1, row_title = "Proteins", column_title = "Hierachical clustering of DEPs (padj<0.05)")
+dev.off()
+```
+
+### Comparing proteins found in TYG experiment vs. BHI experiment:
+Lastly I wanted to look at the protein differences in each experiment we have done so far to see how much of an impact different media has on the protein expression of the cells. 
+
+```{r}
+BHI_res_ord <- read.csv("NCTC_vs_ETBF_DE_results.csv", stringsAsFactors = FALSE)
+nrow(BHI_res_ord)
+colnames(BHI_res_ord) <- c("Accession", "baseMean", "log2FoldChange", "lfcSE", "stat", "pvalue", "padj")
+
+BHI_ETBF_unique <- data.frame(ETBF_res_non_common)
+nrow(BHI_ETBF_unique)
+
+BHI_NCTC_unique <- data.frame(NCTC_res_non_common)
+nrow(BHI_NCTC_unique)
+
+TYG_res_ord <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/NCTC_vs_ETBF_DE_results.csv", stringsAsFactors = FALSE)
+nrow(TYG_res_ord)
+colnames(TYG_res_ord)
+TYG_ETBF_unique <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Differential_Analysis/ETBF_Non_Common_Proteins.csv", stringsAsFactors = FALSE)
+nrow(TYG_ETBF_unique)
+
+TYG_NCTC_unique <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Differential_Analysis/NCTC_Non_Common_Proteins.csv", stringsAsFactors = FALSE)
+nrow(TYG_NCTC_unique)
+
+overall_common <- merge(BHI_res_ord, TYG_res_ord, by = "Accession")
+colnames(overall_common) <- c("Accession", "baseMean.BHI", "log2FoldChange.BHI", "lfcSE.BHI",
+                              "stat.BHI", "pvalue.BHI", "padj.BHI","baseMean.TYG", 
+                              "log2FoldChange.TYG", "lfcSE.TYG", "stat.TYG", "pvalue.TYG",
+                              "padj.TYG")
+write.csv(overall_common, "Common_Pro_BHI_TYG_201129.csv", row.names = FALSE)
+
+overall_ETBF_unique <- merge(BHI_ETBF_unique, TYG_ETBF_unique, by = "Accession")
+colnames(overall_ETBF_unique) <- c("Accession", "ETBF_1.BHI", "ETBF_2.BHI", "ETBF_3.BHI",
+                                   "Protein_name.BHI", "ETBF_1.TYG", "ETBF_2.TYG", "ETBF_3.TYG",
+                                   "Protein_name.TYG", "Pfam_Description")
+write.csv(overall_ETBF_unique, "BHI_TYG_common_unique_ETBF_201129.csv", row.names = FALSE)
+
+overall_NCTC_unique <- merge(BHI_NCTC_unique, TYG_NCTC_unique, by = "Accession")
+colnames(overall_NCTC_unique) <- c("Accession", "NCTC_1.BHI", "NCTC_2.BHI", "NCTC_3.BHI",
+                                   "Protein_name.BHI", "NCTC_1.TYG", "NCTC_2.TYG", "NCTC_3.TYG",
+                                   "Protein_name.TYG", "Pfam_Description")
+write.csv(overall_NCTC_unique, "BHI_TYG_common_unique_NCTC_201129.csv", row.names = FALSE)
+```
+
+```{r}
+# Make correlation between both experiments
+NCTC_BHIS_rename <- subset(select(NCTC_res, c("Protein_Name",
+                                              "Accession",
+                                              "NCTC_1",
+                                              "NCTC_2",
+                                              "NCTC_3")))
+colnames(NCTC_BHIS_rename) <- c("Protein",
+                                "Accession",
+                                "S1",
+                                "S2",
+                                "S3")
+NCTC_BHIS_rename$Strain <- c("NCTC")
+
+ETBF_BHIS_rename <- subset(select(ETBF_res, c("Protein_Name",
+                                              "Accession",
+                                              "ETBF_1",
+                                              "ETBF_2",
+                                              "ETBF_3")))
+colnames(ETBF_BHIS_rename) <- c("Protein",
+                                "Accession",
+                                "S1",
+                                "S2",
+                                "S3")
+ETBF_BHIS_rename$Strain <- c("ETBF")
+
+
+BHIS_all <- rbind(NCTC_BHIS_rename, ETBF_BHIS_rename)
+
+NCTC_res_2 <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Results for 21-2256_NTCT9343_Sample1-3.csv", stringsAsFactors = FALSE)
+colnames(NCTC_res_2) <- c("X",
+                          "Visible",
+                          "Starred",
+                          "Protein_Name",
+                          "Accession",
+                          "Alt_ID",
+                          "Mol_weight",
+                          "Protein.Grouping.Ambiguity",
+                          "Taxonomy",
+                          "NCTC_1",
+                          "NCTC_2",
+                          "NCTC_3")
+
+
+NCTC_TYG_rename <- subset(select(NCTC_res_2, c("Protein_Name",
+                                              "Accession",
+                                              "NCTC_1",
+                                              "NCTC_2",
+                                              "NCTC_3")))
+colnames(NCTC_TYG_rename) <- c("Protein",
+                                "Accession",
+                                "S1",
+                                "S2",
+                                "S3")
+NCTC_TYG_rename$Strain <- c("NCTC")
+
+ETBF_res_2 <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Results for 21-2256_ETBF_Sample4-6.csv", stringsAsFactors = FALSE)
+
+colnames(ETBF_res_2) <- c("X",
+                          "Visible",
+                          "Starred",
+                          "Protein_Name",
+                          "Accession",
+                          "Alt_ID",
+                          "Mol_weight",
+                          "Protein.Grouping.Ambiguity",
+                          "Taxonomy",
+                          "ETBF_1",
+                          "ETBF_2",
+                          "ETBF_3")
+
+
+
+ETBF_TYG_rename <- subset(select(ETBF_res_2, c("Protein_Name",
+                                              "Accession",
+                                              "ETBF_1",
+                                              "ETBF_2",
+                                              "ETBF_3")))
+colnames(ETBF_TYG_rename) <- c("Protein",
+                                "Accession",
+                                "S1",
+                                "S2",
+                                "S3")
+ETBF_TYG_rename$Strain <- c("ETBF")
+
+
+TYG_all <- rbind(NCTC_TYG_rename, ETBF_TYG_rename)
+
+BHIS_all$Avg <- rowMeans(subset(BHIS_all, select = c("S1", "S2", "S3")), na.rm = TRUE)
+BHIS_merge <- subset(BHIS_all, select = c("Accession", "Avg", "Strain"))
+TYG_all$Avg <- rowMeans(subset(TYG_all, select = c("S1", "S2", "S3")), na.rm = TRUE)
+TYG_merge <- subset(TYG_all, select = c("Accession", "Avg", "Strain"))
+Avg_both <- merge(BHIS_merge, TYG_merge, by = c("Accession", "Strain"))
+Avg_both$log_BHIS <- log2(Avg_both$Avg.x)
+Avg_both$log_TYG <- log2(Avg_both$Avg.y)
+Avg_both$log_both <- log2(Avg_both$Avg.x/Avg_both$Avg.y)
+nrow(Avg_both)
+tmp <- is.na(Avg_both)
+reg1 <- lm(log_TYG ~ log_BHIS, data = Avg_both)
+corr <- ggplot(Avg_both, aes(log_BHIS, log_TYG)) + geom_point(aes(log_BHIS, log_TYG, color = Strain), alpha = 0.8, size = 2) + theme_light() + geom_smooth(method = "lm", se = FALSE, color = "gray25") + labs(x = "Log2 of BHIS Proteins", y = "Log2 of TYG Proteins", title = "Correlation of Both Proteomics Experiments") + scale_color_manual(values = c("blue3", "red3"))
+
+plot(corr)
+
+pdf(file = "Exp_Correlation_Strain.pdf", width = 8, height = 5)
+plot(corr)
+dev.off()
+```
+
+```{r}
+# Make correlation of just analyzed proteins
+res_corr <- as.data.frame(overall_common)
+colnames(overall_common)
+# add a column that will be used to save the colors we want to plot 
+res_corr$sig.BHI <- c()
+res_corr$sig.TYG <- c()
+# set the significance cut off (alpha) and fold change threshold to be used for coloring of genes 
+alpha <- 0.05
+fc_cutoff <- 2
+
+res_corr$sig.BHI <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$pvalue.BHI[i])){
+    res_corr$sig.BHI[i] <- NA
+  }
+  else if(res_corr$pvalue.BHI[i] <= alpha & res_corr$log2FoldChange.BHI[i] > fc_cutoff){
+    res_corr$sig.BHI[i] <- "sig"
+  } 
+  else if(res_corr$pvalue.BHI[i] <= alpha & res_corr$log2FoldChange.BHI[i] < -fc_cutoff){
+    res_corr$sig.BHI[i] <- "sig"
+  } 
+    else if(res_corr$pvalue.BHI[i] <= alpha & res_corr$log2FoldChange.BHI[i] < fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.BHI[i] <= alpha & res_corr$log2FoldChange.BHI[i] > -fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.BHI[i] >= alpha & res_corr$log2FoldChange.BHI[i] > fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.BHI[i] >= alpha & res_corr$log2FoldChange.BHI[i] < -fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.BHI[i] >= alpha & res_corr$log2FoldChange.BHI[i] < fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.BHI[i] >= alpha & res_corr$log2FoldChange.BHI[i] > -fc_cutoff){
+    res_corr$sig.BHI[i] <- "not_sig"
+  }
+}
+
+
+res_corr$sig.TYG <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$pvalue.TYG[i])){
+    res_corr$sig.TYG[i] <- NA
+  }
+  else if(res_corr$pvalue.TYG[i] <= alpha & res_corr$log2FoldChange.TYG[i] > fc_cutoff){
+    res_corr$sig.TYG[i] <- "sig"
+  } 
+    else if(res_corr$pvalue.TYG[i] <= alpha & res_corr$log2FoldChange.TYG[i] < -fc_cutoff){
+    res_corr$sig.TYG[i] <- "sig"
+  } 
+    else if(res_corr$pvalue.TYG[i] <= alpha & res_corr$log2FoldChange.TYG[i] < fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.TYG[i] <= alpha & res_corr$log2FoldChange.TYG[i] > -fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.TYG[i] >= alpha & res_corr$log2FoldChange.TYG[i] > fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.TYG[i] >= alpha & res_corr$log2FoldChange.TYG[i] < -fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.TYG[i] >= alpha & res_corr$log2FoldChange.TYG[i] < fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+    else if(res_corr$pvalue.TYG[i] >= alpha & res_corr$log2FoldChange.TYG[i] > -fc_cutoff){
+    res_corr$sig.TYG[i] <- "not_sig"
+  }
+
+}
+
+res_corr$cols <- c()
+significant <- c("sig")
+not_significant <- c("not_sig")
+
+res_corr$cols <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$sig.BHI[i])){
+    res_corr$cols[i] <- NA
+  }
+  else if(res_corr$sig.BHI[i] == "sig" & res_corr$sig.TYG[i] == "sig"){
+    res_corr$cols[i] <- "red2"
+  } 
+    else if(res_corr$sig.BHI[i] == "sig" & res_corr$sig.TYG[i] == "not_sig"){
+    res_corr$cols[i] <- "blue2"
+  }  
+    else if(res_corr$sig.BHI[i] == "not_sig" & res_corr$sig.TYG[i] == "sig"){
+    res_corr$cols[i] <- "forestgreen"
+  }
+    else if(res_corr$sig.BHI[i] == "not_sig" & res_corr$sig.TYG[i] == "not_sig"){
+    res_corr$cols[i] <- "grey35"
+  }
+}
+
+res_corr$Significance
+res_corr$Significance <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$cols[i])){
+    res_corr$Significance[i] <- NA
+  }
+  else if(res_corr$cols[i] == "red2"){
+    res_corr$Significance[i] <- "Both"
+  } 
+    else if(res_corr$cols[i] == "blue2"){
+    res_corr$Significance[i] <- "BHIS Only"
+  }  
+    else if(res_corr$cols[i] == "forestgreen"){
+    res_corr$Significance[i] <- "TYG Only"
+  }
+    else if(res_corr$cols[i] == "grey35"){
+    res_corr$Significance[i] <- "Neither"
+  }
+}
+
+
+res_corr$log.BHI <- log2(res_corr$baseMean.BHI)
+res_corr$log.TYG <- log2(res_corr$baseMean.TYG)
+
+res_corr$Significance <- factor(res_corr$Significance, levels = c("Both", "BHIS Only", "TYG Only", "Neither"))
+
+corr_2 <- ggplot(res_corr, aes(log.BHI, log.TYG, color = Significance)) + 
+  geom_point(aes(fill = cols), alpha = 0.8, size = 2) + theme_light() +
+  geom_smooth(method = "lm", se = FALSE, color = "gray25") + labs(x = "Log2 of BHIS Proteins", y = "Log2 of TYG Proteins", title = "Correlation of Both Proteomics Experiments") + theme(legend.key = element_blank()) + scale_color_manual(values = c("red2", "blue2", "forestgreen", "grey45"))
+
+corr_2 <- corr_2  + scale_fill_discrete(name = "Significance", labels = c("Both", "BHIS Only", "TYG Only", "Neither"))
+
+plot(corr_2)
+
+pdf(file = "Exp_Correlation_significance.pdf", width = 8, height = 5)
+plot(corr_2)
+dev.off()
+
+
+res_corr$cols <- c()
+significant <- c("sig")
+not_significant <- c("not_sig")
+
+res_corr$shapes <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$sig.BHI[i])){
+    res_corr$shapes[i] <- NA
+  }
+  else if(res_corr$sig.BHI[i] == "sig" & res_corr$sig.TYG[i] == "sig"){
+    res_corr$shapes[i] <- "circle"
+  } 
+    else if(res_corr$sig.BHI[i] == "sig" & res_corr$sig.TYG[i] == "not_sig"){
+    res_corr$shapes[i] <- "triangle"
+  }  
+    else if(res_corr$sig.BHI[i] == "not_sig" & res_corr$sig.TYG[i] == "sig"){
+    res_corr$shapes[i] <- "star"
+  }
+    else if(res_corr$sig.BHI[i] == "not_sig" & res_corr$sig.TYG[i] == "not_sig"){
+    res_corr$shapes[i] <- "square"
+  }
+}
+
+res_corr$Significance
+res_corr$Significance <- NA
+for(i in 1:nrow(res_corr)){
+  if(is.na(res_corr$shapes[i])){
+    res_corr$Significance[i] <- NA
+  }
+  else if(res_corr$shapes[i] == "circle"){
+    res_corr$Significance[i] <- "Both"
+  } 
+    else if(res_corr$shapes[i] == "triangle"){
+    res_corr$Significance[i] <- "BHIS Only"
+  }  
+    else if(res_corr$shapes[i] == "star"){
+    res_corr$Significance[i] <- "TYG Only"
+  }
+    else if(res_corr$shapes[i] == "square"){
+    res_corr$Significance[i] <- "Neither"
+  }
+}
+
+colnames(res_corr)
+
+corr3 <- ggplot(res_corr, aes(log_BHIS, log_TYG)) + geom_point(aes(log.BHI, log.TYG, color = Strain, shape = cols), alpha = 0.8, size = 2) + theme_light() + geom_smooth(method = "lm", se = FALSE, color = "gray25") + labs(x = "Log2 of BHIS Proteins", y = "Log2 of TYG Proteins", title = "Correlation of Both Proteomics Experiments") + scale_color_manual(values = c("blue3", "red3"))
+
+plot(corr3)
+
+
+```
+
+### Running TMHMM on the Proteomes:
+I wanted to predict transmembrane proteins for each of the proteomes so that I could compare those results to the proteins detected in these experiments. To do this I installed and used **TMHMM**
+
+
+```{r}
+fasta_filename <- system.file(
+  "extdata",
+  "/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Fasta_files/ETBF_GCF_001699885.1_ASM169988v1_protein.faa",
+  package = "tmhmm"
+)
+
+if (is_tmhmm_installed()) {
+  fasta_filename <- get_example_filename("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/200921_TYG_proteomics_exp/Fasta_files/ETBF_GCF_001699885.1_ASM169988v1_protein.faa")
+  predict_topology(fasta_filename)
+}
+
+# Predict the topology
+topology <- predict_topology(fasta_filename)
+
+# Simplify the protein names
+topology$name <- stringr::str_match(
+  string = topology$name,
+  pattern = "..\\|.*\\|(.*)_SARS2"
+)[,2]
+
+# Plot the topology
+plot_topology(topology)
+
+
+```
+
+Because this code was difficult to write, I ran TMHMM online, and downloaded the data to put it into a csv file. Then I deleted all proteins that were denoted with either "i" or "o" for inner or outer membrane proteins so that only the TM proteins remained. 
+
+```{r}
+# Load TMHMM Result Files
+ETBF_TM <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/ETBF_TM_data_210105.csv", stringsAsFactors = FALSE)
+
+NCTC_TM <- read.csv("/Users/paigesalerno/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/NCTC_TM_data_210105.csv", stringsAsFactors = FALSE)
+
+TM_all <- rbind(ETBF_TM, NCTC_TM)
+TM_all <- distinct(TM_all)
+
+# Merge with results to find what proteins are TM proteins
+TM_all_merge <- merge(res_ord_fin, TM_all, by = "Accession")
+nrow(TM_all_merge)
+colnames(TM_all_merge)
+TM_all_merge <- subset(TM_all_merge, select = c("Accession",
+                                                "Description",
+                                                "baseMean",
+                                                "log2FoldChange",
+                                                "lfcSE",
+                                                "stat",
+                                                "pvalue",
+                                                "padj",
+                                                "Sequence",
+                                                "Length.x",
+                                                "Exp_num_TM_AA",
+                                                "Exp_num_First_60AA",
+                                                "Pred_num_TM_helices",
+                                                "Topology"))
+
+write.csv(TM_all_merge, "DE_results_TM_info_210105.csv", row.names = FALSE)
+```
+
+### Session Info
+```{r}
+sessionInfo()
+```

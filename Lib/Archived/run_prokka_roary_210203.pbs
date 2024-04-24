@@ -1,0 +1,32 @@
+#!/bin/bash -l  
+#PBS -N pangenome_bfrag
+#PBS -l nodes=3:ppn=16
+#PBS -l feature='cellk'
+#PBS -l walltime=36:00:00  
+#PBS -m ea  
+#PBS -j oe
+#PBS -M paige.salerno.gr@dartmouth.edu  
+cd $PBS_O_WORKDIR  
+
+conda init bash
+conda activate prokka_env
+
+cat refseq_strain_map.txt | while read x; do
+  file=`echo "$x"`
+  file=`echo "$file" | tr '\t' ' ' | cut -d' ' -f1`
+  echo processing "$file"
+  strain=`echo "$x"`
+  strain=`echo "$strain" | tr '\t' ' ' | cut -d' ' -f2`
+  strain=`echo "$strain" | tr -d ' \t\n\r'`
+  echo processing "$strain"
+  prokka --prefix ${strain} --locustag ${strain} --outdir ../prokka_results_2.0/${strain}_prokka_210203 --rfam --addgenes ${file}
+  mv ../prokka_results_2.0/${strain}_prokka_210203/*.gff ../roary_2.0/
+done
+
+cd ../roary_2.0/
+
+conda activate roary
+
+echo running roary
+
+roary -f ./roary_results_2.0 -r -v -e -n -p 16 *.gff

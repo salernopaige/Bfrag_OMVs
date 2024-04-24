@@ -1,0 +1,16 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+OMV <- read.csv("~/Desktop/Samples Report for 21-2661_Set2_Sample36-61.csv", stringsAsFactors = FALSE)
+colnames(OMV)[5] <- "Protein.Accession"
+head(OMV)
+Elhenawy <- read.csv("~/Documents/Ross_Lab_Thesis_Work/OMV Project/Proteomics/OMV_Proteins_In_Elhenawy.csv", stringsAsFactors = FALSE)
+head(Elhenawy)
+
+pro_in_OMV <- merge(Elhenawy, OMV, by = "Protein.Accession")
+write.csv(pro_in_OMV, "~/Desktop/Elhenawy_Pro_in_ETBF_Fractions_211001.csv", row.names = FALSE)
+```
