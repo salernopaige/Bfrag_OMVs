@@ -1,0 +1,214 @@
+Table 1: Proteins detected exclusively in B. fragilis NCTC 9343 (NTBF),,,,,
+Accession,NTBF 1,NTBF 2,NTBF 3,Protein Name,Gene also present in ETBF Genome
+WP_004291236.1,0,0,4,50S ribosomal protein L22,Y
+WP_004296340.1,9,0,0,50S ribosomal protein L14,Y
+WP_005675419.1,4,0,2,30S ribosomal protein S12,Y
+WP_005776885.1,4,0,0,energy-dependent translational throttle protein EttA,Y
+WP_005779363.1,12,0,0,L-fucose isomerase,Y
+WP_005780311.1,7,2,0,NADH peroxidase,Y
+WP_005780626.1,10,2,0,acyl-CoA carboxylase subunit beta,Y
+WP_005780691.1,7,7,0,outer membrane beta-barrel protein,Y
+WP_005782161.1,15,0,5,50S ribosomal protein L1,Y
+WP_005782201.1,2,0,0,30S ribosomal protein S3,Y
+WP_005783491.1,11,0,0,succinate dehydrogenase/fumarate reductase iron-sulfur subunit,Y
+WP_005783570.1,12,0,0,rubrerythrin family protein,Y
+WP_005783715.1,0,5,1,hypothetical protein,Y
+WP_005783769.1,3,2,0,S26 family signal peptidase,Y
+WP_005783772.1,4,0,0,4-hydroxy-tetrahydrodipicolinate reductase,Y
+WP_005783836.1,12,4,3,beta-ketoacyl-ACP synthase II,Y
+WP_005783862.1,5,5,0,nitroreductase family protein,Y
+WP_005783908.1,3,0,0,class II aldolase/adducin family protein,Y
+WP_005783924.1,2,0,0,Fe-S cluster assembly protein SufB,Y
+WP_005783928.1,7,0,0,Fe-S cluster assembly ATPase SufC,Y
+WP_005783975.1,19,9,0,"2,3-bisphosphoglycerate-independent phosphoglycerate mutase",Y
+WP_005784203.1,8,0,1,glycine--tRNA ligase,Y
+WP_005784257.1,12,0,0,aspartate-semialdehyde dehydrogenase,Y
+WP_005784278.1,5,0,0,glutaminase A,Y
+WP_005784381.1,3,2,0,orotate phosphoribosyltransferase,Y
+WP_005784714.1,5,0,0,UMP kinase,Y
+WP_005784741.1,3,0,0,thioredoxin,Y
+WP_005785120.1,5,1,0,bifunctional UDP-3-O-[3-hydroxymyristoyl N-acetylglucosamine deacetylase/3-hydroxyacyl-ACP dehydratase,Y
+WP_005785154.1,18,2,0,phosphoribosylaminoimidazolesuccinocarboxamide synthase,Y
+WP_005785383.1,18,3,0,thioredoxin-disulfide reductase,Y
+WP_005785732.1,4,1,0,hypothetical protein,Y
+WP_005785759.1,4,0,0,50S ribosomal protein L25/general stress protein Ctc,Y
+WP_005785772.1,7,2,1,ATP-dependent chaperone ClpB,Y
+WP_005785787.1,2,0,0,recombinase RecA,Y
+WP_005785885.1,8,2,0,catalase,Y
+WP_005785923.1,6,7,2,PepSY-like domain-containing protein,Y
+WP_005786056.1,7,1,0,glycoside hydrolase family 130 protein,Y
+WP_005786209.1,8,5,0,NADPH-dependent 7-cyano-7-deazaguanine reductase QueF,Y
+WP_005786370.1,0,4,0,FimB/Mfa2 family fimbrial subunit,Y
+WP_005786418.1,3,0,0,NAD(P)/FAD-dependent oxidoreductase,Y
+WP_005786497.1,3,3,0,3-methyl-2-oxobutanoate dehydrogenase subunit VorB,Y
+WP_005786509.1,12,2,0,galactose mutarotase,Y
+WP_005786511.1,11,11,0,class I mannose-6-phosphate isomerase,Y
+WP_005786570.1,10,2,3,threonine--tRNA ligase,Y
+WP_005786577.1,4,0,2,50S ribosomal protein L20,Y
+WP_005786690.1,15,1,0,ATP-binding cassette domain-containing protein,Y
+WP_005786803.1,9,0,0,"GDP-mannose 4,6-dehydratase",Y
+WP_005786918.1,2,0,0,cytochrome ubiquinol oxidase subunit I,Y
+WP_005787194.1,9,2,0,BamA/TamA family outer membrane protein,Y
+WP_005787198.1,29,2,1,Na(+)-translocating NADH-quinone reductase subunit A,Y
+WP_005787203.1,5,0,0,Na(+)-translocating NADH-quinone reductase subunit C,Y
+WP_005787210.1,2,0,0,NADH:ubiquinone reductase (Na(+)-transporting) subunit F,Y
+WP_005787254.1,10,13,3,DUF1573 domain-containing protein,Y
+WP_005787540.1,14,4,0,serine hydroxymethyltransferase,Y
+WP_005787587.1,10,3,0,ribose-phosphate pyrophosphokinase,Y
+WP_005787631.1,4,0,0,succinate--CoA ligase subunit alpha,Y
+WP_005787656.1,7,0,0,peroxiredoxin,Y
+WP_005787799.1,10,2,5,aminotransferase class I/II-fold pyridoxal phosphate-dependent enzyme,Y
+WP_005787869.1,3,2,0,4-hydroxy-tetrahydrodipicolinate synthase,Y
+WP_005788062.1,3,1,1,outer membrane beta-barrel protein,Y
+WP_005788150.1,9,0,0,UDP-glucose 4-epimerase GalE,Y
+WP_005788170.1,9,2,0,CTP synthase,Y
+WP_005788195.1,8,8,0,PorT family protein,Y
+WP_005788433.1,4,1,0,V-type ATP synthase subunit B,Y
+WP_005788434.1,4,0,0,V-type ATP synthase subunit A,Y
+WP_005788539.1,13,2,7,PepSY-like domain-containing protein,Y
+WP_005788549.1,0,0,3,hypothetical protein,Y
+WP_005788568.1,4,0,0,riboflavin synthase,Y
+WP_005788748.1,4,0,0,DNA polymerase III subunit beta,Y
+WP_005788767.1,4,0,0,NAD-dependent epimerase/dehydratase family protein,Y
+WP_005788812.1,0,4,0,ferritin,Y
+WP_005788816.1,16,3,2,aspartate kinase,Y
+WP_005788978.1,6,0,0,outer membrane beta-barrel protein,Y
+WP_005789239.1,8,0,0,OmpH family outer membrane protein,Y
+WP_005789269.1,3,0,0,"2,3-diphosphoglycerate-dependent phosphoglycerate mutase",Y
+WP_005789293.1,21,3,34,phenylalanine--tRNA ligase subunit alpha,Y
+WP_005789532.1,6,0,0,methylmalonyl-CoA epimerase,Y
+WP_005789701.1,15,9,1,alpha-L-fucosidase,Y
+WP_005789703.1,5,4,0,electron transfer flavoprotein subunit beta/FixA family protein,Y
+WP_005789707.1,17,5,2,acyl-CoA dehydrogenase family protein,Y
+WP_005789791.1,35,9,1,adenylosuccinate synthase,Y
+WP_005789915.1,15,2,0,purine-nucleoside phosphorylase,Y
+WP_005790279.1,14,4,0,acetyl-CoA carboxylase biotin carboxylase subunit,Y
+WP_005790286.1,2,0,0,acyl-CoA carboxylase subunit beta,Y
+WP_005790318.1,5,3,0,O-acetylhomoserine aminocarboxypropyltransferase/cysteine synthase,Y
+WP_005790403.1,7,0,0,lactate utilization protein,Y
+WP_005790434.1,16,0,0,NADP-specific glutamate dehydrogenase,Y
+WP_005790599.1,4,0,0,"dTDP-glucose 4,6-dehydratase",Y
+WP_005790680.1,6,0,0,citrate/2-methylcitrate synthase,Y
+WP_005790693.1,3,0,0,ketol-acid reductoisomerase,Y
+WP_005790695.1,2,3,2,PorT family protein,Y
+WP_005790726.1,1,4,0,family 43 glycosylhydrolase,Y
+WP_005790875.1,17,8,0,dipeptidase,Y
+WP_005790956.1,12,7,0,elongation factor G,Y
+WP_005791020.1,10,0,0,phosphoglucosamine mutase,Y
+WP_005791103.1,3,0,0,bifunctional 3-deoxy-7-phosphoheptulonate synthase/chorismate mutase type II,Y
+WP_005791310.1,6,0,0,aminopeptidase P family protein,Y
+WP_005791373.1,28,2,8,polyribonucleotide nucleotidyltransferase,Y
+WP_005791384.1,11,5,1,mannose-1-phosphate guanylyltransferase,Y
+WP_005791502.1,8,0,0,glutamate--tRNA ligase,Y
+WP_005791536.1,3,0,0,30S ribosomal protein S7,Y
+WP_005791545.1,8,0,4,50S ribosomal protein L2,Y
+WP_005791561.1,4,0,0,50S ribosomal protein L6,Y
+WP_005791729.1,13,2,7,branched-chain amino acid aminotransferase,Y
+WP_005791755.1,11,0,0,asparagine--tRNA ligase,Y
+WP_005791757.1,8,0,1,pseudouridine synthase,Y
+WP_005791759.1,3,3,0,adenylosuccinate lyase,Y
+WP_005791788.1,6,7,0,tryptophan--tRNA ligase,Y
+WP_005791859.1,6,0,0,IMP dehydrogenase,Y
+WP_005791925.1,6,0,0,methionine--tRNA ligase,Y
+WP_005791935.1,0,10,0,6-bladed beta-propeller,Y
+WP_005791972.1,7,2,0,uracil phosphoribosyltransferase,Y
+WP_005791976.1,5,0,0,2-oxoacid:acceptor oxidoreductase subunit alpha,Y
+WP_005792012.1,6,2,0,3-oxoacyl-[acyl-carrier-protein reductase,Y
+WP_005792021.1,4,0,0,peptidylprolyl isomerase,Y
+WP_005793230.1,4,0,0,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_005793382.1,4,0,0,amidophosphoribosyltransferase,Y
+WP_005793848.1,0,0,2,hypothetical protein,Y
+WP_005794503.1,2,5,0,3-phosphoserine/phosphohydroxythreonine transaminase,Y
+WP_005795183.1,5,6,2,FimB/Mfa2 family fimbrial subunit,Y
+WP_005795269.1,4,0,0,aspartate 4-decarboxylase,Y
+WP_005795977.1,9,4,0,FprA family A-type flavoprotein,Y
+WP_005796026.1,4,1,0,DUF3256 family protein,Y
+WP_005796464.1,4,5,0,TolC family protein,Y
+WP_005796520.1,7,0,0,acetylornithine carbamoyltransferase,Y
+WP_005796541.1,22,8,2,phosphate acetyltransferase,Y
+WP_005797027.1,9,1,0,tyrosine--tRNA ligase,Y
+WP_005797495.1,4,0,0,4-hydroxy-3-methylbut-2-en-1-yl diphosphate synthase,Y
+WP_005797520.1,3,0,0,glycoside hydrolase family 16 protein,Y
+WP_005798358.1,5,0,0,4Fe-4S dicluster domain-containing protein,Y
+WP_005798580.1,3,0,0,dihydroorotate dehydrogenase-like protein,Y
+WP_005798822.1,0,5,0,PepSY-associated TM helix domain-containing protein,Y
+WP_005798834.1,10,0,0,aminoacyl-histidine dipeptidase,Y
+WP_005798976.1,3,2,0,electron transfer flavoprotein subunit alpha/FixB family protein,Y
+WP_005799108.1,12,1,14,carbamoyl-phosphate synthase (glutamine-hydrolyzing) large subunit,Y
+WP_005800139.1,5,2,0,3-phosphoglycerate dehydrogenase,Y
+WP_005800555.1,7,0,0,nucleotide exchange factor GrpE,Y
+WP_005800633.1,13,2,1,galactokinase,Y
+WP_005812284.1,6,0,0,cysteine--tRNA ligase,Y
+WP_005812922.1,6,0,0,nucleoside phosphorylase,Y
+WP_005813169.1,4,5,0,phosphoribosylformylglycinamidine cyclo-ligase,Y
+WP_005814804.1,5,0,1,alpha-L-fucosidase,Y
+WP_005816384.1,3,0,2,DUF4890 domain-containing protein,Y
+WP_008657202.1,4,2,0,glycoside hydrolase family 97 protein,Y
+WP_008657830.1,2,3,0,erythromycin esterase family protein,Y
+WP_008660041.1,5,2,5,hypothetical protein,Y
+WP_008660220.1,9,7,0,ADP-forming succinate--CoA ligase subunit beta,Y
+WP_008660222.1,6,0,0,ACP S-malonyltransferase,Y
+WP_008768302.1,4,0,0,nucleoside deaminase,Y
+WP_008768977.1,2,0,0,YebC/PmpR family DNA-binding transcriptional regulator,Y
+WP_008768998.1,5,0,0,S9 family peptidase,Y
+WP_008769511.1,11,6,0,orotidine-5'-phosphate decarboxylase,Y
+WP_008769876.1,39,21,7,hypothetical protein,Y
+WP_008769920.1,4,2,2,metallophosphoesterase,Y
+WP_008769925.1,2,2,0,TolC family protein,Y
+WP_009291291.1,10,0,0,leucine--tRNA ligase,Y
+WP_009291412.1,0,4,0,DUF2264 domain-containing protein,Y
+WP_009291688.1,4,0,0,hypothetical protein,Y
+WP_009291732.1,4,0,0,hypothetical protein,Y
+WP_009291818.1,20,3,0,peptidase T,Y
+WP_009291819.1,7,0,0,glycine cleavage system aminomethyltransferase GcvT,Y
+WP_009291985.1,2,0,0,2-oxo acid dehydrogenase subunit E2,Y
+WP_009292125.1,4,2,2,DUF4251 domain-containing protein,Y
+WP_009292334.1,31,5,0,isoleucine--tRNA ligase,Y
+WP_009292594.1,5,0,1,lysine--tRNA ligase,Y
+WP_009292622.1,14,0,0,aconitate hydratase,Y
+WP_009292704.1,4,7,1,peptide-methionine (R)-S-oxide reductase MsrB,Y
+WP_009292933.1,3,0,0,endonuclease,Y
+WP_009292942.1,7,0,0,phosphoribosylformylglycinamidine synthase,Y
+WP_009293085.1,4,3,2,hypothetical protein,Y
+WP_010992966.1,0,1,6,carboxypeptidase regulatory-like domain-containing protein,Y
+WP_011203748.1,2,3,0,DUF4932 domain-containing protein,Y
+WP_014299443.1,3,0,3,TolC family protein,Y
+WP_025813916.1,3,5,2,hypothetical protein,Y
+WP_032497071.1,6,0,0,type I pullulanase,Y
+WP_032556935.1,8,0,1,iron-containing alcohol dehydrogenase,Y
+WP_032565546.1,12,0,0,arginine--tRNA ligase,Y
+WP_032567971.1,3,0,0,alanine--tRNA ligase,Y
+WP_032568641.1,6,1,0,cobaltochelatase subunit CobN,Y
+WP_032568875.1,6,1,1,BamA/TamA family outer membrane protein,Y
+WP_032576604.1,3,0,2,DUF4840 domain-containing protein,Y
+WP_032580882.1,6,5,0,alpha/beta hydrolase family protein,Y
+WP_032595467.1,10,3,3,C10 family peptidase,Y
+WP_065849545.1,5,6,0,hypothetical protein,Y
+WP_065849594.1,32,13,1,acetate kinase,Y
+WP_065849613.1,0,6,0,alpha-N-acetylglucosaminidase,Y
+WP_065849626.1,5,0,3,DUF349 domain-containing protein,Y
+WP_065849670.1,22,2,0,valine--tRNA ligase,Y
+WP_065849682.1,27,6,1,saccharopine dehydrogenase family protein,Y
+WP_065849696.1,6,0,0,TonB-dependent receptor,Y
+WP_065849699.1,7,0,0,alpha-2-macroglobulin,Y
+WP_065849700.1,3,0,0,glycoside hydrolase family 97 protein,Y
+WP_065849746.1,28,0,0,TonB-dependent receptor,Y
+WP_065849747.1,17,0,0,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_065849780.1,2,2,0,"D-2-hydroxyacid dehydrogenase, partial",Y
+WP_065849785.1,0,0,6,TonB-dependent receptor,Y
+WP_065849879.1,0,0,4,"hypothetical protein, partial",Y
+WP_065849897.1,6,0,0,aspartate--tRNA ligase,Y
+WP_065849918.1,25,0,1,carbamoyl-phosphate synthase (glutamine-hydrolyzing) large subunit,Y
+WP_065849937.1,6,3,3,clostripain,Y
+WP_065849976.1,7,0,0,beta-N-acetylhexosaminidase,Y
+WP_065850068.1,14,0,0,diaminopimelate dehydrogenase,Y
+WP_065850115.1,4,0,0,ketoacyl-ACP synthase III,Y
+WP_065850120.1,3,2,0,BamA/TamA family outer membrane protein,Y
+WP_065850129.1,9,0,0,aminopeptidase P family protein,Y
+WP_032534055.1,5,20,11,BACON domain-containing protein,N
+WP_009292672.1,4,6,26,DUF4493 domain-containing protein,N
+WP_009293274.1,6,10,20,membrane protein,N
+WP_045899445.1,3,6,14,hypothetical protein,N
+WP_032533931.1,10,8,8,hypothetical protein,N
+WP_009291999.1,13,2,3,DUF3869 domain-containing protein,N
+WP_065850156.1,0,3,3,hypothetical protein,N

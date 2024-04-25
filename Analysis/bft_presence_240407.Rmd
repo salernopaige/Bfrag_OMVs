@@ -1,0 +1,178 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+setwd("~/Desktop/")
+metadata <- read.csv("All_metadata_with_individuals_final_231222.csv", stringsAsFactors = F)
+
+bft_dart <- read.csv("counts_BFT_combined.csv", stringsAsFactors = F)
+
+bft_kostic <- read.csv("Kostic_counts_BFT_combined.csv", stringsAsFactors = F)
+bft_vatanen <- read.csv("Vatanen_counts_BFT_combined.csv", stringsAsFactors = F)
+bft_yassour <- read.csv("Yassour_counts_BFT_combined.csv", stringsAsFactors = F)
+
+bft_diab <- rbind(bft_yassour, rbind(bft_kostic, bft_vatanen))
+
+bft_teddy <- read.csv("TEDDY_counts_BFT_combined.csv", stringsAsFactors = F)
+
+bft_hayden <- read.csv("Hayden_counts_BFT_combined.csv", stringsAsFactors = F)
+bft_hayden$Tag <- metadata$Sample[match(bft_hayden$Tag, metadata$SRR)]
+bft_hayden <- na.omit(bft_hayden)
+
+bft_all <- rbind(bft_hayden, rbind(bft_teddy, rbind(bft_dart, bft_diab)))
+colnames(bft_all)[1] <- "Sample"
+
+metadata <- read.csv("All_metadata_with_individuals_final_231222.csv", stringsAsFactors = F)
+
+# get all samples and all individuals
+merged_all <- merge(bft_all, metadata, by = "Sample")
+
+# summarize all individuals for totals per cohort
+all_indv <- merged_all %>%
+  group_by(Cohort) %>%
+  summarize(Total_Unique = length(unique(Individual)))
+
+# Get only samples with BFT detected
+bft_samples <- bft_all %>%
+  filter(total > 0)
+
+# metadata for subsetted samples
+merged_sub <- merge(bft_samples, metadata, by = "Sample")
+merged_sub[is.na(merged_sub)] = 0
+colnames(merged_sub)[5] <- "Read Counts"
+individuals <- unique(merged_sub$Individual)
+
+# Get rid of weird 0 individuals 
+merged_sub <- merged_sub %>%
+  filter(Cohort != 0)
+
+# Keep all data pertaining to notable individuals
+final <- merged_all %>%
+  filter(Individual %in% individuals)
+
+# Count number of individuals with BFT detected
+unq_indv <- merged_sub %>%
+  group_by(Cohort) %>%
+  summarize(N_Unique = length(unique(Individual)))
+
+# get all individual data in one df and calc percentages 
+all_indv_level_data <- merge(unq_indv, all_indv)
+all_indv_level_data$Percentage <- ((all_indv_level_data$N_Unique/all_indv_level_data$Total_Unique)*100)
+
+write.csv(all_indv_level_data, "BFT_percentages_240408.csv", row.names = F)
+
+plot <- ggplot(final, aes(Age, total, color = Cohort)) +
+  geom_point() +
+  # geom_smooth() +
+  geom_line() +
+  facet_wrap(Individual~Cohort, ncol = 4, scales = "free_y") +
+  theme_classic() +
+  scale_color_manual(values = c("#000080", "#CC9900", "#046307", "#800020"))
+
+# ggsave("individual_bft_reads_dart_diab_240308.pdf", plot, width = 15, height = 15)
+
+```
+
+### Comparing BFT abundance in CF vs non-CF ETBF
+```{r}
+metaphlan <- read.csv("All_metaphlan_data_230502.csv", stringsAsFactors = F)
+colnames(metaphlan) <- gsub("X", "", colnames(metaphlan))
+metaphlan$clade <- gsub("^.*s__", "", metaphlan$clade)
+
+hayden <- metadata %>%
+  filter(Cohort == "Hayden")
+View(metaphlan)
+names(metaphlan)[names(metaphlan) %in% hayden$SRR] <- hayden$Sample[match(names(metaphlan)[names(metaphlan) %in% hayden$SRR], hayden$SRR)]
+
+abudance_melt <- pivot_longer(metaphlan, cols = -clade, names_to = "Sample", values_to = "Relab")
+bfrag <- abudance_melt %>%
+  filter(clade == "Bacteroides_fragilis")
+bfrag_merge <- merge(bfrag, metadata)
+bfrag_filter <- bfrag_merge %>%
+  filter(Cohort == "Dartmouth" | Cohort == "DIABIMMUNE" | Cohort == "TEDDY" | Cohort == "Hayden")
+
+bfrag_filter$Strain_type <- ifelse(bfrag_filter$Individual %in% individuals, "ETBF", "NTBF")
+
+plot <- ggplot(bfrag_filter, aes(Age, Relab, color = Cohort)) +
+  geom_point() +
+  geom_line() +
+  facet_wrap(Strain_type~Cohort, ncol = 4) +
+  theme_classic() +
+  theme(strip.background = element_blank())
+plot
+
+# ggsave("Bfrag_BFT_relab.pdf", plot, width = 25, height = 10)
+```
+
+```{r}
+library(pheatmap)
+library(viridis)
+
+etbf <- bfrag_filter %>%
+  filter(Strain_type == "ETBF") %>%
+  filter(Individual != "1405004" & Individual != "B226")
+
+df_processed <- etbf %>%
+  arrange(Individual, Age) %>%
+  group_by(Individual) %>%
+  mutate(Sample = row_number()) %>%
+  ungroup()
+
+df_wide <- df_processed %>%
+  pivot_wider(id_cols = Individual,
+              names_from = Sample,
+              values_from = Relab)#,
+              # names_prefix = "S_") #%>%
+  #select(-Age)
+
+df_wide_numeric <- select(df_wide, -Individual)
+
+data_matrix <- as.matrix(df_wide_numeric)
+data_matrix[is.infinite(data_matrix)] <- NA
+data_matrix[is.na(data_matrix)] <- 0
+
+rownames(data_matrix) <- df_wide$Individual
+tmp <- t(apply(data_matrix, 1L, scales::rescale))
+
+
+annotations <- df_processed %>%
+  distinct(Individual, Cohort) %>%
+  arrange(Individual) %>%
+  column_to_rownames("Individual")
+
+cohorts <- annotations$Cohort
+
+cohort_colors <- c("Dartmouth" = "#1F78B4",
+                   "DIABIMMUNE" = "#33A02C",
+                   "Hayden" = "#D73027",
+                   "TEDDY" = "#FF7F00")
+
+# Map cohort colors to cohort names
+cohort_colors <- cohort_colors[cohorts]
+
+
+color_pal <- colorRampPalette(colors = c("#D9EBFF", "#3366FF", "#0047B3"))(100)
+
+pdf("heatmap_BFT_240409.pdf", width = 10, height = 9)
+pheatmap(tmp,
+         # scale = "row",
+         color = color_pal,
+         annotation_row = annotations,
+         show_rownames = TRUE,
+         clustering_distance_rows = "euclidean",
+         clustering_distance_cols = "euclidean",
+         clustering_method = "complete",
+         cluster_rows = F,
+         cluster_cols = F,
+         angle_col = 45,  # Rotate x-axis labels by 45 degrees
+         xlab = "Sample Number",
+         annotation_colors = list(Cohort = cohort_colors),
+         fontsize = 8
+)
+dev.off()
+
+```
+

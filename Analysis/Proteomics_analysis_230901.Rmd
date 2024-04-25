@@ -1,0 +1,390 @@
+---
+title: "R Notebook"
+output: html_notebook
+---
+
+## Proteomics Analysis for NTBF and ETBF
+For this experiment we tested 3 samples each of *B. fragilis* NCTC 9343 and *B. fragilis* 86-5443-2-2 (Enterotoxigenic, ETBF). We grew these samples up in 150mL of BHIS medium, isolated the OMVs, and split the samples into two aliquots. One aliquot was for small RNA-Seq, and one was for Proteomics. The proteomics samples were sent to Young Ah Goo and here we analyze them for interesting findings. Ultimately this is an exploratory experiment, and we will follow with more hypothesis driven experiments based on these findings. The initial results files are found at:
+
+`ETBF_Raw_from_Young.csv`
+`NCTC_Raw_from_Young.csv`
+
+**NOTE:** Using the initial analysis, all of the proteins identified in the NCTC files actually matched the protein list of the ETBF proteome, including proteins such as BFT which is not at all found in the NCTC proteome. This suggests the files are mislabelled and will be treated as such moving forward.
+
+```{r}
+knitr::opts_chunk$set(root.dir = "/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/")
+knitr::opts_chunk$set(echo = TRUE, fig.align="center")
+library(dplyr)
+library(tidyr)
+library(VennDiagram)
+library(gplots)
+library(DESeq2)
+library(ggrepel)
+library(circlize)
+library(ggplot2)
+library(RColorBrewer)
+library(ComplexHeatmap)
+library(stringr)
+```
+
+```{r}
+## Load Files required:
+# Sample info file
+Sinfo <- read.csv("sample_info.csv", stringsAsFactors = FALSE)
+Sinfo$Strain_rep <- gsub("NCTC", "NTBF", Sinfo$Strain_rep)
+Sinfo$Strain <- gsub("NCTC", "NTBF", Sinfo$Strain)
+
+# Merged df2 by accession
+Common_protein_list <- data.frame(read.csv("/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/Common_proteins_Final_201001.csv", stringsAsFactors = FALSE))
+
+# NCTC results from Young's group
+NTBF_res <- read.csv("/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/NCTC_Raw_from_Young.csv", stringsAsFactors = FALSE, header = TRUE)
+
+# ETBF results from Young's group
+ETBF_res <- data.frame(read.csv("/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/ETBF_Raw_from_Young.csv", stringsAsFactors = FALSE, header = TRUE))
+```
+
+```{r}
+# Renaming columns for NCTC results
+# colnames(NTBF_res)
+colnames(NTBF_res) <- c("x",
+                        "Visible",
+                        "Starred",
+                        "Protein_Name",
+                        "Accession",
+                        "Alternate.ID",
+                        "Mol_weight",
+                        "Protein_Grouping_Ambiguity",
+                        "Taxonomy",
+                        "NTBF_1",
+                        "NTBF_2",
+                        "NTBF_3")
+
+# Making a dataframe containing only accession, sample counts and protein descriptions
+NTBF_subset <- subset(NTBF_res, select = c("Accession",
+                                           "NTBF_1",
+                                           "NTBF_2",
+                                           "NTBF_3",
+                                           "Protein_Name"))
+nrow(NTBF_subset)
+NTBF_subset$Protein_Name <- gsub("WP_\\d{9}\\.\\d ", "", NTBF_subset$Protein_Name)
+
+# Renaming columns for ETBF
+# colnames(ETBF_res)
+colnames(ETBF_res) <- c("x",
+                        "Visible",
+                        "Starred",
+                        "Protein_Name",
+                        "Accession",
+                        "Alternate.ID",
+                        "Mol_weight",
+                        "Protein_Grouping_Ambiguity",
+                        "Taxonomy",
+                        "ETBF_1",
+                        "ETBF_2",
+                        "ETBF_3")
+
+# Making a dataframe containing only accession, sample counts and protein descriptions
+ETBF_subset <- subset(ETBF_res, select = c("Accession",
+                                           "ETBF_1",
+                                           "ETBF_2",
+                                           "ETBF_3",
+                                           "Protein_Name"))
+nrow(ETBF_subset)
+```
+
+```{r}
+# Finding the intersection between results files, using subset data frames and making a new df for it
+ETBF_res_common <- merge(ETBF_subset, Common_protein_list, by = "Accession")
+nrow(ETBF_res_common)
+
+# Eliminating terms in brackets after protein descriptions
+ETBF_res_common$Description <- str_replace_all(ETBF_res_common$Description, "Bacteria|Bacteroides|Bacteroides fragilis|Bacteroidaceae| fragilis| \\[|\\]", "")
+ETBF_res_common <- ETBF_res_common %>%
+  mutate(Description = trimws(Description))
+
+
+ETBF_res_uncommon <- ETBF_subset %>%
+  anti_join(Common_protein_list, by = c("Accession"))
+nrow(ETBF_res_uncommon)
+ETBF_res_uncommon$Description <- str_replace_all(ETBF_res_uncommon$Protein_Name, "Bacteria|Bacteroides|Bacteroides fragilis|Bacteroidaceae| fragilis| \\[|\\]|MULTISPECIES: ", "")
+ETBF_res_uncommon$Found_in_Both_Species_Genomes <- "N"
+
+NTBF_res_common <- merge(NTBF_subset, Common_protein_list, by = "Accession")
+nrow(NTBF_res_common)
+
+# Eliminating terms in brackets after protein descriptions
+NTBF_res_common$Description <- str_replace_all(NTBF_res_common$Description, "Bacteria|Bacteroides|Bacteroides fragilis|Bacteroidaceae| fragilis| \\[|\\]", "")
+NTBF_res_common <- NTBF_res_common %>%
+  mutate(Description = trimws(Description))
+
+NTBF_res_uncommon <- NTBF_subset %>%
+  anti_join(Common_protein_list, by = c("Accession"))
+nrow(NTBF_res_uncommon)
+NTBF_res_uncommon$Description <- str_replace_all(NTBF_res_uncommon$Protein_Name, "Bacteria|Bacteroides|Bacteroides fragilis|Bacteroidaceae| fragilis| \\[|\\]|MULTISPECIES: ", "")
+NTBF_res_uncommon$Found_in_Both_Species_Genomes <- "N"
+
+# Common Proteins
+common_proteins <- ETBF_res_common %>%
+  inner_join(NTBF_res_common, by = c("Accession", "Description", "Protein_Name", "Sequence", "Length"), suffix = c("_ETBF", "_NTBF"))
+nrow(common_proteins)
+
+# Unique to ETBF
+unique_ETBF <- ETBF_res_common %>%
+  anti_join(NTBF_res_common, by = c("Accession", "Description"))
+nrow(unique_ETBF)
+unique_ETBF$Found_in_Both_Species_Genomes <- "Y"
+
+nrow(common_proteins) + nrow(unique_ETBF) + nrow(ETBF_res_uncommon) == 439
+
+# Unique to NTBF
+unique_NTBF <- NTBF_res_common %>%
+  anti_join(ETBF_res_common, by = c("Accession", "Description"))
+nrow(unique_NTBF)
+unique_NTBF$Found_in_Both_Species_Genomes <- "Y"
+
+nrow(common_proteins) + nrow(unique_NTBF) + nrow(NTBF_res_uncommon) == 570
+
+
+ETBF_all_uncommon <- rbind(unique_ETBF[c(1:6,9)], ETBF_res_uncommon)
+NTBF_all_uncommon <- rbind(unique_NTBF[c(1:6,9)], NTBF_res_uncommon)
+```
+
+```{r}
+# write.csv(common_proteins, "Common_OMV_Proteins_230901.csv", row.names = FALSE)
+# write.csv(ETBF_all_uncommon, "ETBF_Unique_OMV_Proteins_230901.csv", row.names = FALSE)
+# write.csv(NTBF_all_uncommon, "NTBF_Unique_OMV_Proteins_230901.csv", row.names = FALSE)
+```
+
+### Differential analysis
+
+```{r}
+Common_subs <- common_proteins[c(1,9:11,2:4)]
+
+# Making sure the data is ready for making the DESeq object
+countDataMatrix <- as.matrix(Common_subs[ , -1])
+rownames(countDataMatrix) <- Common_subs[ , 1]
+Sinfo_da <- Sinfo[1:6,]
+
+# Make sure NCTC is baseline
+Sinfo_da$Strain
+Sinfo_da$Strain <- factor(Sinfo_da$Strain, levels=c("NTBF", "ETBF"))
+
+# Create DESeq object
+dds <- DESeqDataSetFromMatrix(countData = countDataMatrix,
+                              colData = Sinfo_da,
+                              design = ~ Strain)
+
+head(counts(dds))
+head(colData(dds))
+
+# drop proteins with low counts 
+keep <- rowSums(counts(dds)) >= 6
+dds <- dds[keep,]
+dim(dds)
+
+dds <- estimateSizeFactors(dds)
+
+sizeFactors(dds)
+
+counts_norm <- counts(dds, normalized=TRUE)
+head(counts_norm)
+```
+
+```{r}
+rld <- rlog(dds, blind = FALSE)
+
+# calculate gene expression level variance between samples 
+var <- rev(rowVars(assay(rld))[order(rowVars(assay(rld)))])
+
+# modify variable feature number to be used in PCA and hierachical clustering based on no. of most variable features 
+var_feature_n <- 100
+
+# perform PCA and order by variance 
+rv <- rowVars(assay(rld))
+select <- order(rv, decreasing = TRUE)[seq_len(min(var_feature_n, length(rv)))]
+pca <- prcomp(t(assay(rld)[select, ]))
+
+# extract the variance explained by each PC
+percentVar <- pca$sdev^2/sum(pca$sdev^2)
+names(percentVar)[1:5] <- c("PC1", "PC2", "PC3", "PC4", "PC5")
+percentVar <- percentVar[1:5]
+# plot variance for top 10 PCs
+barplot(percentVar[1:5], col = "indianred", las = 1, ylab = "% Variance", cex.lab = 1.2)
+
+# construct data frame w/ PC loadings and add sample labels
+pca_df <- as.data.frame(pca$x)
+pca_df$Strain <- dds@colData$Strain
+pca_df$sample_ids <- colnames(dds)
+
+# add colors for plotting to df
+pca_df$col <- NA
+for(i in 1:length(levels(pca_df$Strain))){
+  ind1 <- which(pca_df$Strain == levels(pca_df$Strain)[i])
+  pca_df$col[ind1] <- i
+}
+
+# plot PC1 vs PC2
+plot(pca_df[, 1], pca_df[, 2],
+     xlab = paste0("PC1 (", (round(percentVar[1], digits=3)*100), "% variance)"),
+     ylab = paste0("PC2 (", (round(percentVar[2], digits=3)*100), "% variance)"),
+     main=paste0("PC1 vs PC2 for ", var_feature_n, " most variable genes"),
+     pch=16, cex=1.35, cex.lab=1.3, cex.axis = 1.15, las=1,
+     panel.first = grid(),
+     col=pca_df$col)
+text((pca_df[, 2])~(pca_df[, 1]), labels = pca_df$sample_ids, cex=0.6, font=2, pos=4)
+
+# select top X no. of variable genes 
+topVarGenes <- head(order(rowVars(assay(rld)), decreasing=TRUE),
+                    var_feature_n)
+
+# set up gene expression matrix 
+mat1 <- assay(rld)[topVarGenes,]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+```
+
+```{r}
+# run the DEseq2 analysis 
+dds <- DESeq(dds)
+mean_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, mean)
+variance_counts <- apply(counts(dds, normalized=FALSE)[,1:3], 1, var)
+```
+
+```{r}
+# quickly check the available coefficients we could extract 
+resultsNames(dds)
+
+# get results for DE analysis (and order by Pval) by specifying design 
+res <- results(dds, 
+               name = "Strain_ETBF_vs_NTBF", 
+               alpha = 0.05, 
+               lfcThreshold = 0)
+res
+
+
+res <- results(dds, alpha = 0.05, 
+               contrast = c("Strain", "NTBF", "ETBF"), 
+               lfcThreshold = 0)
+res
+
+# order by adj Pval 
+res_ord <- res[order(res$padj),] 
+res_ord
+
+# quick check for how many DEGs with significance @ 5% level in either FC direction 
+sum(res$padj < 0.05, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange > 2, na.rm=TRUE)
+sum(res$padj < 0.05 & res$log2FoldChange < -2, na.rm=TRUE)
+
+# or to get both padj < 0.05 and log2FoldChange > 2 or < -2
+sum(res$padj < 0.05 & res$log2FoldChange > 2| res$padj < 0.05 & res$log2FoldChange< -2, na.rm=TRUE)
+
+table(is.na(res$padj))
+
+```
+
+```{r}
+res_ord <- res_ord[!is.na(res_ord$padj),]
+```
+
+```{r}
+# subset @ 5% adjusted pval sig. level 
+res_order_FDR_05 <- res_ord[res_ord$padj<0.05,]
+nrow(res_order_FDR_05)
+
+# write both to csv files
+write.csv(as.data.frame(res_ord), file= "/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/NTBF_vs_ETBF_DE_results_240313.csv")
+write.csv(as.data.frame(res_order_FDR_05), file="/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/NTBF_vs_ETBF_DE_results.FDR.0.05_240313.csv")
+
+# Add protein names to DE results
+de_res <- read.csv("/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/NTBF_vs_ETBF_DE_results_240313.csv", stringsAsFactors = FALSE)
+colnames(de_res)[1] <- c("Accession")
+res_ord_fin <- merge(de_res, Common_protein_list, by = "Accession")
+colnames(res_ord_fin)
+res_ord_fin <- subset(res_ord_fin, select = c("Description",
+                                              "Accession",
+                                              "baseMean",
+                                              "log2FoldChange",
+                                              "lfcSE",
+                                              "stat",
+                                              "pvalue",
+                                              "padj",
+                                              "Sequence",
+                                              "Length"))
+res_ord_fin$Description <- str_replace_all(res_ord_fin$Description, "Bacteria|Bacteroides|Bacteroides fragilis|Bacteroidaceae| fragilis| \\[|\\]|MULTISPECIES: ", "")
+res_ord_fin <- res_ord_fin %>%
+  mutate(Description = trimws(Description))
+
+write.csv(res_ord_fin, "/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/DE_results_annotated_240313.csv", row.names = FALSE)
+
+# calculate shrunken fold change estimate
+res_shrink <- lfcShrink(dds, 
+                        coef=paste0(resultsNames(dds)[which(resultsNames(dds)=="Strain_ETBF_vs_NTBF")]), 
+                        type="apeglm")
+
+```
+
+
+```{r}
+# Load required packages
+library(ComplexHeatmap)
+library(circlize)
+library(viridis)
+rld <- rlog(dds, blind = FALSE)
+ind_to_keep <- c(which(colData(rld)$Strain=="NTBF"), which(colData(rld)$Strain=="ETBF"))
+
+# set up protein abundance matrix 
+mat1 <- assay(rld)[rownames(res_order_FDR_05), ind_to_keep]
+
+# scale matrix by each col. values 
+mat_scaled = t(apply(mat1, 1, scale))
+
+# Change the accession numbers for the protein names
+new_names <- res_ord_fin[c(2,1)]
+new_names$new_row_names <- paste(new_names$Accession , new_names$Description, sep = ": ")
+# Swap out old row names for new ones 
+rownames(mat_scaled) <- new_names$new_row_names[match(rownames(mat_scaled), new_names$Accession)]
+
+# subset coldata for samples in each group
+colData_sub <- colData(dds)[ind_to_keep, ]
+# Create a color mapping using colorRamp2
+col = colorRamp2(breaks = c(min(mat_scaled), 0, max(mat_scaled)), colors = viridis(3))
+# Annotation bar for samples
+ha1 = HeatmapAnnotation(Group = colData_sub$Strain, 
+                        col = list(Group = c("NTBF" = "darkorange",
+                                             "ETBF" = "dodgerblue")), 
+                        show_legend = TRUE)
+
+# Column annotation labels (samples)
+ha = columnAnnotation(x = anno_text(colData_sub$Strain_rep, 
+                                    which="column", rot = 45, 
+                                    gp = gpar(fontsize = 8)))
+
+# Generate the heatmap object
+ht1 = Heatmap(mat_scaled, name = "Abundance", col = col, 
+              top_annotation = ha1, 
+              bottom_annotation = ha,
+              show_row_names = TRUE,
+              row_names_gp = gpar(fontsize = 8),
+              cluster_columns = TRUE)
+
+# Draw the heatmap
+draw(ht1, row_title = "Proteins", column_title = "Hierarchical clustering of DEPs (padj<0.05)")
+
+
+```
+
+```{r}
+# library(Cairo)
+pdf("/Users/paigesalerno/Documents/Data_Backup_Restorations/Final_Proteomics_Analysis/OMV_DEP_Heatmap_240313.pdf", width = 8, height = 8)
+draw(ht1, row_title = "Proteins", column_title = "Hierarchical clustering of DEPs (padj<0.05)")
+dev.off()
+```
+
+### Making a volcano plot
+```{r}
+
+```
+

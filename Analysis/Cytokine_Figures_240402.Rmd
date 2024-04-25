@@ -1,0 +1,146 @@
+---
+title: "Cytokine Data Figures 4/2/24"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+```
+
+```{r}
+raw <- read_excel("Raw_Cytokine_240402.xlsx")
+raw <- pivot_longer(raw,
+                    cols = -(Date:`Apical or Basolateral`), 
+                    names_to = "Cytokine", 
+                    values_to = "Value")
+colnames(raw)
+raw$Time_Hours <- gsub("1", "1 Hour", raw$Time_Hours)
+raw$Time_Hours <- gsub("24", "24 Hours", raw$Time_Hours)
+raw$Treatment <- factor(raw$Treatment, levels = c("Control", "NTBF", "ETBF", "dETBF", "NTBF_BFT", "NTBF_EPS", "NTBF_BFT_EPS"))
+
+apical <- raw %>%
+  filter(`Apical or Basolateral` == "Apical")
+
+baso <- raw %>%
+  filter(`Apical or Basolateral` == "Basolateral")
+
+apical_plot <- ggplot(apical, aes(Treatment, Value, color = Donor)) +
+  geom_boxplot() +
+  facet_wrap(Cytokine~Time_Hours, scales = "free_y", ncol = 7) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+
+ggsave("cytokine_by_time_apical.pdf", apical_plot, height = 15, width = 15)
+
+
+baso_plot <- ggplot(baso, aes(Treatment, Value, color = Donor)) +
+  geom_boxplot() +
+  facet_wrap(Cytokine~Time_Hours, scales = "free_y", ncol = 7) +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+
+ggsave("cytokine_by_time_basolateral.pdf", baso_plot, height = 15, width = 15)
+
+
+
+
+```
+
+```{r}
+il8 <- raw %>%
+  filter(Cytokine == "IL-8 (38)")
+
+apical <- il8 %>%
+  filter(`Apical or Basolateral` == "Apical") 
+
+baso <- il8 %>%
+  filter(`Apical or Basolateral` == "Basolateral")
+
+custom_roygbiv_palette <- c(
+  "#6C4675", # A deep violet
+  "#5E7CE2", # A bold blue
+  "#50A2A7", # A strong teal
+  "#9BC53D", # A vivid green
+  "#FDEE00", # A vibrant yellow
+  "#FA7921", # A rich orange
+  "#DB2B39"  # A bold red
+)
+
+tests <- list(c("Control", "NTBF"), c("Control", "ETBF"), c("Control", "dETBF"), c("Control", "NTBF_BFT"), c("Control", "NTBF_EPS"), c("Control", "NTBF_BFT_EPS"))
+y_axis_range <- c(0, 1000, 2000, 3000, 4000, 5000, 6000)
+
+plot <- ggplot(il8, aes(Treatment, Value, fill = Treatment)) +
+  geom_boxplot(color = "black", outlier.size = 0.5) +
+  geom_point(color = "black", size = 0.5) +
+  facet_wrap(`Apical or Basolateral`~Time_Hours, scales = "free_y") +
+  scale_fill_manual(values = custom_roygbiv_palette) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "black", size = 8),
+        axis.text.y = element_text(color = "black", size = 8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(color = "black", size = 10),
+        strip.background = element_blank()) +
+  # scale_y_continuous(breaks = y_axis_range, limits = c(min(y_axis_range), max(y_axis_range))) +
+  stat_compare_means(comparisons = tests, method = "t.test",
+                     tip.length = 0.03,
+                     step.increase = 0.1,
+                     label = "p.signif",
+                     size = 3)
+
+plot
+# ggsave("IL-8_by_time.pdf", plot, height = 4, width = 6)
+
+### Apical only
+
+ap_plot <- ggplot(apical, aes(Treatment, Value, fill = Treatment)) +
+  geom_boxplot(color = "black", outlier.size = 0.5) +
+  geom_point(color = "black", size = 0.5) +
+  facet_wrap(`Apical or Basolateral`~Time_Hours, scales = "free_y") +
+  scale_fill_manual(values = custom_roygbiv_palette) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "black", size = 8),
+        axis.text.y = element_text(color = "black", size = 8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(color = "black", size = 10),
+        strip.background = element_blank()) +
+  scale_y_continuous(breaks = c(0, 2000, 4000), limits = c(0, 6000)) +
+  stat_compare_means(comparisons = tests, method = "t.test",
+                     tip.length = 0.03,
+                     step.increase = 0.1,
+                     label = "p.signif",
+                     size = 3)
+
+ap_plot
+ggsave("IL-8_apical_by_time_240406.pdf", ap_plot, height = 4, width = 6)
+
+### Basolateral only
+
+bas_plot <- ggplot(baso, aes(Treatment, Value, fill = Treatment)) +
+  geom_boxplot(color = "black", outlier.size = 0.5) +
+  geom_point(color = "black", size = 0.5) +
+  facet_wrap(`Apical or Basolateral`~Time_Hours, scales = "free_y") +
+  scale_fill_manual(values = custom_roygbiv_palette) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, color = "black", size = 8),
+        axis.text.y = element_text(color = "black", size = 8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(color = "black", size = 10),
+        strip.background = element_blank()) +
+  scale_y_continuous(breaks = c(0, 500, 1000, 1500), limits = c(0, 2000)) +
+  stat_compare_means(comparisons = tests, method = "t.test",
+                     tip.length = 0.03,
+                     step.increase = 0.1,
+                     label = "p.signif",
+                     size = 3)
+
+bas_plot
+
+ggsave("IL-8_basolateral_by_time_240406.pdf", bas_plot, height = 4, width = 6)
+
+numbers <- il8[3:5] %>%
+    group_by(Treatment, Time_Hours, `Apical or Basolateral`) %>%
+    summarize(N = n())
+numbers
+```
+
+

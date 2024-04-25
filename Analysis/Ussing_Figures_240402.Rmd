@@ -1,0 +1,134 @@
+---
+title: "Ussing Data Figures 4/2/24"
+output: html_notebook
+---
+
+```{r}
+library(tidyverse)
+library(readxl)
+library(ggpubr)
+```
+
+```{r}
+tidy_cftr_df <- function(raw_df){
+  labels1 <- raw_df[4:5] 
+  labels <- labels1 %>%
+    group_by(Treatment, Hours) %>%
+    summarize(N = n())
+
+  raw_merge <- merge(raw_df, labels)
+
+  raw_annot <- raw_merge %>%
+    mutate(annot = paste(Treatment, "\n(n = ", N, ")"))
+  
+  raw_final <- raw_annot %>%
+  group_by(Treatment, Hours, Date, Donor, `Pass Number`, N, annot) %>%
+  summarize(CFTR_Current = mean(`CFTR172 Current`))
+  
+  return(raw_final)
+}
+
+
+tidy_cftr_df_test <- function(raw_df){
+  labels1 <- raw_df[4:5] 
+  labels <- labels1 %>%
+    group_by(Treatment, Hours) %>%
+    summarize(N = n())
+
+  raw_merge <- merge(raw_df, labels)
+
+  raw_annot <- raw_merge %>%
+    mutate(annot = paste(Treatment, "\n(n = ", N, ")"))
+  raw_final <- raw_annot[c(1:4,6:8)] %>%
+  group_by(Treatment, Hours, Date, Donor, N, annot) %>%
+  summarize(CFTR_Current = mean(`CFTR172 Current`))
+
+  return(raw_final)
+}
+
+
+
+boxplot_cftr <- function(cftr_df, color_list, test_list, y_axis_range){
+  plot <- ggplot(cftr_df, aes(Treatment, CFTR_Current, fill = Treatment)) +
+  geom_boxplot(color = "black", outlier.size = 0.7) +
+  geom_point(color = "black", size = 0.7) +
+  facet_wrap(~Hours, scales = "free_y") +
+  scale_fill_manual(values = color_list) +
+  scale_x_discrete(labels = function(x) cftr_df$annot[match(x, cftr_df$Treatment)]) +
+  scale_y_continuous(breaks = y_axis_range, limits = c(min(y_axis_range), max(y_axis_range))) +
+  theme_classic() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1, vjust = 1, color = "black", size = 8),
+        axis.text.y = element_text(color = "black", size = 8),
+        axis.title.x = element_blank(),
+        axis.title.y = element_text(color = "black", size = 10),
+        strip.background = element_blank(),
+        legend.position = "none") +
+  stat_compare_means(comparisons = test_list, method = "wilcox.test",
+                     tip.length = 0.03,
+                     step.increase = 0.1,
+                     label = "p.signif",
+                     size = 3)
+  return(plot)
+}
+
+
+```
+
+```{r}
+raw_orig <- read_excel("Raw_Ussing_originals_240402.xlsx")
+raw_orig[4:5]
+
+raw_orig$Hours <- gsub("1", "1 Hour", raw_orig$Hours)
+raw_orig$Hours <- gsub("24", "24 Hours", raw_orig$Hours)
+raw_orig$Treatment <- factor(raw_orig$Treatment, levels = c("Control", "NTBF", "ETBF", "dETBF"))
+
+originals <- tidy_cftr_df(raw_orig)
+
+original_colors <- c(
+  "#6C4675", # A deep violet
+  "#5E7CE2", # A bold blue
+  "#50A2A7", # A strong teal
+  "#9BC53D" # A vivid green
+)
+
+tests <- list(c("Control", "NTBF"), c("Control", "ETBF"), c("Control", "dETBF"))
+y_axis <- c(0, 30, 60, 90, 120)
+
+original_plot <- boxplot_cftr(originals, original_colors, tests, y_axis)
+ggsave("ussing_by_time_originals_240425.pdf", original_plot, height = 4, width = 6)
+
+# Calculate number of initial observations per time point
+numbers <- raw_orig[4:5] %>%
+    group_by(Treatment, Hours) %>%
+    summarize(N = n())
+numbers
+```
+
+```{r}
+raw_mut <- read_excel("Raw_Ussing_NTBF_Muts_240402.xlsx")
+raw_mut$Hours <- gsub("1", "1 Hour", raw_mut$Hours)
+raw_mut$Hours <- gsub("24", "24 Hours", raw_mut$Hours)
+raw_mut$Treatment <- factor(raw_mut$Treatment, levels = c("Control", "NTBF", "NTBF BFT", "NTBF dEPS", "NTBF dEPS + BFT"))
+
+mutants <- tidy_cftr_df(raw_mut)
+
+mut_colors <- c(
+  "#6C4675", # A deep violet
+  "#5E7CE2", # A bold blue
+  "#FDEE00", # A vibrant yellow
+  "#FA7921", # A rich orange
+  "#DB2B39"  # A bold red
+)
+  
+tests <- list(c("Control", "NTBF"), c("Control", "NTBF BFT"), c("Control", "NTBF dEPS"), c("Control", "NTBF dEPS + BFT"))
+y_axis <- c(0, 30, 60, 90, 120, 150, 180)
+
+mutant_plot <- boxplot_cftr(mutants, mut_colors, tests, y_axis)
+ggsave("ussing_by_time_NTBF_mutants_240425.pdf", mutant_plot, height = 4, width = 6)
+
+numbers <- raw_mut[5] %>%
+    group_by(Hours) %>%
+    summarize(N = n())
+numbers
+```
+

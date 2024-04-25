@@ -1,0 +1,83 @@
+Table 2: Proteins detected exclusively in B. fragilis 86-5443-2-2 (ETBF),,,,,
+Accession,ETBF 1,ETBF 2,ETBF 3,Protein Name,Gene also present in NTBF Genome
+WP_005781453.1,4,4,1,30S ribosomal protein S6,Y
+WP_005783448.1,14,5,7,TonB-dependent receptor,Y
+WP_005783777.1,5,3,2,DUF4348 domain-containing protein,Y
+WP_005784067.1,5,7,6,TonB-dependent receptor,Y
+WP_005784069.1,4,6,3,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_005784783.1,0,2,5,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_005784785.1,9,8,3,discoidin domain-containing protein,Y
+WP_005785211.1,6,3,6,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_005785232.1,3,0,0,tetratricopeptide repeat protein,Y
+WP_005785910.1,3,5,4,endonuclease/exonuclease/phosphatase family protein,Y
+WP_005786179.1,3,2,3,TlpA family protein disulfide reductase,Y
+WP_005787945.1,3,0,1,YccF domain-containing protein,Y
+WP_005788073.1,2,1,3,hypothetical protein,Y
+WP_005788909.1,5,2,8,discoidin domain-containing protein,Y
+WP_005790351.1,9,8,5,lytic transglycosylase domain-containing protein,Y
+WP_005790480.1,5,9,3,WD40 repeat domain-containing protein,Y
+WP_005790574.1,4,5,2,RIP metalloprotease RseP,Y
+WP_005791129.1,4,2,1,MotA/TolQ/ExbB proton channel family protein,Y
+WP_005791447.1,0,5,4,DUF1349 domain-containing protein,Y
+WP_005795456.1,6,4,5,hypothetical protein,Y
+WP_005796238.1,7,7,2,SusC/RagA family TonB-linked outer membrane protein,Y
+WP_005796482.1,1,4,2,hypothetical protein,Y
+WP_005797280.1,21,18,26,TonB-dependent receptor,Y
+WP_005797281.1,4,3,5,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_005797763.1,3,2,3,hypothetical protein,Y
+WP_005799113.1,2,3,2,DUF3575 domain-containing protein,Y
+WP_005801211.1,4,4,4,hypothetical protein,Y
+WP_005801900.1,3,2,2,DUF2807 domain-containing protein,Y
+WP_005802513.1,4,3,0,serine hydrolase,Y
+WP_008659393.1,3,4,0,PCMD domain-containing protein,Y
+WP_009291443.1,4,11,6,TonB-dependent receptor,Y
+WP_011202785.1,17,8,23,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_022347156.1,0,2,0,hypothetical protein,Y
+WP_022347430.1,11,6,9,beta-glucosidase BglX,Y
+WP_025813915.1,5,6,12,FKBP-type peptidyl-prolyl cis-trans isomerase,Y
+WP_065849537.1,5,4,3,DUF2723 domain-containing protein,Y
+WP_065849620.1,12,10,18,TonB-dependent receptor,Y
+WP_065849646.1,8,4,2,alpha-galactosidase,Y
+WP_065849701.1,4,4,4,outer membrane beta-barrel protein,Y
+WP_065849709.1,5,4,2,TolC family protein,Y
+WP_065849751.1,4,4,3,SusC/RagA family TonB-linked outer membrane protein,Y
+WP_065849783.1,2,2,3,peptidase S41,Y
+WP_065849802.1,0,0,12,RagB/SusD family nutrient uptake outer membrane protein,Y
+WP_065849936.1,5,5,4,PepSY-like domain-containing protein,Y
+WP_065849973.1,2,4,1,redoxin domain-containing protein,Y
+WP_065850032.1,11,15,4,alpha-amylase,Y
+WP_065850147.1,6,8,2,DUF3858 domain-containing protein,Y
+WP_139108962.1,5,6,8,"linear amide C-N hydrolase, partial",Y
+WP_009291999.1,112,144,138,DUF3869 domain-containing protein,N
+WP_005795092.1,43,44,36,hemin receptor,N
+WP_009291506.1,8,16,50,hypothetical protein,N
+WP_032534055.1,20,20,17,BACON domain-containing protein,N
+WP_081309421.1,24,19,26,"TonB-dependent receptor, partial",N
+WP_007485339.1,19,17,22,hypothetical proteinBacteroidales,N
+WP_009040576.1,15,10,31,hypothetical proteinBacteroidales,N
+WP_032532599.1,12,17,24,OmpA family protein,N
+WP_045899445.1,13,20,15,hypothetical protein,N
+WP_008659530.1,9,16,12,metallophosphoesterase,N
+WP_005785202.1,13,13,11,RagB/SusD family nutrient uptake outer membrane protein,N
+WP_009292672.1,10,18,4,DUF4493 domain-containing protein,N
+WP_032533931.1,10,14,8,hypothetical protein,N
+WP_009293274.1,12,9,10,membrane protein,N
+WP_065849684.1,9,8,3,efflux transporter outer membrane subunit,N
+WP_005794946.1,10,8,6,glycoside hydrolase,N
+WP_005816213.1,9,7,8,efflux RND transporter periplasmic adaptor subunit,N
+WP_009292634.1,6,7,10,hypothetical protein,N
+WP_005816746.1,6,6,9,hypothetical protein,N
+WP_175393078.1,2,2,18,OmpA family protein,N
+WP_009291482.1,6,9,0,tripeptidyl aminopeptidase,N
+WP_009291990.1,3,6,4,perforin protein,N
+WP_009292030.1,4,6,1,TonB-dependent receptor,N
+WP_005794948.1,2,4,4,alkaline phosphatase,N
+WP_103483278.1,2,4,5,fragilysin BFT-2,N
+WP_005793337.1,2,4,2,hypothetical protein,N
+WP_005816276.1,3,3,2,OmpA family protein,N
+WP_032533676.1,3,2,3,hypothetical protein,N
+WP_065849792.1,4,3,0,hypothetical protein,N
+WP_065849793.1,5,2,0,hypothetical protein,N
+WP_065850156.1,2,3,0,hypothetical protein,N
+WP_032595641.1,1,3,0,hypothetical protein,N
+WP_065849804.1,1,3,0,TonB-dependent receptor,N
